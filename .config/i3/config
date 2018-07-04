@@ -1,0 +1,201 @@
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:Droid Sans Mono 8
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+### Change language
+bindsym $mod+p exec "setxkbmap gb"
+bindsym $mod+Semicolon exec "setxkbmap sk"
+
+# lock
+bindsym $mod+x exec "~/.i3/i3lock-multimonitor/lock"
+exec_always --no-startup-id /usr/bin/xautolock -time 5 -corners -000 -notify 60 -notifier "notify-send --urgency=\"critical\" --expire-time=30000 \"i3lock\" \"locking in 1 minute\"" -locker ~/.i3/i3lock-multimonitor/lock
+
+# screen
+exec_always --no-startup-id "xrandr --output DP-1 --above eDP-1"
+bindsym $mod+b exec "xrandr --output DP-1 --mode 1680x1050 --above eDP-1"
+bindsym $mod+Shift+b exec "xrandr --auto"
+bindsym $mod+z move workspace to output DP-1
+bindsym $mod+Shift+z move workspace to output eDP-1
+exec_always --no-startup-id "feh --randomize --bg-scale ~/.config/i3/wallpapers/* --no-fehbg"
+
+# start a terminal
+bindsym $mod+Return exec x-terminal-emulator
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+bindsym $mod+d exec "rofi -show run -location 2 -width 100 -lines 5 -sidebar-mode -modi run,ssh,drun"
+bindsym F2 exec "rofi -show window"
+bindsym $mod+shift+Return exec ~/bin/tmux-menu
+
+# change focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+bindsym $mod+y focus left
+bindsym $mod+u focus down
+bindsym $mod+i focus up
+bindsym $mod+o focus right
+
+# move focused window
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+#bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+bindsym $mod+Shift+a focus child
+
+# switch workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+bindsym $mod+t exec i3-input -F 'workspace "%s"' -P 'Workspace Name: '
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+t exec i3-input -F 'move container to workspace "%s"' -P 'Workspace Name: '
+
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+	# These bindings trigger as soon as you enter the resize mode
+	
+	# resize with arrow keys
+	bindsym Left resize shrink width 5 px or 5 ppt
+	bindsym Down resize grow height 5 px or 5 ppt
+	bindsym Up resize shrink height 5 px or 5 ppt
+	bindsym Right resize grow width 5 px or 5 ppt
+	
+	# renaming custom workspaces happens only in resize mode!
+	bindsym $mod+t exec i3-input -F 'rename workspace to "%s"' -P 'Workspace Name: '
+	
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+bindsym $mod+Shift+L exec i3lock -b -e -f --image ~/.config/i3/lockscreen.png
+
+hide_edge_borders both
+focus_follows_mouse no
+
+# color scheme
+set $highlight_txt		#ffffff
+set $dim_txt			#888888
+set $subtle_bg			#2d2d2d
+set $dim_bg				#888888
+set $highlight_border	#444444
+set $dim_border			#222222
+
+# class					border		background	text			indicator	child_border
+client.focused			$subtle_bg	$subtle_bg	$highlight_txt	$dim_txt	$highlight_border
+client.focused_inactive	$subtle_bg	$subtle_bg	$highlight_txt	$dim_txt	$dim_border
+client.unfocused		$subtle_bg	$subtle_bg	$dim_txt		$dim_txt	$dim_border
+client.urgent			$subtle_bg	$subtle_bg	$dim_txt		$dim_txt	#ff0000
+client.placeholder		$subtle_bg	$subtle_bg	$dim_txt		$dim_txt	$dim_border
+client.background		$subtle_bg
+
+# this moves stuff to a "hidden" workspace which acts like a bin
+bindsym $mod+Shift+minus move scratchpad
+# gets last window moved to bin to current workspace in floating mode
+bindsym $mod+minus scratchpad show
+
+bindsym $mod+F1 exec x-terminal-emulator -c file_manager -e ranger
+bindsym $mod+F2 exec x-terminal-emulator -c editor -e vim
+bindsym $mod+F3 exec subl3
+
+# Multimedia Keys
+# increase volume
+bindsym XF86AudioRaiseVolume exec amixer -D pulse -q set Master 5%+ unmute
+# decrease volume
+bindsym XF86AudioLowerVolume exec amixer -D pulse -q set Master 5%- unmute
+# mute volume
+bindsym XF86AudioMute exec amixer -D pulse -q set Master toggle
+
+# add icons to firefox and chrome and ranger windows
+# requires the Font-Awesome font
+for_window [class="(?i)opera"] title_format " %title"
+for_window [class="(?i)chromium"] title_format " %title"
+for_window [class="file_manager"] title_format " %title"
+for_window [class="editor"] title_format "  (%title)"
+for_window [class="xterm-256color"] border pixel 1
+
+# status bar
+bar {
+	status_command i3status -c ~/.config/i3/i3status.conf
+	tray_output primary
+	colors {
+	    background $subtle_bg
+	    statusline #ffffff
+	}
+	position top
+	mode hide
+	#modifier none
+}
+
+bindsym F1 bar hidden_state toggle
+
+new_window pixel 0
+
+
