@@ -16,34 +16,87 @@ call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
+nnoremap <leader>pi <esc>:w<cr>:source ~/.vimrc<cr>:PluginInstall<cr>
+nnoremap <leader>pc <esc>:w<cr>:source ~/.vimrc<cr>:PluginClean<cr>
+nnoremap <leader>pu :PluginUpdate<cr>
+
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
+
+"Plugin 'devjoe/vim-codequery'
+Plugin 'wakatime/vim-wakatime'
+Plugin 'tpope/vim-speeddating'
+
+Plugin 'ap/vim-css-color'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'pangloss/vim-javascript'
+Plugin 'moll/vim-node'
 Plugin 'posva/vim-vue'
 Plugin 'Raimondi/delimitMate'
-Plugin 'mattn/emmet-vim'
+Plugin 'terryma/vim-expand-region' " + -
+Plugin 'mattn/emmet-vim' " c-y,
+Plugin 'AndrewRadev/splitjoin.vim' " gS gJ
 Plugin 'prettier/vim-prettier', { 'do': 'npm install' }
 Plugin 'Quramy/vim-js-pretty-template'
 Plugin 'dai-shi/es-beautifier', {'rtp': 'contrib/vim', 'external_commands': 'node', 'build_commands': 'npm', 'build': {'others': 'npm install --only=production'}}
+"Plugin 'kshenoy/vim-signature'
+Plugin 'mbbill/undotree'
+nnoremap <leader>uu :UndotreeToggle<cr>
+Plugin 'Yggdroot/indentLine'
+let g:indentLine_color_term = 236
+let g:indentLine_char = '|'
+autocmd FileType json :IndentLinesDisable<cr>
+
+" note taking
+Plugin 'metakirby5/codi.vim'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-notes'
+Plugin 'junegunn/limelight.vim'
+Plugin 'itchyny/calendar.vim'
+Plugin 'RRethy/vim-illuminate'
+let g:Illuminate_delay = 1
+
+" toggle scratchpad
+nnoremap <leader>ns :Codi!!<cr>
+" open notes
+nnoremap <leader>nn :Note<space>
+nnoremap <leader>nN :Note<cr>
+" toggle limelight
+nnoremap <leader>nl :Limelight!!<cr>
+" start calendar
+nnoremap <leader>nc :Calendar<cr>
+
+" text-object-y
+Plugin 'wellle/targets.vim'
+Plugin 'tpope/vim-surround'
 
 " git
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-rhubarb'
-map <Leader>gs <Esc>:Gstatus<Enter>
-map <Leader>gd <Esc>:Gdiff<Enter>
-map <Leader>gc <Esc>:Gcommit<Enter>
-map <Leader>gb <Esc>:Gblame<Enter>
-map <Leader>gm <Esc>:Gmove<Enter>
-map <Leader>gg <Esc>:Ggrep<Enter> map <Leader>gl <Esc>:Glog<Enter>
-map <Leader>gb <Esc>:Gbrowse<Enter>
-map <Leader>gw <Esc>:Gwrite<Enter>
-map <Leader>gp <Esc>:Gpull<Enter>
-map <Leader>gP <Esc>:Gpush<Enter>
+nnoremap <Leader>gs :Gstatus<cr><c-w>J
+nnoremap <Leader>gd :Gdiff<cr>
+nnoremap <Leader>gc :Gcommit<cr><c-w>J
+nnoremap <Leader>gb :Gblame<cr>
+nnoremap <Leader>gm :Gmove<cr>
+nnoremap <Leader>gl :Glog<cr>
+nnoremap <Leader>gb :Gbrowse<cr>
+nnoremap <Leader>gw :Gwrite<cr>
+nnoremap <Leader>gp :Gpull<cr>
+nnoremap <Leader>gP :Gpush<cr>
 
+" gist
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim'
+
+nnoremap <leader>hh <esc>:Gist -a<cr>
+nnoremap <leader>hs <esc>:Gist -p<cr>
+nnoremap <leader>hp <esc>:Gist -P<cr>
+vnoremap <leader>hh <esc>:Gist -a<cr>
+vnoremap <leader>hs <esc>:Gist -p<cr>
+vnoremap <leader>hp <esc>:Gist -P<cr>
 " status
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -54,6 +107,8 @@ let g:airline_powerline_fonts = 1
 " autocomplete
 Plugin 'othree/jspc.vim'
 Plugin 'ternjs/tern_for_vim', { 'do': 'npm i' }
+
+"Plugin 'Valloric/YouCompleteMe'
 
 " indent guides
 Plugin 'nathanaelkane/vim-indent-guides'
@@ -154,7 +209,6 @@ augroup END
 
 " nerdtree
 Plugin 'scrooloose/nerdtree'
-nnoremap <leader>nn :NERDTreeToggle<cr>
 
 let g:NERDTreeWinSize=20
 
@@ -192,9 +246,12 @@ set autoindent
 set showmatch
 set matchtime=1
 
-" edit and source .vimrc
+" edit and source .vimrc (and other meta)
 nnoremap <leader>ve :split $MYVIMRC<cr>
+nnoremap <leader>vE :e $MYVIMRC<cr>
 nnoremap <leader>vv :source $MYVIMRC<cr>
+nnoremap <leader>vu :UltiSnipsEdit<cr>
+nnoremap <leader>vU :UltiSnipsEdit<space>
 
 " insert js comment
 nnoremap <leader>ic mqI//<esc>`qll
@@ -204,7 +261,9 @@ nnoremap <leader>is mqA;<esc>`q
 " open current file in a new tab
 nnoremap <leader>oo :tabe %<cr>
 " open terminal
-nnoremap <leader>ot :term fish<cr>
+nnoremap <leader>ot :term zsh<cr>
+" toggle nerdtree
+nnoremap <leader>on :NERDTreeToggle<cr>
 
 " settings
 nnoremap <leader>sp :set paste!<cr>
@@ -281,7 +340,14 @@ nnoremap <leader>rr :w !bash<cr>
 " when you press :, it also adds '<,'>
 vnoremap <leader>rr :w !bash<cr>
 
-onoremap p i(
+inoremap <c-s> <esc>:w<cr>
+nnoremap <c-s> <esc>:w<cr>
+inoremap <c-q> <esc>:q<cr>
+nnoremap <c-q> <esc>:q<cr>
 
+inoremap <c-c> <c-x><c-o>
+
+hi colorcolumn ctermbg=brown
+autocmd FileType javascript,vim call matchadd('colorcolumn', '\%80v', 100)
 " local vimrc
 set exrc
