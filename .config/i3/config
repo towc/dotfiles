@@ -17,16 +17,12 @@ bindsym $mod+Semicolon exec "setxkbmap sk"
 
 # lock
 bindsym $mod+x exec "~/.i3/i3lock-multimonitor/lock"
-exec_always --no-startup-id "/usr/bin/xautolock -time 5 -corners -000 -notify 60 -notifier \"notify-send --urgency=\\\"critical\\\" --expire-time=30000 \\\"i3lock\\\" \\\"locking in 1 minute\\\"\" -locker /home/user/.i3/i3lock-multimonitor/lock"
 
 # screen
-exec_always --no-startup-id "redshift -p"
-exec_always --no-startup-id "xrandr --output DP-1 --above eDP-1"
 bindsym $mod+b exec "xrandr --output DP-1 --mode 1680x1050 --above eDP-1"
 bindsym $mod+Shift+b exec "xrandr --auto"
 bindsym $mod+z move workspace to output DP-1
 bindsym $mod+Shift+z move workspace to output eDP-1
-exec_always --no-startup-id "feh --randomize --bg-scale ~/.config/i3/wallpapers/* --no-fehbg"
 
 # start a terminal
 bindsym $mod+Return exec x-terminal-emulator
@@ -200,3 +196,6 @@ bindsym F1 bar hidden_state toggle
 new_window pixel 0
 
 
+# startup stuff
+exec --no-startup-id /home/user/startup-once.sh
+exec_always --no-startup-id /home/user/startup-many.sh

@@ -1,0 +1,6 @@
+#!/bin/bash
+while true; do
+  thyme track -o ~/thyme.json;
+  thyme show -i ~/thyme.json -w stats > ~/thyme.html;
+  sleep 30s;
+done;
