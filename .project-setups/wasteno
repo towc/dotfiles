@@ -1,0 +1,77 @@
+;;;
+; definitions
+
+ft * super+Return
+
+fT * ctrl+b
+
+fs z .1
+fs @T
+fs * quotedbl
+fs z
+
+fS z .1
+fS @T
+fS * percent
+fS z
+
+f> ! spacing
+f> z .1
+f> @T
+f> *7alt+Right
+f> z
+
+fw . wd wasteno
+fv . vim
+
+fn z .1
+fn * ctrl+w
+fn * s
+fn z
+
+;;;
+; instructions
+
+! dev terminal
+@t
+! vim
+@w
+@v
+. :Note wasteno
+. e
+! docker-compose
+@S
+@w
+. docker-compose up
+! extra shell
+@s
+@w
+@>
+
+! test terminal
+@t
+*2super+Shift+Down
+! vim
+@w
+. cd test
+@v
+. :e stories/index.js
+. e
+@n
+* ctrl+w
+* shift+l
+. :e stories/data.js
+. e
+@n
+* ctrl+w
+* shift+k
+. :e stories
+! docker test
+@S
+@w
+, docker exec $(docker ps | grep wasteno_backend
+.  | cut -c 1-12) /scripts/test-init.sh
+! extra shell
+@s
+@w
+@>
