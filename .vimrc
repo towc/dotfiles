@@ -72,7 +72,7 @@ autocmd FileType json :IndentLinesDisable
 " note taking {{{
 Plugin 'metakirby5/codi.vim'
 Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-notes'
+"Plugin 'xolox/vim-notes'
 Plugin 'junegunn/limelight.vim'
 Plugin 'itchyny/calendar.vim'
 Plugin 'RRethy/vim-illuminate'
@@ -81,6 +81,10 @@ let g:Illuminate_delay = 1
 
 " toggle scratchpad
 nnoremap <leader>ns :Codi!!<cr>
+
+let g:vimwiki_conceallevel = 0
+let g:vimwiki_list = [{ 'path': '~/uni/notes', 'syntax': 'markdown' }]
+au FileType vimwiki nnoremap <leader>nc :set conceallevel=0<cr>
 
 let g:notes_list_bullets = ['*', '-', '+']
 let g:notes_directories = [ '/home/user/.vim/bundle/vim-notes/misc/notes/user', '/home/user/uni/notes' ]
@@ -102,8 +106,6 @@ nnoremap <leader>nt :RecentNotes<cr>
 nnoremap <leader>nl :Limelight!!<cr>
 " start calendar
 nnoremap <leader>nc :Calendar<cr>
-
-
 
 " }}}
 " text-object related {{{
@@ -313,6 +315,9 @@ nnoremap <leader>vv :source $MYVIMRC<cr>
 nnoremap <leader>vu :UltiSnipsEdit<cr>
 nnoremap <leader>vU :UltiSnipsEdit<space>
 
+" }}}
+" loader insert (i) {{{
+nnoremap <leader>id :pu=strftime('%c')<cr>
 " }}}
 " leader opening (o) {{{
 " open current file in a new tab

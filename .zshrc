@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=./node_modules/.bin:$HOME/.npm-global/bin:$HOME/.bin:$HOME/.local/bin:$HOME:/.cargo/bin:/snap/bin:$HOME/bin:$HOME/.fzf/bin:/home/user/.gem/ruby/2.3.0/bin:$PATH
+export PATH=./node_modules/.bin:$HOME/.npm-global/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME:/.cargo/bin:/snap/bin:$HOME/bin:$HOME/.fzf/bin:/home/user/.gem/ruby/2.3.0/bin:$PATH
 
 # Path to your oh-my-zsh installation.
   export ZSH="/home/user/.oh-my-zsh"
@@ -116,3 +116,4 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias q='exit'
+alias greps='ps aux | grep '

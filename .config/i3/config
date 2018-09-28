@@ -19,9 +19,14 @@ bindsym $mod+Semicolon exec "setxkbmap sk"
 bindsym $mod+x exec "~/.i3/i3lock-multimonitor/lock"
 
 # screen
-bindsym $mod+b exec "xrandr --output DP-1 --mode 1680x1050 --above eDP-1"
 bindsym $mod+Shift+b exec "xrandr --auto"
-bindsym $mod+z move workspace to output DP-1
+# VGA
+#bindsym $mod+b exec "xrandr --output DP-1 --mode 1680x1050 --above eDP-1"
+#bindsym $mod+z move workspace to output DP-1
+#bindsym $mod+Shift+z move workspace to output eDP-1
+# HDMI
+bindsym $mod+b exec "xrandr --output HDMI-1 --mode 1920x1080 --above eDP-1"
+bindsym $mod+z move workspace to output HDMI-1
 bindsym $mod+Shift+z move workspace to output eDP-1
 
 # start a terminal
@@ -68,7 +73,8 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+#bindsym $mod+space focus mode_toggle
+bindsym $mod+space exec "~/.vim-anywhere/bin/run"
 
 # focus the parent container
 bindsym $mod+a focus parent
