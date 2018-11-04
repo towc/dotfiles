@@ -84,7 +84,7 @@ nnoremap <leader>ns :Codi!!<cr>
 
 let g:vimwiki_conceallevel = 0
 let g:vimwiki_list = [{ 'path': '~/uni/notes', 'syntax': 'markdown' }]
-au FileType vimwiki nnoremap <leader>nc :set conceallevel=0<cr>
+" see ~/.vim/after/ftplugin/vimwiki.vim
 
 let g:notes_list_bullets = ['*', '-', '+']
 let g:notes_directories = [ '/home/user/.vim/bundle/vim-notes/misc/notes/user', '/home/user/uni/notes' ]
@@ -94,14 +94,14 @@ let g:notes_conceal_bold = 0
 let g:notes_conceal_url = 0
 let g:notes_unicode_enabled = 0
 
-" open notes
-nnoremap <leader>nn :Note<space>
-vnoremap <leader>nn :NoteFromSelectedText<cr>
-nnoremap <leader>nN :Note<cr>
-" search notes
-nnoremap <leader>ns :SearchNotes<space>
-nnoremap <leader>nr :RelatedNotes<cr>
-nnoremap <leader>nt :RecentNotes<cr>
+"" open notes
+"nnoremap <leader>nn :Note<space>
+"vnoremap <leader>nn :NoteFromSelectedText<cr>
+"nnoremap <leader>nN :Note<cr>
+"" search notes
+"nnoremap <leader>ns :SearchNotes<space>
+"nnoremap <leader>nr :RelatedNotes<cr>
+"nnoremap <leader>nt :RecentNotes<cr>
 " toggle limelight
 nnoremap <leader>nl :Limelight!!<cr>
 " start calendar
@@ -240,6 +240,45 @@ augroup ts-mappings
 augroup END
 
 " }}}
+" java {{{
+source ~/.vim/bundle/eclim/plugin/eclim.vim
+au FileType java inoremap <c-c> <c-x><c-u>
+au FileType java nnoremap <leader>f :%JavaFormat<cr>
+au FileType java vnoremap <leader>f :JavaFormat<cr>
+
+au FileType java nnoremap <leader>tr :JavaRename<space>
+au FileType java nnoremap <leader>tm :JavaMove<space>
+au FileType java nnoremap <leader>th :JavaHierarchy<space>
+au FileType java nnoremap <leader>tc :JavaCallHierarchy<space>
+au FileType java nnoremap <leader>to :JavaOutline<space>
+au FileType java nnoremap <leader>ti :JavaImport<cr>
+
+au FileType java nnoremap <leader>tnc :JavaNew class<space>
+au FileType java nnoremap <leader>tni :JavaNew interface<space>
+au FileType java nnoremap <leader>tna :JavaNew abstract<space>
+au FileType java nnoremap <leader>tne :JavaNew enum<space>
+au FileType java nnoremap <leader>tn@ :JavaNew @interface<space>
+
+au FileType java nnoremap <leader>tgc :JavaConstructor<space>
+au FileType java vnoremap <leader>tgc :JavaConstructor<cr>
+au FileType java nnoremap <leader>tgg :JavaGet<space>
+au FileType java vnoremap <leader>tgg :JavaGet<cr>
+au FileType java nnoremap <leader>tgs :JavaSet<space>
+au FileType java vnoremap <leader>tgs :JavaSet<cr>
+au FileType java nnoremap <leader>tgS :JavaGetSet<space>
+au FileType java vnoremap <leader>tgS :JavaGetSet<cr>
+au FileType java nnoremap <leader>tgG :JavaGetSet<space>
+au FileType java vnoremap <leader>tgG :JavaGetSet<cr>
+
+au FileType java nnoremap <leader>r :Java<cr>
+" }}}
+" assembly {{{
+Plugin 'VelkyVenik/vim-avr' " always sets type to avr. Better fix it somehow
+au FileType asm set ft=avr
+au FileType avr set tabstop=8
+au FileType avr set softtabstop=0 noexpandtab
+au FileType avr set shiftwidth=8
+" }}}
 " Ultisnips {{{
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
@@ -309,11 +348,16 @@ set matchtime=1
 
 " }}}
 " leader meta (v) {{{
+if empty($MYVIMRC)
+  let $MYVIMRC = "~/.vimrc"
+endif
 nnoremap <leader>ve :split $MYVIMRC<cr>
 nnoremap <leader>vE :e $MYVIMRC<cr>
 nnoremap <leader>vv :source $MYVIMRC<cr>
 nnoremap <leader>vu :UltiSnipsEdit<cr>
 nnoremap <leader>vU :UltiSnipsEdit<space>
+nnoremap <leader>vr :runtime after/ftplugin/*<cr>
+nnoremap <leader>vs :syntax sync fromstart<cr>
 
 " }}}
 " loader insert (i) {{{
@@ -390,6 +434,7 @@ nnoremap <leader>zL :BLines<cr>
 " search all files in directory
 command! -bang -nargs=* CAg call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 nnoremap <leader>zv :CAg<cr>
+vnoremap <leader>zv :<c-u>CAg <c-r>*<cr>
 nnoremap <leader>zV :Ag<cr>
 
 nnoremap <leader>zm :Marks<cr>

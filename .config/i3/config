@@ -36,8 +36,10 @@ bindsym $mod+Return exec x-terminal-emulator
 bindsym $mod+Shift+q kill
 
 bindsym $mod+d exec "rofi -show run -location 2 -width 100 -lines 5 -sidebar-mode -modi run,ssh,drun"
-bindsym F2 exec "rofi -show window"
-bindsym $mod+shift+Return exec ~/bin/tmux-menu
+
+# backlight brightness
+bindsym XF86MonBrightnessUp exec "xbacklight +5 -time 30"
+bindsym XF86MonBrightnessDown exec "xbacklight -5 -time 30"
 
 # change focus
 bindsym $mod+Left focus left
@@ -163,10 +165,6 @@ client.background		$subtle_bg
 bindsym $mod+Shift+minus move scratchpad
 # gets last window moved to bin to current workspace in floating mode
 bindsym $mod+minus scratchpad show
-
-bindsym $mod+F1 exec x-terminal-emulator -c file_manager -e ranger
-bindsym $mod+F2 exec x-terminal-emulator -c editor -e vim
-bindsym $mod+F3 exec subl3
 
 # Multimedia Keys
 # increase volume

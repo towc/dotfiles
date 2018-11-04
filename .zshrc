@@ -1,6 +1,21 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=./node_modules/.bin:$HOME/.npm-global/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME:/.cargo/bin:/snap/bin:$HOME/bin:$HOME/.fzf/bin:/home/user/.gem/ruby/2.3.0/bin:$PATH
+PATHS=""
+PATHS+="./node_modules/.bin"
+PATHS+=":$HOME/.npm-global/bin"
+PATHS+=":$HOME/.bin"
+PATHS+=":$HOME/.cargo/bin"
+PATHS+=":$HOME/.local/bin"
+PATHS+=":$HOME/Android/Sdk/platform-tools"
+PATHS+=":/snap/bin"
+PATHS+=":$HOME/bin"
+PATHS+=":$HOME/.fzf/bin"
+PATHS+=":$HOME/.gem/ruby/2.3.0/bin"
+
+export PATH=$PATHS:$PATH
+
+export ANDROID_SDK=$HOME/Android/Sdk
+
 
 # Path to your oh-my-zsh installation.
   export ZSH="/home/user/.oh-my-zsh"
@@ -110,10 +125,22 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
+
+# unbind c-s and c-q
+stty stop ''
+stty start ''
+stty -ixon
+stty -ixoff
+
+exec-exit () exit
+
+zle -N exec-exit
+bindkey ^q exec-exit
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias q='exit'
 alias greps='ps aux | grep '
+
+fpath=(/home/user/.zsh/gradle-completion $fpath)
