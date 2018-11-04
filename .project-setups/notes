@@ -1,0 +1,49 @@
+;;;
+; definitions
+
+ft * super+Return
+ft # .4
+
+fT * ctrl+b
+
+fc * super+d
+
+fs z .1
+fs @T
+fs * quotedbl
+fs z
+
+fS z .1
+fS @T
+fS * percent
+fS z
+
+f> ! spacing
+f> z .1
+f> @T
+f> *8alt+Right
+f> z
+
+fw . wd wasteno
+fv . vim
+
+fn z .1
+fn * ctrl+w
+fn * s
+fn z
+
+;;;
+; instructions
+
+* super+8
+* super+z
+@t
+. wd notes
+. vim index.wiki
+@c
+. opera -newwindow
+# .2
+* super+r
++. 10 300
+* Left
+* Return

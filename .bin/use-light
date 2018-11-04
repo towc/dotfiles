@@ -1,0 +1,2 @@
+cd /home/user/git/github/jwilm/alacritty/res
+cp day_text.v.glsl text.v.glsl

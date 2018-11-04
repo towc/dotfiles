@@ -2,6 +2,7 @@
 ; definitions
 
 ft * super+Return
+ft # .2
 
 fT * ctrl+b
 
@@ -18,7 +19,7 @@ fS z
 f> ! spacing
 f> z .1
 f> @T
-f> *7alt+Right
+f> *8alt+Right
 f> z
 
 fw . wd wasteno
@@ -36,6 +37,7 @@ fn z
 @t
 ! vim
 @w
+. cd src
 @v
 . :Note wasteno
 . e
@@ -69,9 +71,12 @@ fn z
 ! docker test
 @S
 @w
-, docker exec $(docker ps | grep wasteno_backend
+..docker exec $(docker ps | grep wasteno_backend
 .  | cut -c 1-12) /scripts/test-init.sh
 ! extra shell
 @s
 @w
 @>
+* ctrl+h
+* ctrl+w
+* equal
