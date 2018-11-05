@@ -35,7 +35,9 @@ bindsym $mod+Return exec x-terminal-emulator
 # kill focused window
 bindsym $mod+Shift+q kill
 
-bindsym $mod+d exec "rofi -show run -location 2 -width 100 -lines 5 -sidebar-mode -modi run,ssh,drun"
+bindsym $mod+d exec "rofi -show run -location 2 -width 100 -lines 5 -sidebar-mode -modi run,window,ssh,drun"
+bindsym $mod+Shift+d exec "rofi -show window -location 2 -width 100 -lines 5 -sidebar-mode -modi run,window,ssh,drun"
+
 
 # backlight brightness
 bindsym XF86MonBrightnessUp exec "xbacklight +5 -time 30"
