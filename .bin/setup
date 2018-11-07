@@ -60,11 +60,25 @@ function useLine {
         sleep $content
         skipSleep=true
         ;;
-      ',')
-        xdotool type "$content"
-        ;;
       '.')
-        xdotool type "$content" && xdotool key Return
+        case "$flag" in
+          '.')
+            xdotool type "$content"
+            ;;
+          *)
+            xdotool type "$content" && xdotool key Return
+            ;;
+        esac
+        ;;
+      '+')
+        # I'm not sure if this works
+        if [[ ! -z $content ]]; then
+          xdotool mousemove $content
+        fi
+
+        if [ "$flag" = '.' ]; then
+          xdotool click 1
+        fi
         ;;
       *)
         if [[ ! -z $line ]]; then
