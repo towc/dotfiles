@@ -1,0 +1,2 @@
+#!/usr/bin/zsh
+i3lock -e -f --image ~/.config/i3/lockscreen.png

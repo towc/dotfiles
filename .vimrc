@@ -43,6 +43,7 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'scy/vim-mkdir-on-write'
 Plugin 'vim-jp/vital.vim'
 Plugin 'mattn/webapi-vim'
+Plugin 'danilo-august/vim-afterglow'
 Plugin 'tpope/vim-speeddating'
 
 Plugin 'tikhomirov/vim-glsl'
@@ -83,16 +84,8 @@ let g:Illuminate_delay = 1
 nnoremap <leader>ns :Codi!!<cr>
 
 let g:vimwiki_conceallevel = 0
-let g:vimwiki_list = [{ 'path': '~/uni/notes', 'syntax': 'markdown' }]
+let g:vimwiki_list = [{ 'path': '~/uni/notes', 'syntax': 'markdown' }, { 'path': '~/git/bitbucket/towc/uni-cs-kcl-2018', 'syntax': 'markdown' }]
 " see ~/.vim/after/ftplugin/vimwiki.vim
-
-let g:notes_list_bullets = ['*', '-', '+']
-let g:notes_directories = [ '/home/user/.vim/bundle/vim-notes/misc/notes/user', '/home/user/uni/notes' ]
-let g:notes_conceal_code = 0
-let g:notes_conceal_italic = 0
-let g:notes_conceal_bold = 0
-let g:notes_conceal_url = 0
-let g:notes_unicode_enabled = 0
 
 "" open notes
 "nnoremap <leader>nn :Note<space>
@@ -241,7 +234,7 @@ augroup END
 
 " }}}
 " java {{{
-source ~/.vim/bundle/eclim/plugin/eclim.vim
+"source ~/.vim/bundle/eclim/plugin/eclim.vim
 au FileType java inoremap <c-c> <c-x><c-u>
 au FileType java nnoremap <leader>f :%JavaFormat<cr>
 au FileType java vnoremap <leader>f :JavaFormat<cr>
@@ -335,6 +328,7 @@ set softtabstop=0 expandtab
 set shiftwidth=2
 set smarttab
 set autoindent
+set bs=2
 
 " }}}
 " ruler {{{

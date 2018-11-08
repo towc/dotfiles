@@ -92,8 +92,8 @@ plugins=(
   node
   npm
   tmux
-  zsh-syntax-highlighting
   zsh-autosuggestions
+  zsh-syntax-highlighting
   dirhistory
   wd
   ssh-agent
@@ -144,3 +144,5 @@ alias q='exit'
 alias greps='ps aux | grep '
 
 fpath=(/home/user/.zsh/gradle-completion $fpath)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

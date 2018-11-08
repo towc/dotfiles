@@ -16,7 +16,7 @@ bindsym $mod+p exec "setxkbmap gb"
 bindsym $mod+Semicolon exec "setxkbmap sk"
 
 # lock
-bindsym $mod+x exec "~/.i3/i3lock-multimonitor/lock"
+bindsym $mod+x exec "~/.bin/lock-screen"
 
 # screen
 bindsym $mod+Shift+b exec "xrandr --auto"
@@ -35,9 +35,8 @@ bindsym $mod+Return exec x-terminal-emulator
 # kill focused window
 bindsym $mod+Shift+q kill
 
-bindsym $mod+d exec "rofi -show run -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun"
-bindsym $mod+w exec "rofi -show window -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun"
-
+bindsym $mod+d exec "zsh -c \\"rofi -show run -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun\\""
+bindsym $mod+w exec "zsh -c \\"rofi -show window -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun\\""
 
 # backlight brightness
 bindsym XF86MonBrightnessUp exec "xbacklight +5 -time 30"
@@ -140,8 +139,6 @@ mode "resize" {
 	bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
-
-bindsym $mod+Shift+L exec i3lock -b -e -f --image ~/.config/i3/lockscreen.png
 
 hide_edge_borders both
 focus_follows_mouse no
