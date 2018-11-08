@@ -43,8 +43,10 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'scy/vim-mkdir-on-write'
 Plugin 'vim-jp/vital.vim'
 Plugin 'mattn/webapi-vim'
-Plugin 'danilo-august/vim-afterglow'
 Plugin 'tpope/vim-speeddating'
+Plugin 'embear/vim-localvimrc'
+let g:localvimrc_ask = 0
+let g:localvimrc_sandbox = 0
 
 Plugin 'tikhomirov/vim-glsl'
 Plugin 'ap/vim-css-color'
