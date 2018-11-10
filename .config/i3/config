@@ -13,7 +13,7 @@ floating_modifier $mod
 
 ### Change language
 bindsym $mod+p exec "setxkbmap gb"
-bindsym $mod+Semicolon exec "setxkbmap sk"
+bindsym $mod+semicolon exec "setxkbmap sk"
 
 # lock
 bindsym $mod+x exec "~/.bin/lock-screen"
