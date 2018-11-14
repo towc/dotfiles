@@ -182,7 +182,8 @@ for_window [class="xterm-256color"] border pixel 1
 
 # status bar
 bar {
-	status_command i3status -c ~/.config/i3/i3status.conf
+	#status_command i3status -c ~/.config/i3/i3status.conf
+  status_command i3blocks -c ~/.config/i3/i3blocks.conf
 	tray_output primary
 	colors {
 	    background $subtle_bg
