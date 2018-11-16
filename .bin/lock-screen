@@ -1,2 +1,3 @@
 #!/usr/bin/zsh
+setxkbmap gb
 i3lock -e -f --image ~/.config/i3/lockscreen.png

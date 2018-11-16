@@ -136,12 +136,16 @@ exec-exit () exit
 
 zle -N exec-exit
 bindkey ^q exec-exit
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias q='exit'
 alias greps='ps aux | grep '
+
+alias sau='sudo apt-get update'
+alias sadu='sudo apt-get dist-upgrade'
+alias sai='sudo apt-get install'
+
+alias d-c='docker-compose'
 
 fpath=(/home/user/.zsh/gradle-completion $fpath)
 
