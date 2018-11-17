@@ -351,6 +351,8 @@ nnoremap <leader>ve :split $MYVIMRC<cr>
 nnoremap <leader>vE :e $MYVIMRC<cr>
 nnoremap <leader>vv :source $MYVIMRC<cr>
 nnoremap <leader>vu :UltiSnipsEdit<cr>
+let g:UltiSnipsEditSplit = "horizontal"
+
 nnoremap <leader>vU :UltiSnipsEdit<space>
 nnoremap <leader>vr :runtime after/ftplugin/*<cr>
 nnoremap <leader>vs :syntax sync fromstart<cr>

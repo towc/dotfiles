@@ -15,7 +15,7 @@ case $state in
   charging)
     echo "+ $percentage"
     ;;
-  full)
+  fully-charged)
     echo "= $percentage"
     ;;
   **)
