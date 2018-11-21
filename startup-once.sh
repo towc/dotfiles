@@ -4,3 +4,5 @@ xautolock -corners "----" \
   -notify 1 \
   -notifier "notify-send 'xautolock' 'locking screen in 1 minute'" \
   -locker '~/.bin/lock-screen' &
+
+dunst &

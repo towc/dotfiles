@@ -1,3 +1,5 @@
 [user]
 	email = matei@copot.eu
 	name = Matei Copot
+[core]
+	excludesfile = /home/user/.gitignore_global

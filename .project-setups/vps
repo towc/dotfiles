@@ -51,8 +51,8 @@ fn z
 * Return
 
 ! dev
-* super+2
-* super+Shift+z
+;* super+2
+;* super+Shift+z
 @t
 . wd vps
 . vim

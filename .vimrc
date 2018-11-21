@@ -356,6 +356,7 @@ let g:UltiSnipsEditSplit = "horizontal"
 nnoremap <leader>vU :UltiSnipsEdit<space>
 nnoremap <leader>vr :runtime after/ftplugin/*<cr>
 nnoremap <leader>vs :syntax sync fromstart<cr>
+nnoremap <leader>vS :redraw!<cr>
 
 " }}}
 " loader insert (i) {{{

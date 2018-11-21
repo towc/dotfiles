@@ -1,0 +1,7 @@
+username: copotmatei@gmail.com
+name: Matei Copot
+polling: true
+
+vim_opts: |
+  nnoremap <c-k> :TmuxNavigateUp<cr>
+  nnoremap <c-j> :TmuxNavigateDown<cr>
