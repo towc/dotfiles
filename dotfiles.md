@@ -16,7 +16,7 @@ config checkout
 # oh-my-zsh
 
 ```
-sudo apt-get install zsh tmux
+sudo apt-get install zsh tmux fonts-powerline
 # hide previous installation from installer
 mv -f .oh-my-zsh .oh-my-zsh-tmp
 mv .zshrc .zshrc-tmp
@@ -28,6 +28,7 @@ mv .zshrc-tmp .zshrc
 # install custom plugins
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+curl https://raw.githubusercontent.com/towc/dotfiles/master/.oh-my-zsh/themes/agnoster.zsh-theme > .oh-my-zsh/themes/agno ster.zsh-theme
 # reboot for changes to happen, or `zsh` for now
 ```
 
@@ -46,4 +47,10 @@ curl https://raw.githubusercontent.com/danilo-augusto/vim-afterglow/master/color
 # i3
 ```
 sai i3 i3blocks rofi chromium-browser
+```
+
+# alacritty
+```
+# install from repo, then
+sudo update-alternatives --config x-terminal-emulator
 ```
