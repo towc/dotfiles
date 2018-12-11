@@ -48,6 +48,9 @@ Plugin 'embear/vim-localvimrc'
 let g:localvimrc_ask = 0
 let g:localvimrc_sandbox = 0
 
+"Plugin 'vim-scripts/sketch.vim'
+Plugin 'vim-scripts/DrawIt'
+
 Plugin 'tikhomirov/vim-glsl'
 Plugin 'ap/vim-css-color'
 Plugin 'jelera/vim-javascript-syntax'

@@ -97,6 +97,7 @@ plugins=(
   dirhistory
   wd
   ssh-agent
+  notify
 )
 
 source $ZSH/oh-my-zsh.sh

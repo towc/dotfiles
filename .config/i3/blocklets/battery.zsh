@@ -7,7 +7,7 @@ case $state in
   discharging)
     echo "- $percentage"
     echo ""
-    if [[ $percentage =~ "(0|1).%" ]]
+    if [[ $percentage =~ "^(0|1).%" ]]
     then
       echo "#FF0000";
     fi
