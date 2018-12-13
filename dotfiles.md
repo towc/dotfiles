@@ -54,3 +54,8 @@ sai i3 i3blocks rofi chromium-browser
 # install from repo, then
 sudo update-alternatives --config x-terminal-emulator
 ```
+
+# other packages
+```
+sai redshift vlock w3m bvi r2 xbacklight nmap feh
+```
