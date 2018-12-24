@@ -53,18 +53,10 @@ Plugin 'vim-scripts/DrawIt'
 
 Plugin 'tikhomirov/vim-glsl'
 Plugin 'ap/vim-css-color'
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'pangloss/vim-javascript'
-Plugin 'purescript-contrib/purescript-vim'
-Plugin 'moll/vim-node'
-Plugin 'posva/vim-vue'
 Plugin 'Raimondi/delimitMate'
 Plugin 'terryma/vim-expand-region' " + -
 Plugin 'mattn/emmet-vim' " c-y,
 Plugin 'AndrewRadev/splitjoin.vim' " gS gJ
-Plugin 'prettier/vim-prettier', { 'do': 'npm install' }
-Plugin 'Quramy/vim-js-pretty-template'
-Plugin 'dai-shi/es-beautifier', {'rtp': 'contrib/vim', 'external_commands': 'node', 'build_commands': 'npm', 'build': {'others': 'npm install --only=production'}}
 "Plugin 'kshenoy/vim-signature'
 Plugin 'mbbill/undotree'
 nnoremap <leader>uu :UndotreeToggle<cr>
@@ -109,11 +101,11 @@ nnoremap <leader>nc :Calendar<cr>
 " text-object related {{{
 Plugin 'wellle/targets.vim'
 Plugin 'tpope/vim-surround'
-Plugin 'bkad/CamelCaseMotion'
-
-map <silent> w <Plug>CamelCaseMotion_w
-map <silent> b <Plug>CamelCaseMotion_b
-map <silent> e <Plug>CamelCaseMotion_e
+"Plugin 'bkad/CamelCaseMotion'
+"
+"map <silent> w <Plug>CamelCaseMotion_w
+"map <silent> b <Plug>CamelCaseMotion_b
+"map <silent> e <Plug>CamelCaseMotion_e
 
 
 " }}}
@@ -165,6 +157,20 @@ hi IndentGuidesOdd  ctermbg=none
 hi IndentGuidesEven ctermbg=red
 
 " }}}
+" c++ {{{
+Plugin 'vim-scripts/OmniCppComplete'
+au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
+au BufNewFile,BufRead,BufEnter *.cpp,*.hpp map <leader>tt :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+au FileType cpp nnoremap <leader>rr :!g++ <c-r>=expand("%:p")<cr> -o tmp-out -Wall -Weffc++ -Wextra -Wsign-conversion && ./tmp-out<cr>
+au FileType cpp nnoremap <leader>ro :!g++ <c-r>=expand("%:p")<cr> -o tmp-out -O3 -Wall -Weffc++ -Wextra -Wsign-conversion && ./tmp-out<cr>
+set tags+=~/.vim/tags/cpp
+
+"Plugin 'vim-scripts/Conque-GDB'
+
+"Plugin 'Rip-Rip/clang_complete'
+"let g:clang_library_path='/usr/lib/llvm-6.0/lib/libclang-6.0.so.1'
+
+" }}}
 " eslint {{{
 Plugin 'w0rp/ale'
 let g:ale_sign_column_always = 1
@@ -174,6 +180,10 @@ let g:ale_fixers = {
 \   'json': ['eslint'],
 \   'typescript': ['tslint'],
 \   'vue': ['eslint'],
+\   'c': ['clang-format'],
+\   'cpp': ['clang-format'],
+\   'h': ['clang-format'],
+\   'hpp': ['clang-format']
 \}
 map <leader>f :ALEFix<CR>
 let g:ale_linters = {
@@ -215,10 +225,19 @@ Plugin 'mxw/vim-jsx'
 
 " }}}
 " javascript {{{
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'pangloss/vim-javascript'
+Plugin 'purescript-contrib/purescript-vim'
+Plugin 'moll/vim-node'
+Plugin 'posva/vim-vue'
+Plugin 'Quramy/vim-js-pretty-template'
+Plugin 'dai-shi/es-beautifier', {'rtp': 'contrib/vim', 'external_commands': 'node', 'build_commands': 'npm', 'build': {'others': 'npm install --only=production'}}
+Plugin 'prettier/vim-prettier', { 'do': 'npm install' }
 augroup js-init
   au FileType javascript setlocal omnifunc=jspc#omni
   au FileType javascript nnoremap <buffer> <Leader>e :call EsBeautifier()<cr>
   au FileType javascript vnoremap <buffer> <Leader>e :call RangeEsBeautifier()<cr>
+  au FileType javascript nnoremap <buffer> <leader>rr :!node <c-r>=expand("%:p")<cr><cr>
 augroup END
 
 " }}}
