@@ -81,7 +81,7 @@ let g:Illuminate_delay = 1
 nnoremap <leader>ns :Codi!!<cr>
 
 let g:vimwiki_conceallevel = 0
-let g:vimwiki_list = [{ 'path': '~/uni/notes', 'syntax': 'markdown' }, { 'path': '~/git/bitbucket/towc/uni-cs-kcl-2018', 'syntax': 'markdown' }]
+let g:vimwiki_list = [{ 'path': '~/uni/notes', 'syntax': 'markdown' }, { 'path': '~/git/github/towc/uni-cs-kcl-2018', 'syntax': 'markdown' }]
 " see ~/.vim/after/ftplugin/vimwiki.vim
 
 "" open notes
@@ -295,6 +295,9 @@ au FileType asm set ft=avr
 au FileType avr set tabstop=8
 au FileType avr set softtabstop=0 noexpandtab
 au FileType avr set shiftwidth=8
+" }}}
+" python {{{
+au FileType python nnoremap <leader>rr :!python3 <c-r>=expand("%:p")<cr><cr>
 " }}}
 " Ultisnips {{{
 Plugin 'SirVer/ultisnips'

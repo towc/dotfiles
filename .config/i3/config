@@ -25,12 +25,13 @@ bindsym $mod+Shift+b exec "xrandr --auto"
 #bindsym $mod+z move workspace to output DP-1
 #bindsym $mod+Shift+z move workspace to output eDP-1
 # HDMI
-bindsym $mod+b exec "xrandr --output HDMI-1 --mode 1920x1080 --above eDP-1"
-bindsym $mod+z move workspace to output HDMI-1
+bindsym $mod+b exec "xrandr --output HDMI1 --mode 1920x1080 --above eDP-1"
+bindsym $mod+z move workspace to output HDMI1
 bindsym $mod+Shift+z move workspace to output eDP-1
 
 # start a terminal
 bindsym $mod+Return exec x-terminal-emulator
+#bindsym $mod+Shift+Return exec x-terminal-emulator; exec sleep 0.2s; floating enable
 
 # kill focused window
 bindsym $mod+Shift+q kill

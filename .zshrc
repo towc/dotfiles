@@ -11,6 +11,7 @@ PATHS+=":/snap/bin"
 PATHS+=":$HOME/bin"
 PATHS+=":$HOME/.fzf/bin"
 PATHS+=":$HOME/.gem/ruby/2.3.0/bin"
+PATHS+=":/home/nvidia/.local/bin"
 
 export PATH=$PATHS:$PATH
 
@@ -145,8 +146,10 @@ alias greps='ps aux | grep '
 alias sau='sudo apt-get update'
 alias sadu='sudo apt-get dist-upgrade'
 alias sai='sudo apt-get install'
+alias sdi='sudo dpkg -i'
 
-alias d-c='docker-compose'
+alias dc='docker-compose'
+alias dcu='docker-compose up'
 
 fpath=(/home/user/.zsh/gradle-completion $fpath)
 
