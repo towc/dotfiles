@@ -48,6 +48,8 @@ Plugin 'embear/vim-localvimrc'
 let g:localvimrc_ask = 0
 let g:localvimrc_sandbox = 0
 
+"Plugin 'yuratomo/w3m.vim'
+
 "Plugin 'vim-scripts/sketch.vim'
 Plugin 'vim-scripts/DrawIt'
 
@@ -471,6 +473,9 @@ nnoremap <leader>rr :w !bash<cr>
 " when you press :, it also adds '<,'>
 vnoremap <leader>rr :w !bash<cr>
 
+" }}}
+" leader refactoring (t) {{{
+nnoremap <leader>tr :%s/\<<c-r><c-w>\>//g<left><left>
 " }}}
 " remap buffer writing/quitting {{{
 inoremap <c-s> <esc>:w<cr>

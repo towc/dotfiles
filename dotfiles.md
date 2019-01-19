@@ -55,6 +55,14 @@ sai i3 i3blocks rofi chromium-browser
 sudo update-alternatives --config x-terminal-emulator
 ```
 
+# chatting
+```
+sai weechat lua-cjson
+curl https://raw.githubusercontent.com/torhve/weechat-matrix-protocol-script/master/matrix.lua ~/.weechat/lua/matrix.lua
+# and then /script load matrix.lua
+curl https://weechat.org/files/temp/theme/theme.py > ~/.weechat/python/autoload/theme.py
+```
+
 # other packages
 ```
 sai redshift vlock w3m bvi r2 xbacklight nmap feh
