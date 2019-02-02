@@ -17,6 +17,10 @@ export PATH=$PATHS:$PATH
 
 export ANDROID_SDK=$HOME/Android/Sdk
 
+if type rustc > /dev/null; then
+  export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+fi
+
 
 # Path to your oh-my-zsh installation.
   export ZSH="/home/user/.oh-my-zsh"
@@ -150,6 +154,16 @@ alias sdi='sudo dpkg -i'
 
 alias dc='docker-compose'
 alias dcu='docker-compose up'
+
+alias ni='npm install --save'
+alias nd='npm uninstall --save'
+alias nig='npm install --save -g'
+alias ndg='npm uninstall --save -g'
+alias pi='pip install --user'
+
+alias py='python3'
+alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
+alias vsrc='vim ~/.zshrc ~/.tmux.conf ~/.vimrc'
 
 fpath=(/home/user/.zsh/gradle-completion $fpath)
 

@@ -65,6 +65,7 @@ nnoremap <leader>uu :UndotreeToggle<cr>
 Plugin 'Yggdroot/indentLine'
 let g:indentLine_color_term = 236
 let g:indentLine_char = '|'
+set concealcursor=
 autocmd FileType json :IndentLinesDisable
 
 
@@ -185,7 +186,9 @@ let g:ale_fixers = {
 \   'c': ['clang-format'],
 \   'cpp': ['clang-format'],
 \   'h': ['clang-format'],
-\   'hpp': ['clang-format']
+\   'hpp': ['clang-format'],
+\   'rust': ['rustfmt'],
+\   'python': ['autopep8'],
 \}
 map <leader>f :ALEFix<CR>
 let g:ale_linters = {
@@ -193,7 +196,7 @@ let g:ale_linters = {
 \   'jsx': ['eslint'],
 \   'json': ['eslint'],
 \   'typescript': ['tsserver'],
-\   'rust': ['rustfmt'],
+\   'rust': ['rustc'],
 \}
 
 " let g:ale_sign_error = '█'
@@ -208,11 +211,11 @@ map <Leader>af <Esc>:ALEFix<Enter>
 map <Leader>an <Esc>:ALENext<Enter>
 
 augroup ecma-mappings
-  au FileType javascript,jsx nnoremap <Leader>td :TernDef<cr>
-  au FileType javascript,jsx nnoremap <Leader>tx :TernDoc<cr>
-  au FileType javascript,jsx nnoremap <Leader>tt :TernType<cr>
-  au FileType javascript,jsx nnoremap <Leader>tr :TernRefs<cr>
-  au FileType javascript,jsx nnoremap <Leader>tn :TernRename<cr>
+  au FileType javascript,jsx nnoremap <buffer> <Leader>td :TernDef<cr>
+  au FileType javascript,jsx nnoremap <buffer> <Leader>tx :TernDoc<cr>
+  au FileType javascript,jsx nnoremap <buffer> <Leader>tt :TernType<cr>
+  au FileType javascript,jsx nnoremap <buffer> <Leader>tr :TernRefs<cr>
+  au FileType javascript,jsx nnoremap <buffer> <Leader>tn :TernRename<cr>
   au FileType javascript,jsx nnoremap <buffer> <Leader>tb :call EsBeautifier()<cr>
   au FileType javascript,jsx vnoremap <buffer> <Leader>tb :call RangeEsBeautifier()<cr>
 augroup END
@@ -299,6 +302,18 @@ au FileType avr set softtabstop=0 noexpandtab
 au FileType avr set shiftwidth=8
 " }}}
 " python {{{
+Plugin 'davidhalter/jedi-vim' " autocomplete
+let g:jedi#show_call_signatures = "1"
+let g:jedi#goto_command             = "<leader>td"
+let g:jedi#goto_assignments_command = ""
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command    = "K"
+let g:jedi#usages_command           = "<leader>tr"
+let g:jedi#completions_command      = "<C-Space>"
+let g:jedi#rename_command           = "<leader>tn"
+
+Plugin 'tweekmonster/django-plus.vim'
+
 au FileType python nnoremap <leader>rr :!python3 <c-r>=expand("%:p")<cr><cr>
 " }}}
 " Ultisnips {{{
@@ -322,13 +337,16 @@ map g/ <Plug>(incsearch-stay)
 Plugin 'rust-lang/rust.vim'
 Plugin 'racer-rust/vim-racer'
 set hidden
-let g:racer_cmd = "/home/user/.bin/racer"
+let g:racer_cmd = '~/.cargo/bin/racer'
 let g:racer_experimental_completer = 1
 
 augroup rust-mappings
   au FileType rust nmap <leader>td <Plug>(rust-def)
   au FileType rust nmap <leader>tD <Plug>(rust-def-split)
   au FileType rust nmap <leader>tx <Plug>(rust-doc)
+
+  au FileType rust nnoremap <leader>rr :!rustc <c-r>=expand('%:p')<cr> -o tmp-out-rs && echo compilation done && ./tmp-out-rs<cr>
+  au FileType rust nnoremap <leader>ro :!rustc -O <c-r>=expand('%:p')<cr> -o tmp-out-rs && echo optimized compilation done && ./tmp-out-rs<cr>
 augroup END
 
 " }}}

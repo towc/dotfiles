@@ -36,7 +36,7 @@ curl https://raw.githubusercontent.com/towc/dotfiles/master/.oh-my-zsh/themes/ag
 
 ```
 sai vim
-vim --version # make sure it's above 8
+vim --version # make sure it's above 8.1
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 mkdir .vim/colors
 curl https://raw.githubusercontent.com/danilo-augusto/vim-afterglow/master/colors/afterglow.vim .vim/colors/afterglow.vim
@@ -66,4 +66,5 @@ curl https://weechat.org/files/temp/theme/theme.py > ~/.weechat/python/autoload/
 # other packages
 ```
 sai redshift vlock w3m bvi r2 xbacklight nmap feh
+npm i -g serve fkill-cli eslint tldr
 ```
