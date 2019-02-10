@@ -67,12 +67,15 @@ let g:indentLine_color_term = 236
 let g:indentLine_char = '|'
 set concealcursor=
 autocmd FileType json :IndentLinesDisable
+nnoremap <leader>ni :IndentLinesToggle<cr>
 
 
 " }}}
 " note taking {{{
 Plugin 'metakirby5/codi.vim'
 Plugin 'xolox/vim-misc'
+Plugin 'junegunn/goyo.vim'
+nnoremap <leader>ng :Goyo<cr>:set wrap! linebreak!<cr>:IndentLinesToggle<cr>
 "Plugin 'xolox/vim-notes'
 Plugin 'junegunn/limelight.vim'
 Plugin 'itchyny/calendar.vim'
@@ -151,13 +154,6 @@ setlocal ofu=syntaxcomplete#Complete
 set completeopt-=preview
 
 inoremap <c-c> <c-x><c-o>
-
-" }}}
-" indent guides {{{
-Plugin 'nathanaelkane/vim-indent-guides'
-let g:indent_guides_auto_colors = 0
-hi IndentGuidesOdd  ctermbg=none
-hi IndentGuidesEven ctermbg=red
 
 " }}}
 " c++ {{{

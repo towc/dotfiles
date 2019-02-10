@@ -145,11 +145,13 @@ bindkey ^q exec-exit
 
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias q='exit'
-alias greps='ps aux | grep '
+alias greps='ps aux | grep'
+pids() { greps $1 | grep -v grep | sed -re 's/^[^0-9]+//' | sed -re 's/ .+//' }
 
 alias sau='sudo apt-get update'
 alias sadu='sudo apt-get dist-upgrade'
 alias sai='sudo apt-get install'
+alias sap='sudo apt-get purge'
 alias sdi='sudo dpkg -i'
 
 alias dc='docker-compose'
@@ -164,6 +166,12 @@ alias pi='pip install --user'
 alias py='python3'
 alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
 alias vsrc='vim ~/.zshrc ~/.tmux.conf ~/.vimrc'
+
+alias ssp='kill -STOP'
+sspn() { ssp $(pids $1)}
+alias cnt='kill -CONT'
+cntn() { cnt $(pids $1)}
+killn() { kill $(pids $1)}
 
 fpath=(/home/user/.zsh/gradle-completion $fpath)
 

@@ -40,8 +40,10 @@ let mappings = "
 \:ℤ integers ints sz sint
 \:≤ <= lte le
 \:≥ >= gte ge
-\:ε emptyword ew greeke epsilon .e
-\:λ lambda greekl .l
+\:ε emptyword ew greeke gre epsilon .e
+\:λ lambda greekl grl .l
+\:Ω uomega greekO grO .O
+\:ϴ utheta greekT grT .T
 \ "
 
 let maptypes = ['inoremap', 'cnoremap']
