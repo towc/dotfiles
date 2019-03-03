@@ -31,13 +31,15 @@ bindsym $mod+Shift+z move workspace to output eDP-1
 
 # start a terminal
 bindsym $mod+Return exec x-terminal-emulator
-#bindsym $mod+Shift+Return exec x-terminal-emulator; exec sleep 0.2s; floating enable
+bindsym $mod+Shift+Return exec zsh -c "ZSH_TMUX_AUTOSTART=false x-terminal-emulator"
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 bindsym $mod+d exec "zsh -c \\"rofi -show run -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun\\""
 bindsym $mod+w exec "zsh -c \\"rofi -show window -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun\\""
+
+bindsym $mod+i exec "xcalib -invert -alter"
 
 # backlight brightness
 bindsym XF86MonBrightnessUp exec "xbacklight +5 -time 30"

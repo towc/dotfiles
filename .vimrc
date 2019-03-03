@@ -68,8 +68,6 @@ let g:indentLine_char = '|'
 set concealcursor=
 autocmd FileType json :IndentLinesDisable
 nnoremap <leader>ni :IndentLinesToggle<cr>
-
-
 " }}}
 " note taking {{{
 Plugin 'metakirby5/codi.vim'
@@ -242,6 +240,10 @@ augroup js-init
 augroup END
 
 " }}}
+" vue {{{
+" format element. F<ea<cr><esc>f>i<cr><80><esc>. 80 is backspace
+au FileType vue let @i = "F<eaf>i€kb"
+" }}}
 " typescript {{{
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Quramy/tsuquyomi'
@@ -311,6 +313,11 @@ let g:jedi#rename_command           = "<leader>tn"
 Plugin 'tweekmonster/django-plus.vim'
 
 au FileType python nnoremap <leader>rr :!python3 <c-r>=expand("%:p")<cr><cr>
+" }}}
+" Qt {{{
+Plugin 'peterhoeg/vim-qml'
+au FileType qml nnoremap <buffer> <leader>rr :!qmlscene <c-r>=expand("%:p")<cr><cr>
+au FileType qml nnoremap <buffer> <leader>rm :!QT_QUICK_CONTROLS_STYLE=material qmlscene <c-r>=expand("%:p")<cr><cr>
 " }}}
 " Ultisnips {{{
 Plugin 'SirVer/ultisnips'
@@ -414,6 +421,8 @@ nnoremap <leader>on :NERDTreeToggle<cr>
 " }}}
 " leader settings (s) {{{
 nnoremap <leader>sp :set paste!<cr>
+nnoremap <leader>sfi :set foldmethod=indent<cr>
+nnoremap <leader>sfs :set foldmethod=syntax<cr>
 
 function! ToggleVirtualEdit()
   if strlen(&virtualedit) == 0
@@ -489,7 +498,8 @@ vnoremap <leader>rr :w !bash<cr>
 
 " }}}
 " leader refactoring (t) {{{
-nnoremap <leader>tr :%s/\<<c-r><c-w>\>//g<left><left>
+nnoremap <leader>tn :%s/\<<c-r><c-w>\>//g<left><left>
+nnoremap <leader>tN :%s/\<<c-r><c-w>\>//g<left><left>
 " }}}
 " remap buffer writing/quitting {{{
 inoremap <c-s> <esc>:w<cr>

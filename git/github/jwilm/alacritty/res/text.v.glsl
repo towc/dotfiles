@@ -1,6 +1,7 @@
 // Copyright 2016 Joe Wilm, The Alacritty Project Contributors
 //
-// Licensed under the Apache License, Version 2.0 (the "License"); // you may not use this file except in compliance with the License.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
 //     http://www.apache.org/licenses/LICENSE-2.0
@@ -86,6 +87,7 @@ vec3 rgbToHsl(vec3 color) {
 
 vec3 tweak(vec3 rgb) {
   vec3 hsl = rgbToHsl(rgb);
+  hsl.z = 1 - hsl.z;
   hsl.x *= 6; 
   return hslToRgb(hsl);
 }
@@ -122,6 +124,6 @@ void main()
     vb = visualBell;
     background = backgroundPass;
 
-    bg = vec4(tweak(backgroundColor.rgb / 255.0), backgroundColor.a);
+    bg = vec4(tweak(backgroundColor.rgb / 255.0), 1.0); // backgroundColor.a);
     fg = tweak(textColor / 255.0);
 }

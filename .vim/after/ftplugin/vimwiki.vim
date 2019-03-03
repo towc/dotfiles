@@ -44,6 +44,10 @@ let mappings = "
 \:λ lambda greekl grl .l
 \:Ω uomega greekO grO .O
 \:ϴ utheta greekT grT .T
+\:σ lsigma greeks grs .s
+\:π lpi greekp grp .p
+\:ρ lrho greekr grr .r
+\:⋈ join rajoin raj
 \ "
 
 let maptypes = ['inoremap', 'cnoremap']

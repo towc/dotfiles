@@ -65,6 +65,6 @@ curl https://weechat.org/files/temp/theme/theme.py > ~/.weechat/python/autoload/
 
 # other packages
 ```
-sai redshift vlock w3m bvi r2 xbacklight nmap feh
+sai redshift vlock w3m bvi r2 xbacklight nmap feh xcalib
 npm i -g serve fkill-cli eslint tldr
 ```

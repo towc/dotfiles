@@ -83,7 +83,9 @@ DISABLE_AUTO_UPDATE="true"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 if [[ ! -o login ]]; then
-  ZSH_TMUX_AUTOSTART=true
+  if [[ ! -v ZSH_TMUX_AUTOSTART ]]; then
+    ZSH_TMUX_AUTOSTART=true
+  fi
   ZSH_TMUX_AUTOQUIT=true
 fi
 ZSH_TMUX_AUTOCONNECT=false
@@ -153,6 +155,8 @@ alias sadu='sudo apt-get dist-upgrade'
 alias sai='sudo apt-get install'
 alias sap='sudo apt-get purge'
 alias sdi='sudo dpkg -i'
+alias dl='dpkg -l'
+alias sdl='dl'
 
 alias dc='docker-compose'
 alias dcu='docker-compose up'
