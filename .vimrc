@@ -191,6 +191,7 @@ let g:ale_linters = {
 \   'json': ['eslint'],
 \   'typescript': ['tsserver'],
 \   'rust': ['rustc'],
+\   'sql': ['sqlint'],
 \}
 
 " let g:ale_sign_error = '█'
@@ -313,6 +314,7 @@ let g:jedi#rename_command           = "<leader>tn"
 Plugin 'tweekmonster/django-plus.vim'
 
 au FileType python nnoremap <leader>rr :!python3 <c-r>=expand("%:p")<cr><cr>
+au FileType python nnoremap <leader>rt :!pytest <c-r>=expand("%:p")<cr><cr>
 " }}}
 " Qt {{{
 Plugin 'peterhoeg/vim-qml'
@@ -362,6 +364,9 @@ let g:NERDTreeWinSize=20
 " docker  {{{
 Plugin 'docker/docker'
 
+" }}}
+" sql {{{
+"Plugin 'vim-scripts/sql.vim'
 " }}}
 " authoring vim plugins {{{
 Plugin 'tpope/vim-scriptease'

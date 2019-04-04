@@ -171,6 +171,12 @@ alias py='python3'
 alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
 alias vsrc='vim ~/.zshrc ~/.tmux.conf ~/.vimrc'
 
+#alias -g H='| head'
+#alias -g T='| tail'
+#alias -g G='| grep'
+#alias -g L="| less"
+#alias -g M="| most"
+
 alias ssp='kill -STOP'
 sspn() { ssp $(pids $1)}
 alias cnt='kill -CONT'
@@ -180,3 +186,4 @@ killn() { kill $(pids $1)}
 fpath=(/home/user/.zsh/gradle-completion $fpath)
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source ~/.local/bin/aws_zsh_completer.sh

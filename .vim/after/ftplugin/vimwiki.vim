@@ -48,7 +48,8 @@ let mappings = "
 \:π lpi greekp grp .p
 \:ρ lrho greekr grr .r
 \:⋈ join rajoin raj
-\ "
+\:÷ obelus division div radivision radiv rad
+\"
 
 let maptypes = ['inoremap', 'cnoremap']
 for str in split(mappings, ":")
