@@ -69,11 +69,11 @@ set concealcursor=
 autocmd FileType json :IndentLinesDisable
 nnoremap <leader>ni :IndentLinesToggle<cr>
 " }}}
-" note taking {{{
+" note taking (n) {{{
 Plugin 'metakirby5/codi.vim'
 Plugin 'xolox/vim-misc'
 Plugin 'junegunn/goyo.vim'
-nnoremap <leader>ng :Goyo<cr>:set wrap! linebreak!<cr>:IndentLinesToggle<cr>
+nnoremap <leader>ng :Goyo<cr>:set linebreak!<cr>:IndentLinesToggle<cr>
 "Plugin 'xolox/vim-notes'
 Plugin 'junegunn/limelight.vim'
 Plugin 'itchyny/calendar.vim'
@@ -101,6 +101,27 @@ nnoremap <leader>nl :Limelight!!<cr>
 " start calendar
 nnoremap <leader>nc :Calendar<cr>
 
+" markdown
+Plugin 'shime/vim-livedown'
+au FileType markdown nnoremap <leader>nm :LivedownToggle<cr>
+let g:livedown_browser = 'opera'
+
+function! UseBookMode()
+    LivedownPreview
+    Goyo
+    IndentLinesDisable
+    Limelight
+    g:saving_at_every_edit = 0
+    call ToggleSaveEveryEdit()
+    set linebreak
+    set wrap
+    nnoremap j gj
+    nnoremap k gk
+    " add a note
+    let @i = '?note-index2f-lyt"a<a name="note-content-pyiwA" href="#note-index-pA"><sup>pA</sup></a>Go</p><a name="note-index-pA" href="#note-content-pA">pa</a>: </p>Bi'
+endfunction
+nnoremap <leader>nb :call UseBookMode()<cr>
+" for books: \nm\ng\sns
 " }}}
 " text-object related {{{
 Plugin 'wellle/targets.vim'
@@ -438,6 +459,24 @@ function! ToggleVirtualEdit()
 endfunction
 nnoremap <leader>sv :call ToggleVirtualEdit()<cr>
 
+let g:saving_at_every_edit = 0
+function! ToggleSaveEveryEdit()
+  if g:saving_at_every_edit == 0
+    let g:saving_at_every_edit = 1
+    augroup SaveAtEveryEdit
+      au TextChanged,TextChangedI <buffer> silent write
+    augroup END 
+  else
+    let g:saving_at_every_edit = 0
+    " delete group
+    au! SaveAtEveryEdit
+  endif
+endfunction
+nnoremap <leader>ss :call ToggleSaveEveryEdit()<cr>
+
+" note settings {{{
+nnoremap <leader>sns :set spell!<cr>
+" }}}
 " }}}
 " leader echos (e) {{{
 " echo resolved path under cursor
