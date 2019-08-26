@@ -7,6 +7,8 @@ set foldmethod=marker
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+set nomodeline  " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+
 let maplocalleader="\\"
 
 " plugin management {{{
@@ -115,6 +117,7 @@ function! UseBookMode()
     call ToggleSaveEveryEdit()
     set linebreak
     set wrap
+    set spell
     nnoremap j gj
     nnoremap k gk
     " add a note
@@ -389,6 +392,13 @@ Plugin 'docker/docker'
 " sql {{{
 "Plugin 'vim-scripts/sql.vim'
 " }}}
+" r {{{
+" run, and allow to look at term
+au FileType r nnoremap <buffer> <leader>re :!echo "x11();" > /tmp/vim-r-script && cat <c-r>=expand("%:p")<cr> >> /tmp/vim-r-script && echo "Sys.sleep(.05);system('x-terminal-emulator --title \"Floater Confirm\" -d 5 5 -e bash -c read')" >> /tmp/vim-r-script && Rscript /tmp/vim-r-script && rm /tmp/vim-r-script<cr>
+" run, and go back to code
+au FileType r nnoremap <buffer> <leader>rr :!echo "x11();" > /tmp/vim-r-script && cat <c-r>=expand("%:p")<cr> >> /tmp/vim-r-script && echo "Sys.sleep(.05);system('x-terminal-emulator --title \"Floater Confirm\" -d 5 5 -e bash -c read')" >> /tmp/vim-r-script && Rscript /tmp/vim-r-script && rm /tmp/vim-r-script<cr><cr>
+au FileType r nnoremap <buffer> <leader>rt :!Rscript <c-r>=expand("%:p")<cr><cr>
+" }}}
 " authoring vim plugins {{{
 Plugin 'tpope/vim-scriptease'
 
@@ -434,7 +444,8 @@ nnoremap <leader>vS :redraw!<cr>
 
 " }}}
 " loader insert (i) {{{
-nnoremap <leader>id :pu=strftime('%c')<cr>
+nnoremap <leader>id :let @d=strftime("%c")<cr>"dP
+nnoremap <leader>iD :pu=strftime('%c')<cr>
 " }}}
 " leader opening (o) {{{
 " open current file in a new tab
@@ -473,6 +484,9 @@ function! ToggleSaveEveryEdit()
   endif
 endfunction
 nnoremap <leader>ss :call ToggleSaveEveryEdit()<cr>
+
+nnoremap <leader>sts :let old_ft=&filetype <bar> set ft=txt<cr>
+nnoremap <leader>str :let &ft=old_ft<cr>
 
 " note settings {{{
 nnoremap <leader>sns :set spell!<cr>

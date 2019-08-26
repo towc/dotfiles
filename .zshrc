@@ -1,7 +1,10 @@
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 PATHS=""
-PATHS+="./node_modules/.bin"
+PATHS+="$HOME/work/vps/bin"
+PATHS+=":./node_modules/.bin"
 PATHS+=":$HOME/.npm-global/bin"
 PATHS+=":$HOME/.bin"
 PATHS+=":$HOME/.cargo/bin"
@@ -12,6 +15,7 @@ PATHS+=":$HOME/bin"
 PATHS+=":$HOME/.fzf/bin"
 PATHS+=":$HOME/.gem/ruby/2.3.0/bin"
 PATHS+=":/home/nvidia/.local/bin"
+PATHS+=":$JAVA_HOME/bin"
 
 export PATH=$PATHS:$PATH
 
@@ -149,11 +153,14 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias q='exit'
 alias greps='ps aux | grep'
 pids() { greps $1 | grep -v grep | sed -re 's/^[^0-9]+//' | sed -re 's/ .+//' }
+agg() { git grep $1 $(git rev-list all) }
+alias gbb='git symbolic-ref --short HEAD'
 
 alias sau='sudo apt-get update'
 alias sadu='sudo apt-get dist-upgrade'
 alias sai='sudo apt-get install'
 alias sap='sudo apt-get purge'
+alias acs='apt-cache search'
 alias sdi='sudo dpkg -i'
 alias dl='dpkg -l'
 alias sdl='dl'
@@ -171,6 +178,9 @@ alias py='python3'
 alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
 alias vsrc='vim ~/.zshrc ~/.tmux.conf ~/.vimrc'
 
+alias copy='xclip -sel clip'
+alias L='less -R'
+
 #alias -g H='| head'
 #alias -g T='| tail'
 #alias -g G='| grep'
@@ -183,7 +193,9 @@ alias cnt='kill -CONT'
 cntn() { cnt $(pids $1)}
 killn() { kill $(pids $1)}
 
-fpath=(/home/user/.zsh/gradle-completion $fpath)
+#fpath=(/home/user/.zsh/gradle-completion $fpath)
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source ~/.local/bin/aws_zsh_completer.sh
+
+eval $(thefuck --alias)

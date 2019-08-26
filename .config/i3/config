@@ -21,9 +21,9 @@ bindsym $mod+x exec "~/.bin/lock-screen"
 # screen
 bindsym $mod+Shift+b exec "xrandr --auto"
 # VGA
-#bindsym $mod+b exec "xrandr --output DP-1 --mode 1680x1050 --above eDP-1"
-#bindsym $mod+z move workspace to output DP-1
-#bindsym $mod+Shift+z move workspace to output eDP-1
+#bindsym $mod+b exec "xrandr --output DP1 --mode 1680x1050 --above eDP1"
+#bindsym $mod+z move workspace to output DP1
+#bindsym $mod+Shift+z move workspace to output eDP1
 # HDMI
 bindsym $mod+b exec "xrandr --output HDMI1 --mode 1920x1080 --above eDP1"
 bindsym $mod+z move workspace to output HDMI1
@@ -32,6 +32,7 @@ bindsym $mod+Shift+z move workspace to output eDP1
 # start a terminal
 bindsym $mod+Return exec x-terminal-emulator
 bindsym $mod+Shift+Return exec zsh -c "ZSH_TMUX_AUTOSTART=false x-terminal-emulator"
+bindsym $mod+BackSpace exec zsh -c "ZSH_TMUX_AUTOSTART=false x-terminal-emulator -e $(cat ~/cmd)"
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -39,7 +40,9 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec "zsh -c \\"rofi -show run -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun\\""
 bindsym $mod+w exec "zsh -c \\"rofi -show window -location 2 -width 100 -lines 10 -sidebar-mode -modi run,window,ssh,drun\\""
 
+# misc
 bindsym $mod+i exec "xcalib -invert -alter"
+bindsym $mod+o border toggle 
 
 # backlight brightness
 bindsym XF86MonBrightnessUp exec "xbacklight +5 -time 30"
@@ -182,6 +185,9 @@ for_window [class="(?i)chromium"] title_format " %title"
 for_window [class="file_manager"] title_format " %title"
 for_window [class="editor"] title_format "  (%title)"
 for_window [class="xterm-256color"] border pixel 1
+
+#for_window [title="Floater Confirm"] floating enable
+for_window [title="R Graphics:"] floating enable
 
 # status bar
 bar {

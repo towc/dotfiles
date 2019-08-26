@@ -13,25 +13,23 @@
 // limitations under the License.
 #version 330 core
 in vec2 TexCoords;
-in vec3 fg;
-in vec4 bg;
-flat in float vb;
-flat in int background;
+flat in vec3 fg;
+flat in vec4 bg;
+uniform int backgroundPass;
 
 layout(location = 0, index = 0) out vec4 color;
 layout(location = 0, index = 1) out vec4 alphaMask;
 
-uniform float bgOpacity;
 uniform sampler2D mask;
 
 void main()
 {
-    if (background != 0) {
-      if (bg.a == 0.0)
-          discard;
+    if (backgroundPass != 0) {
+        if (bg.a == 0.0)
+            discard;
 
         alphaMask = vec4(1.0);
-        color = vec4(bg.rgb + vb, 1.0);
+        color = vec4(bg.rgb, 1.0);
     } else {
         vec3 textColor = texture(mask, TexCoords).rgb;
         alphaMask = vec4(textColor, textColor.r);
