@@ -179,6 +179,7 @@ alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
 alias vsrc='vim ~/.zshrc ~/.tmux.conf ~/.vimrc'
 
 alias copy='xclip -sel clip'
+alias myip='dig myip.opendns.com @resolver1.opendns.com +short'
 alias L='less -R'
 
 #alias -g H='| head'

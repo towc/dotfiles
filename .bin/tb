@@ -1,0 +1,2 @@
+#!/usr/bin/zsh
+nc termbin.com 9999

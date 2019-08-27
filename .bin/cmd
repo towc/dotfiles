@@ -1,0 +1,4 @@
+#!/bin/bash
+FILE=~/cmds/$1
+shift
+echo $@ > $FILE

@@ -1,0 +1,2 @@
+#!/bin/bash
+yq r -j - | python -m json.tool

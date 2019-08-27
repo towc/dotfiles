@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cp ~/.aws/credentials.s3 ~/.aws/credentials

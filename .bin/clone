@@ -1,0 +1,55 @@
+#!/bin/zsh
+
+protocol=$1
+user=$2
+repo=$3
+
+base=$HOME/git
+site=''
+strat=$protocol
+
+case $protocol in
+  github | gh)
+    strat=github
+    site=github
+    ;;
+  vps)
+    strat=vps
+    base=$HOME/work/vps/git
+    site='bitbucket'
+    ;;
+  *)
+    echo "Protocol $site not found, exiting"
+    exit 1
+esac
+
+cd $base
+
+echo "trying to use $base/$site/$user/$repo"
+
+if [ ! -d $site ]
+then
+  echo "creating $base/$site directory"
+  mkdir $site
+fi
+
+cd $site
+
+if [ ! -d $user ]
+then
+  echo "creating $base/$site/$user"
+  mkdir $user
+fi
+
+cd $user
+
+case $strat in
+  github)
+    git clone git@github.com:$user/$repo
+    ;;
+  vps)
+    git clone ssh://git@dev.viewpointsystem.io:7999/$user/$repo.git
+    ;;
+esac
+
+echo "repo located in $base/$site/$user/$repo"

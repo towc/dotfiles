@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cp ~/.aws/credentials.ecr ~/.aws/credentials
