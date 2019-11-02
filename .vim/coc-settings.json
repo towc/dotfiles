@@ -1,0 +1,20 @@
+{
+  "diagnostic.displayByAle": true,
+  "suggest.autoTrigger": "none",
+  "coc.preferences.formatOnSaveFiletypes": ["elm"],
+  "codeLens.enable": true,
+  "languageserver": {
+    "elmLS": {
+      "command": "elm-language-server",
+      "filetypes": ["elm"],
+      "rootPatterns": ["elm.json"],
+      "trace.server": "verbose",
+      "initializationOptions": {
+        "elmPath": "elm",
+        "elmFormatPath": "elm-format",
+        "elmTestPath": "elm-test",
+        "elmAnalyseTrigger": "change"
+      }
+    }
+  }
+}

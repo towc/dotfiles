@@ -12,81 +12,145 @@ set nomodeline  " https://github.com/numirias/security/blob/master/doc/2019-06-0
 let maplocalleader="\\"
 
 " plugin management {{{
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" Install vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-nnoremap <leader>pi <esc>:w<cr>:source ~/.vimrc<cr>:PluginInstall<cr>
-nnoremap <leader>pc <esc>:w<cr>:source ~/.vimrc<cr>:PluginClean<cr>
-nnoremap <leader>pu :PluginUpdate<cr>
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Plugins
+call plug#begin('~/.vim/plugged')
+nnoremap <leader>pi <esc>:w<cr>:source ~/.vimrc<cr>:PlugInstall<cr>
+nnoremap <leader>pc <esc>:w<cr>:source ~/.vimrc<cr>:PlugClean<cr>
+nnoremap <leader>pu :PlugUpdate<cr>
+nnoremap <leader>ps :PlugStatus<cr>
+nnoremap <leader>pd :PlugDiff<cr>
+" upgrade vim-plug itself
+nnoremap <leader>pU :PlugUpgrade<cr>
 
 " }}}
 " timetracking {{{
-Plugin 'termoshtt/toggl.vim'
+Plug 'termoshtt/toggl.vim'
 "let g:toggl_api_token = ""
 "let g:toggl_workspace_id = 123
-Plugin 'wakatime/vim-wakatime'
+Plug 'wakatime/vim-wakatime'
 
 " }}}
 " colorschemes {{{
-Plugin 'NLKNguyen/papercolor-theme' " PaperColor
+Plug 'NLKNguyen/papercolor-theme' " PaperColor
 colorscheme afterglow
 
 " }}}
 " unsorted plugins {{{
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plugin 'junegunn/fzf.vim'
-Plugin 'scy/vim-mkdir-on-write'
-Plugin 'vim-jp/vital.vim'
-Plugin 'mattn/webapi-vim'
-Plugin 'tpope/vim-speeddating'
-Plugin 'embear/vim-localvimrc'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'scy/vim-mkdir-on-write'
+Plug 'vim-jp/vital.vim'
+Plug 'mattn/webapi-vim'
+Plug 'tpope/vim-speeddating'
+Plug 'embear/vim-localvimrc'
 let g:localvimrc_ask = 0
 let g:localvimrc_sandbox = 0
 
-Plugin 'neoclide/coc.nvim@release'
+"Plug 'vim-scripts/DrawIt'
 
-"Plugin 'yuratomo/w3m.vim'
-
-"Plugin 'vim-scripts/sketch.vim'
-Plugin 'vim-scripts/DrawIt'
-
-Plugin 'tikhomirov/vim-glsl'
-Plugin 'ap/vim-css-color'
-Plugin 'Raimondi/delimitMate'
-Plugin 'terryma/vim-expand-region' " + -
-Plugin 'mattn/emmet-vim' " c-y,
-Plugin 'AndrewRadev/splitjoin.vim' " gS gJ
+Plug 'tikhomirov/vim-glsl', { 'for': 'glsl' }
+Plug 'ap/vim-css-color'
+Plug 'Raimondi/delimitMate'
+Plug 'terryma/vim-expand-region' " + -
+Plug 'mattn/emmet-vim', { 'for': ['html', 'xml', 'vue', 'javascript', 'typescript']} " c-y,
+Plug 'AndrewRadev/splitjoin.vim' " gS gJ
 "Plugin 'kshenoy/vim-signature'
-Plugin 'mbbill/undotree'
+Plug 'mbbill/undotree'
 nnoremap <leader>uu :UndotreeToggle<cr>
-Plugin 'Yggdroot/indentLine'
+Plug 'Yggdroot/indentLine'
 let g:indentLine_color_term = 236
 let g:indentLine_char = '|'
 set concealcursor=
 autocmd FileType json :IndentLinesDisable
 nnoremap <leader>ni :IndentLinesToggle<cr>
 " }}}
-" note taking (n) {{{
-Plugin 'metakirby5/codi.vim'
-Plugin 'xolox/vim-misc'
-Plugin 'junegunn/goyo.vim'
-nnoremap <leader>ng :Goyo<cr>:set linebreak!<cr>:IndentLinesToggle<cr>
-"Plugin 'xolox/vim-notes'
-Plugin 'junegunn/limelight.vim'
-Plugin 'itchyny/calendar.vim'
-Plugin 'RRethy/vim-illuminate'
-Plugin 'vimwiki/vimwiki'
-let g:Illuminate_delay = 1
+" language server (c) {{{
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
+nnoremap <leader>C :<c-u>CocDisable<cr>
+nnoremap <leader>Cc :<c-u>CocEnable<cr>
+nnoremap <leader>ci :<c-u>CocInstall 
+nnoremap <leader>cl :<c-u>CocList<cr>
+
+nnoremap <leader>ct :<c-u>call ToggleAutoTrigger()<cr>
+nmap <leader>cr <Plug>(coc-rename)
+nmap <silent> <leader>cs <Plug>(coc-fix-current)
+nmap <silent> <leader>cS <Plug>(coc-codeaction)
+nmap <silent> <leader>ca <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>cA <Plug>(coc-diagnostic-next-error)
+nmap <silent> <leader>cd <Plug>(coc-definition)
+nmap <silent> <leader>cg :call CocAction('doHover')<CR>
+nmap <silent> <leader>cu <Plug>(coc-references)
+nmap <silent> <leader>cp :call CocActionAsync('format')<CR>
+
+function! ToggleAutoTrigger()
+  if get(g:coc_user_config, 'suggest.autoTrigger') == 'always'
+    call coc#config('suggest.autoTrigger', 'none')
+  else
+    call coc#config('suggest.autoTrigger', 'always')
+  endif
+endfunction
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-c> to trigger completion.
+inoremap <silent><expr> <c-c> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+" }}}
+" note taking (n) {{{
+Plug 'metakirby5/codi.vim'
 " toggle scratchpad
 nnoremap <leader>ns :Codi!!<cr>
+
+Plug 'xolox/vim-misc'
+Plug 'junegunn/goyo.vim'
+nnoremap <leader>ng :Goyo<cr>:set linebreak!<cr>:IndentLinesToggle<cr>
+"Plugin 'xolox/vim-notes'
+Plug 'junegunn/limelight.vim'
+Plug 'itchyny/calendar.vim'
+Plug 'RRethy/vim-illuminate'
+Plug 'vimwiki/vimwiki', { 'for': ['vimwiki', 'markdown']}
+let g:Illuminate_delay = 1
 
 let g:vimwiki_conceallevel = 0
 let g:vimwiki_list = [{ 'path': '~/uni/notes', 'syntax': 'markdown' }, { 'path': '~/git/github/towc/uni-cs-kcl-2018', 'syntax': 'markdown' }]
@@ -106,7 +170,7 @@ nnoremap <leader>nl :Limelight!!<cr>
 nnoremap <leader>nc :Calendar<cr>
 
 " markdown
-Plugin 'shime/vim-livedown'
+Plug 'shime/vim-livedown', { 'for': ['vimwiki', 'markdown']}
 au FileType markdown nnoremap <leader>nm :LivedownToggle<cr>
 let g:livedown_browser = 'opera'
 
@@ -129,8 +193,8 @@ nnoremap <leader>nb :call UseBookMode()<cr>
 " for books: \nm\ng\sns
 " }}}
 " text-object related {{{
-Plugin 'wellle/targets.vim'
-Plugin 'tpope/vim-surround'
+Plug 'wellle/targets.vim'
+Plug 'tpope/vim-surround'
 "Plugin 'bkad/CamelCaseMotion'
 "
 "map <silent> w <Plug>CamelCaseMotion_w
@@ -139,9 +203,9 @@ Plugin 'tpope/vim-surround'
 
 
 " }}}
-" git {{{
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-rhubarb'
+" git (g) {{{
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 nnoremap <Leader>gs :Gstatus<cr><c-w>J
 nnoremap <Leader>gd :Gdiff<cr>
 nnoremap <Leader>gc :Gcommit<cr><c-w>J
@@ -154,8 +218,8 @@ nnoremap <Leader>gp :Gpull<cr>
 nnoremap <Leader>gP :Gpush<cr>
 
 " }}}
-" gist {{{
-Plugin 'mattn/gist-vim'
+" gist (h) {{{
+Plug 'mattn/gist-vim'
 
 nnoremap <leader>hh <esc>:Gist -a<cr>
 nnoremap <leader>hs <esc>:Gist -p<cr>
@@ -166,22 +230,22 @@ vnoremap <leader>hp <esc>:Gist -P<cr>
 
 " }}}
 " status line {{{
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
 
 " }}}
-" autocomplete {{{
-Plugin 'othree/jspc.vim'
-Plugin 'ternjs/tern_for_vim', { 'do': 'npm i' }
-setlocal ofu=syntaxcomplete#Complete
-set completeopt-=preview
+" autocomplete ? {{{
+"Plug 'othree/jspc.vim', { 'for': ['javascript', 'typescript', 'html', 'vue']}
+"Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'typescript', 'html', 'vue'], 'do': 'npm i' }
+"setlocal ofu=syntaxcomplete#Complete
+"set completeopt-=preview
 
-inoremap <c-c> <c-x><c-o>
+"inoremap <c-c> <c-x><c-o>
 
 " }}}
 " c++ {{{
-Plugin 'vim-scripts/OmniCppComplete'
+Plug 'vim-scripts/OmniCppComplete', { 'for': ['cpp', 'hpp']}
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp map <leader>tt :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
 au FileType cpp nnoremap <leader>rr :!g++ <c-r>=expand("%:p")<cr> -o tmp-out -Wall -Weffc++ -Wextra -Wsign-conversion && ./tmp-out<cr>
@@ -195,7 +259,7 @@ set tags+=~/.vim/tags/cpp
 
 " }}}
 " eslint {{{
-Plugin 'w0rp/ale'
+Plug 'w0rp/ale'
 let g:ale_sign_column_always = 1
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
@@ -243,7 +307,7 @@ augroup END
 
 " }}}
 " react {{{
-Plugin 'mxw/vim-jsx'
+Plug 'mxw/vim-jsx', {'for':['javascript', 'jsx']}
 
 " }}}
 " angular {{{
@@ -251,22 +315,20 @@ Plugin 'mxw/vim-jsx'
 
 " }}}
 " javascript {{{
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'pangloss/vim-javascript'
-Plugin 'purescript-contrib/purescript-vim'
-Plugin 'moll/vim-node'
-Plugin 'posva/vim-vue'
-Plugin 'Quramy/vim-js-pretty-template'
-Plugin 'dai-shi/es-beautifier', {'rtp': 'contrib/vim', 'external_commands': 'node', 'build_commands': 'npm', 'build': {'others': 'npm install --only=production'}}
-Plugin 'prettier/vim-prettier', { 'do': 'npm install' }
+Plug 'jelera/vim-javascript-syntax', {'for':['javascript', 'jsx', 'vue', 'html']}
+Plug 'pangloss/vim-javascript', {'for':['javascript', 'jsx', 'vue', 'html']}
+Plug 'moll/vim-node', {'for':['javascript', 'jsx', 'vue', 'html']}
+Plug 'Quramy/vim-js-pretty-template', {'for':['javascript', 'jsx', 'vue', 'html']}
 augroup js-init
   au FileType javascript setlocal omnifunc=jspc#omni
-  au FileType javascript nnoremap <buffer> <Leader>e :call EsBeautifier()<cr>
-  au FileType javascript vnoremap <buffer> <Leader>e :call RangeEsBeautifier()<cr>
   au FileType javascript nnoremap <buffer> <leader>rr :!node <c-r>=expand("%:p")<cr><cr>
 augroup END
+
+au FileType javascript,jsx,vue nnoremap <leader>ri :!npm install --save 
 " }}}
 " elm {{{
+
+" using outdated system
 "Plugin 'Zaptic/elm-vim'
 "let g:elm_setup_keybindings = 0
 ""au FileType elm nnoremap <leader>rr <plug>(elm-make)
@@ -277,23 +339,20 @@ augroup END
 "au FileType elm nmap <leader>te <plug>(elm-error-details)
 "au FileType elm nmap <leader>td <plug>(elm-show-docs)
 
-nmap <leader>cr <Plug>(coc-rename)
-nmap <silent> <leader>cs <Plug>(coc-fix-current)
-nmap <silent> <leader>cS <Plug>(coc-codeaction)
-nmap <silent> <leader>ca <Plug>(coc-diagnostic-next)
-nmap <silent> <leader>cA <Plug>(coc-diagnostic-next-error)
-nmap <silent> <leader>cd <Plug>(coc-definition)
-nmap <silent> <leader>cg :call CocAction('doHover')<CR>
-nmap <silent> <leader>cu <Plug>(coc-references)
-nmap <silent> <leader>cp :call CocActionAsync('format')<CR>
+" language server, remember to add to coc-settings.json
+Plug 'andys8/vim-elm-syntax', { 'for': ['elm'] }
+
+au FileType elm nnoremap <leader>ri :!elm install 
 " }}}
 " vue {{{
+Plug 'posva/vim-vue', {'for':['javascript', 'jsx', 'vue', 'html']}
+
 " format element. F<ea<cr><esc>f>i<cr><80><esc>. 80 is backspace
 au FileType vue let @i = "F<eaf>i€kb"
 " }}}
 " typescript {{{
-Plugin 'leafgarland/typescript-vim'
-Plugin 'Quramy/tsuquyomi'
+Plug 'leafgarland/typescript-vim', {'for': 'typescript'}
+Plug 'Quramy/tsuquyomi', {'for': 'typescript'}
 
 augroup ts-mappings
   au FileType typescript map <buffer> <Leader>td <Esc>:TsuDefinition<Enter>
@@ -340,14 +399,14 @@ au FileType java vnoremap <leader>tgG :JavaGetSet<cr>
 au FileType java nnoremap <leader>r :Java<cr>
 " }}}
 " assembly {{{
-Plugin 'VelkyVenik/vim-avr' " always sets type to avr. Better fix it somehow
+Plug 'VelkyVenik/vim-avr' " always sets type to avr. Better fix it somehow
 au FileType asm set ft=avr
 au FileType avr set tabstop=8
 au FileType avr set softtabstop=0 noexpandtab
 au FileType avr set shiftwidth=8
 " }}}
 " python {{{
-Plugin 'davidhalter/jedi-vim' " autocomplete
+Plug 'davidhalter/jedi-vim' " autocomplete
 let g:jedi#show_call_signatures = "1"
 let g:jedi#goto_command             = "<leader>td"
 let g:jedi#goto_assignments_command = ""
@@ -357,19 +416,20 @@ let g:jedi#usages_command           = "<leader>tr"
 let g:jedi#completions_command      = "<C-Space>"
 let g:jedi#rename_command           = "<leader>tn"
 
-Plugin 'tweekmonster/django-plus.vim'
+Plug 'tweekmonster/django-plus.vim'
 
 au FileType python nnoremap <leader>rr :!python3 <c-r>=expand("%:p")<cr><cr>
 au FileType python nnoremap <leader>rt :!pytest <c-r>=expand("%:p")<cr><cr>
+au FileType python nnoremap <leader>ri :!pip install --user 
 " }}}
 " Qt {{{
-Plugin 'peterhoeg/vim-qml'
+Plug 'peterhoeg/vim-qml'
 au FileType qml nnoremap <buffer> <leader>rr :!qmlscene <c-r>=expand("%:p")<cr><cr>
 au FileType qml nnoremap <buffer> <leader>rm :!QT_QUICK_CONTROLS_STYLE=material qmlscene <c-r>=expand("%:p")<cr><cr>
 " }}}
 " Ultisnips {{{
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 let g:UltiSnipsSnippetDirectories=["/home/user/UltiSnips"]
 
 let g:UltiSnipsExpandTrigger="<C-l>"
@@ -378,15 +438,15 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " }}}
 " regex {{{
-Plugin 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
 " }}}
 " rust {{{
-Plugin 'rust-lang/rust.vim'
-Plugin 'racer-rust/vim-racer'
+Plug 'rust-lang/rust.vim'
+Plug 'racer-rust/vim-racer'
 set hidden
 let g:racer_cmd = '~/.cargo/bin/racer'
 let g:racer_experimental_completer = 1
@@ -402,13 +462,13 @@ augroup END
 
 " }}}
 " nerdtree {{{
-Plugin 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 
 let g:NERDTreeWinSize=20
 
 " }}}
 " docker  {{{
-Plugin 'docker/docker'
+Plug 'docker/docker'
 
 " }}}
 " sql {{{
@@ -422,11 +482,11 @@ au FileType r nnoremap <buffer> <leader>rr :!echo "x11();" > /tmp/vim-r-script &
 au FileType r nnoremap <buffer> <leader>rt :!Rscript <c-r>=expand("%:p")<cr><cr>
 " }}}
 " authoring vim plugins {{{
-Plugin 'tpope/vim-scriptease'
+Plug 'tpope/vim-scriptease'
 
 " }}}
 " end plugin management {{{
-call vundle#end()
+call plug#end()
 filetype plugin indent on
 
 " }}}
@@ -597,4 +657,4 @@ autocmd FileType javascript,vim call matchadd('colorcolumn', '\%80v', 100)
 " }}}
 " local vimrc {{{
 set exrc
-" }}]
+" }}}
