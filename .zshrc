@@ -173,6 +173,7 @@ alias nd='npm uninstall --save'
 alias nig='npm install --save -g'
 alias ndg='npm uninstall --save -g'
 alias pi='pip install --user'
+alias ei='elm install'
 
 alias py='python3'
 alias src='source ~/.zshrc && tmux source ~/.tmux.conf'

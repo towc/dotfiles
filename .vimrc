@@ -50,6 +50,8 @@ Plugin 'embear/vim-localvimrc'
 let g:localvimrc_ask = 0
 let g:localvimrc_sandbox = 0
 
+Plugin 'neoclide/coc.nvim@release'
+
 "Plugin 'yuratomo/w3m.vim'
 
 "Plugin 'vim-scripts/sketch.vim'
@@ -263,7 +265,27 @@ augroup js-init
   au FileType javascript vnoremap <buffer> <Leader>e :call RangeEsBeautifier()<cr>
   au FileType javascript nnoremap <buffer> <leader>rr :!node <c-r>=expand("%:p")<cr><cr>
 augroup END
+" }}}
+" elm {{{
+"Plugin 'Zaptic/elm-vim'
+"let g:elm_setup_keybindings = 0
+""au FileType elm nnoremap <leader>rr <plug>(elm-make)
+"au FileType elm nmap <leader>rb <plug>(elm-make)
+"au FileType elm nmap <leader>rm <plug>(elm-make-main)
+"au FileType elm nmap <leader>rt <plug>(elm-test)
+"au FileType elm nmap <leader>re <plug>(elm-repl)
+"au FileType elm nmap <leader>te <plug>(elm-error-details)
+"au FileType elm nmap <leader>td <plug>(elm-show-docs)
 
+nmap <leader>cr <Plug>(coc-rename)
+nmap <silent> <leader>cs <Plug>(coc-fix-current)
+nmap <silent> <leader>cS <Plug>(coc-codeaction)
+nmap <silent> <leader>ca <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>cA <Plug>(coc-diagnostic-next-error)
+nmap <silent> <leader>cd <Plug>(coc-definition)
+nmap <silent> <leader>cg :call CocAction('doHover')<CR>
+nmap <silent> <leader>cu <Plug>(coc-references)
+nmap <silent> <leader>cp :call CocActionAsync('format')<CR>
 " }}}
 " vue {{{
 " format element. F<ea<cr><esc>f>i<cr><80><esc>. 80 is backspace
