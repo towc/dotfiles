@@ -3,3 +3,5 @@
 	name = Matei Copot
 [core]
 	excludesfile = /home/user/.gitignore_global
+[merge]
+	tool = vimdiff

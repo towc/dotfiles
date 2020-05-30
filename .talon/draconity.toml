@@ -1,0 +1,16 @@
+timeout = 80
+timeout_incomplete = 500
+prevent_wake = 1
+secret = "vT7F5oWN7AQu09DyHJD8xQ"
+# logfile = "/home/user/.talon/draconity.log"
+
+[[pipe]]
+path = "/home/user/.talon/.sys/draconity.sock"
+
+# [[socket]]
+# host = "127.0.0.1"
+# port = 38065
+
+# [[remote]]
+# host = "127.0.0.1"
+# port = 38065

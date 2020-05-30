@@ -19,7 +19,7 @@ bindsym $mod+semicolon exec "setxkbmap sk"
 bindsym $mod+x exec "~/.bin/lock-screen"
 
 # screen
-bindsym $mod+Shift+b exec "xrandr --auto"
+bindsym $mod+Shift+b exec "xrandr && xrandr --auto"
 # VGA
 #bindsym $mod+b exec "xrandr --output DP1 --mode 1680x1050 --above eDP1"
 #bindsym $mod+z move workspace to output DP1
@@ -55,6 +55,9 @@ bindsym $mod+w exec "zsh -c \\"rofi -show window -location 2 -width 100 -lines 1
 # misc
 bindsym $mod+i exec "xcalib -invert -alter"
 bindsym $mod+o border toggle 
+
+bindsym $mod+g exec "/home/user/.bin/start-gif"
+bindsym $mod+Shift+g exec "killall ffmpeg"
 
 # backlight brightness
 bindsym XF86MonBrightnessUp exec "xbacklight +5 -time 10"

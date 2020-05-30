@@ -78,8 +78,10 @@ nnoremap <leader>C :<c-u>CocDisable<cr>
 nnoremap <leader>Cc :<c-u>CocEnable<cr>
 nnoremap <leader>ci :<c-u>CocInstall 
 nnoremap <leader>cl :<c-u>CocList<cr>
+nnoremap <leader>cx :<c-u>CocAction<cr>
 
 nnoremap <leader>ct :<c-u>call ToggleAutoTrigger()<cr>
+nnoremap <leader>cf :<c-u>call ToggleAutoFix()<cr>
 nmap <leader>cr <Plug>(coc-rename)
 nmap <silent> <leader>cs <Plug>(coc-fix-current)
 nmap <silent> <leader>cS <Plug>(coc-codeaction)
@@ -95,6 +97,16 @@ function! ToggleAutoTrigger()
     call coc#config('suggest.autoTrigger', 'none')
   else
     call coc#config('suggest.autoTrigger', 'always')
+  endif
+endfunction
+
+function! ToggleAutoFix()
+  if get(g:coc_user_config, 'eslint.autoFixOnSave') == 'true'
+    echo "no longer fixing on save"
+    call coc#config('eslint.autoFixOnSave', 'false')
+  else
+    echo "fixing on save"
+    call coc#config('eslint.autoFixOnSave', 'true')
   endif
 endfunction
 
@@ -172,7 +184,7 @@ nnoremap <leader>nc :Calendar<cr>
 " markdown
 Plug 'shime/vim-livedown', { 'for': ['vimwiki', 'markdown']}
 au FileType markdown nnoremap <leader>nm :LivedownToggle<cr>
-let g:livedown_browser = 'opera'
+let g:livedown_browser = 'firefox'
 
 function! UseBookMode()
     LivedownPreview
@@ -265,7 +277,7 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \   'jsx': ['eslint'],
 \   'json': ['eslint'],
-\   'typescript': ['tslint'],
+\   'typescript': ['eslint'],
 \   'vue': ['eslint'],
 \   'c': ['clang-format'],
 \   'cpp': ['clang-format'],
@@ -273,15 +285,18 @@ let g:ale_fixers = {
 \   'hpp': ['clang-format'],
 \   'rust': ['rustfmt'],
 \   'python': ['autopep8'],
+\   'reason': ['refmt'],
+\   'ruby': ['rubocop']
 \}
 map <leader>f :ALEFix<CR>
 let g:ale_linters = {
 \   'javascript': ['eslint'],
 \   'jsx': ['eslint'],
 \   'json': ['eslint'],
-\   'typescript': ['tsserver'],
+\   'typescript': ['eslint'],
 \   'rust': ['rustc'],
 \   'sql': ['sqlint'],
+\   'reason': ['refmt'],
 \}
 
 " let g:ale_sign_error = '█'
@@ -317,7 +332,7 @@ Plug 'mxw/vim-jsx', {'for':['javascript', 'jsx']}
 " javascript {{{
 Plug 'jelera/vim-javascript-syntax', {'for':['javascript', 'jsx', 'vue', 'html']}
 Plug 'pangloss/vim-javascript', {'for':['javascript', 'jsx', 'vue', 'html']}
-Plug 'moll/vim-node', {'for':['javascript', 'jsx', 'vue', 'html']}
+"Plug 'moll/vim-node', {'for':['javascript', 'jsx', 'vue', 'html']}
 Plug 'Quramy/vim-js-pretty-template', {'for':['javascript', 'jsx', 'vue', 'html']}
 augroup js-init
   au FileType javascript setlocal omnifunc=jspc#omni
@@ -344,6 +359,11 @@ Plug 'andys8/vim-elm-syntax', { 'for': ['elm'] }
 
 au FileType elm nnoremap <leader>ri :!elm install 
 " }}}
+" reason-ml {{{
+Plug 'reasonml-editor/vim-reason-plus'
+au FileType reason nnoremap <leader>rr :!node <c-r>=expand("%<:p")<cr>.bs.js<cr>
+au FileType reason nnoremap <leader>rb :!bsb -make-world && node <c-r>=expand("%<:p")<cr>.bs.js<cr>
+" }}}
 " vue {{{
 Plug 'posva/vim-vue', {'for':['javascript', 'jsx', 'vue', 'html']}
 
@@ -352,18 +372,18 @@ au FileType vue let @i = "F<eaf>i�kb"
 " }}}
 " typescript {{{
 Plug 'leafgarland/typescript-vim', {'for': 'typescript'}
-Plug 'Quramy/tsuquyomi', {'for': 'typescript'}
-
-augroup ts-mappings
-  au FileType typescript map <buffer> <Leader>td <Esc>:TsuDefinition<Enter>
-  au FileType typescript map <buffer> <Leader>tt <Esc>:TsuTypeDefinition<Enter>
-  au FileType typescript map <buffer> <Leader>tr <Esc>:TsuReferences<Enter>
-  au FileType typescript map <buffer> <Leader>ti <Esc>:TsuImplementation<Enter>
-  au FileType typescript map <buffer> <Leader>ts <Esc>:TsuSearch<Enter>
-  au FileType typescript map <buffer> <Leader>tn <Esc>:TsuRenameSymbol<Enter>
-  au FileType typescript map <buffer> <Leader>tN <Esc>:TsuRenameSymbolC<Enter>
-  au FileType typescript map <buffer> <Leader>tI <Esc>:TsuImport<Enter>
-augroup END
+"Plug 'Quramy/tsuquyomi', {'for': 'typescript'}
+"
+"augroup ts-mappings
+"  au FileType typescript map <buffer> <Leader>td <Esc>:TsuDefinition<Enter>
+"  au FileType typescript map <buffer> <Leader>tt <Esc>:TsuTypeDefinition<Enter>
+"  au FileType typescript map <buffer> <Leader>tr <Esc>:TsuReferences<Enter>
+"  au FileType typescript map <buffer> <Leader>ti <Esc>:TsuImplementation<Enter>
+"  au FileType typescript map <buffer> <Leader>ts <Esc>:TsuSearch<Enter>
+"  au FileType typescript map <buffer> <Leader>tn <Esc>:TsuRenameSymbol<Enter>
+"  au FileType typescript map <buffer> <Leader>tN <Esc>:TsuRenameSymbolC<Enter>
+"  au FileType typescript map <buffer> <Leader>tI <Esc>:TsuImport<Enter>
+"augroup END
 
 " }}}
 " java {{{
@@ -406,21 +426,24 @@ au FileType avr set softtabstop=0 noexpandtab
 au FileType avr set shiftwidth=8
 " }}}
 " python {{{
-Plug 'davidhalter/jedi-vim' " autocomplete
-let g:jedi#show_call_signatures = "1"
-let g:jedi#goto_command             = "<leader>td"
-let g:jedi#goto_assignments_command = ""
-let g:jedi#goto_definitions_command = ""
-let g:jedi#documentation_command    = "K"
-let g:jedi#usages_command           = "<leader>tr"
-let g:jedi#completions_command      = "<C-Space>"
-let g:jedi#rename_command           = "<leader>tn"
+"Plug 'davidhalter/jedi-vim' " autocomplete
+"let g:jedi#show_call_signatures = "1"
+"let g:jedi#goto_command             = "<leader>td"
+"let g:jedi#goto_assignments_command = ""
+"let g:jedi#goto_definitions_command = ""
+"let g:jedi#documentation_command    = "K"
+"let g:jedi#usages_command           = "<leader>tr"
+"let g:jedi#completions_command      = "<C-Space>"
+"let g:jedi#rename_command           = "<leader>tn"
 
-Plug 'tweekmonster/django-plus.vim'
+"Plug 'tweekmonster/django-plus.vim'
 
 au FileType python nnoremap <leader>rr :!python3 <c-r>=expand("%:p")<cr><cr>
 au FileType python nnoremap <leader>rt :!pytest <c-r>=expand("%:p")<cr><cr>
 au FileType python nnoremap <leader>ri :!pip install --user 
+" }}}
+" ruby {{{
+au FileType ruby nnoremap <leader>rr :!ruby <c-r>=expand("%:p")<cr><cr>
 " }}}
 " Qt {{{
 Plug 'peterhoeg/vim-qml'
@@ -481,6 +504,9 @@ au FileType r nnoremap <buffer> <leader>re :!echo "x11();" > /tmp/vim-r-script &
 au FileType r nnoremap <buffer> <leader>rr :!echo "x11();" > /tmp/vim-r-script && cat <c-r>=expand("%:p")<cr> >> /tmp/vim-r-script && echo "Sys.sleep(.05);system('x-terminal-emulator --title \"Floater Confirm\" -d 5 5 -e bash -c read')" >> /tmp/vim-r-script && Rscript /tmp/vim-r-script && rm /tmp/vim-r-script<cr><cr>
 au FileType r nnoremap <buffer> <leader>rt :!Rscript <c-r>=expand("%:p")<cr><cr>
 " }}}
+" php {{{
+au FileType php nnoremap <buffer> <leader>rr :!php <c-r>=expand("%:p")<cr><cr>
+" }}}
 " authoring vim plugins {{{
 Plug 'tpope/vim-scriptease'
 
@@ -525,7 +551,7 @@ nnoremap <leader>vs :syntax sync fromstart<cr>
 nnoremap <leader>vS :redraw!<cr>
 
 " }}}
-" loader insert (i) {{{
+" leader insert (i) {{{
 nnoremap <leader>id :let @d=strftime("%c")<cr>"dP
 nnoremap <leader>iD :pu=strftime('%c')<cr>
 " }}}
@@ -536,6 +562,7 @@ nnoremap <leader>oo :tabe %<cr>
 nnoremap <leader>ot :term zsh<cr>
 " toggle nerdtree
 nnoremap <leader>on :NERDTreeToggle<cr>
+nnoremap <leader>of :NERDTreeFind<cr>
 
 " }}}
 " leader settings (s) {{{
@@ -641,6 +668,11 @@ vnoremap <leader>rr :w !bash<cr>
 nnoremap <leader>tn :%s/\<<c-r><c-w>\>//g<left><left>
 nnoremap <leader>tN :%s/\<<c-r><c-w>\>//g<left><left>
 " }}}
+" leader copy to clipboard (y) {{{
+nnoremap <leader>yg gg"+yG<c-o><c-o>
+nnoremap <leader>yb "+yi{<c-o>
+nnoremap <leader>yf [[j"+yi{<c-o><c-o>
+" }}}
 " remap buffer writing/quitting {{{
 inoremap <c-s> <esc>:w<cr>
 nnoremap <c-s> <esc>:w<cr>
@@ -658,3 +690,35 @@ autocmd FileType javascript,vim call matchadd('colorcolumn', '\%80v', 100)
 " local vimrc {{{
 set exrc
 " }}}
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line

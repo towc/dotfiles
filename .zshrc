@@ -1,9 +1,11 @@
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
 
+export WORK=/home/user/work/toptal/deepchannel
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 PATHS=""
-PATHS+="$HOME/work/vps/bin"
+PATHS+="$WORK/bin"
 PATHS+=":./node_modules/.bin"
 PATHS+=":$HOME/.npm-global/bin"
 PATHS+=":$HOME/.bin"
@@ -19,6 +21,7 @@ PATHS+=":$JAVA_HOME/bin"
 
 export PATH=$PATHS:$PATH
 
+export N_PREFIX=$HOME
 export ANDROID_SDK=$HOME/Android/Sdk
 
 if type rustc > /dev/null; then
@@ -149,12 +152,15 @@ exec-exit () exit
 zle -N exec-exit
 bindkey ^q exec-exit
 
+alias galias="alias | grep "
+
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias q='exit'
 alias greps='ps aux | grep'
 pids() { greps $1 | grep -v grep | sed -re 's/^[^0-9]+//' | sed -re 's/ .+//' }
 agg() { git grep $1 $(git rev-list all) }
 alias gbb='git symbolic-ref --short HEAD'
+alias gpc='git push origin $(git_current_branch)'
 
 alias sau='sudo apt-get update'
 alias sadu='sudo apt-get dist-upgrade'
@@ -183,6 +189,8 @@ alias copy='xclip -sel clip'
 alias myip='dig myip.opendns.com @resolver1.opendns.com +short'
 alias L='less -R'
 
+alias kdiff='kitty +kitten diff'
+
 #alias -g H='| head'
 #alias -g T='| tail'
 #alias -g G='| grep'
@@ -201,3 +209,12 @@ killn() { kill $(pids $1)}
 source ~/.local/bin/aws_zsh_completer.sh
 
 eval $(thefuck --alias)
+
+# OPAM configuration
+. /home/user/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+# kitty autocompletion
+autoload -Uz compinit
+compinit
+# Completion for kitty
+kitty + complete setup zsh | source /dev/stdin
