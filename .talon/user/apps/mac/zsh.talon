@@ -7,10 +7,6 @@ and title: /^((?!vim).)*zsh/i
 quit:
   key(ctrl-d)
 
-tex:
-  # tmux
-  key(ctrl-b)
-
 clear line:
   key(ctrl-u)
 

@@ -22,8 +22,8 @@ os mac:
 os lunix:
 	insert("os: linux")
 	
-app:
-	insert("app: ")
+#app:
+#	insert("app: ")
 	
 tags:
 	insert("tags: ")
