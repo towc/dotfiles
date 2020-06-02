@@ -12,6 +12,7 @@ app: Visual Studio Code
 app: Code.exe
 app: /terminal/
 app: /jetbrains/
+title: /firefox/i
 -
 (open | new) tab: app.tab_open()
 last tab: app.tab_previous()

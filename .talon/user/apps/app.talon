@@ -1,5 +1,3 @@
-os: windows
-os: linux
 -
 #app.preferences()
 

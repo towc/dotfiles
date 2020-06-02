@@ -1,4 +1,3 @@
-os: windows
 os: linux
 -
 action(edit.copy): 
@@ -203,4 +202,3 @@ action(edit.zoom_out):
 
 action(edit.zoom_reset):
 	key(ctrl-0)
-	

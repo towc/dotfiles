@@ -118,8 +118,8 @@ find text: insert("\\zv")
 catch: key(escape q)
 play: key(escape @)
 
-undo: key(escape u)
-redo: key(ctrl-r)
+nope: key(escape u)
+actually: key(ctrl-r)
 
 append: key(a)
 append line: key(shift-a)
@@ -130,7 +130,7 @@ config vim:
   insert("\\ve")
 config new:
   key(escape)
-  insert(":split ~/.talon/user/apps/mac/.talon")
+  insert(":split ~/.talon/user/apps/.talon")
   key(left)
   key(left)
   key(left)
@@ -145,11 +145,11 @@ config talon:
 config talon shell:
   # zsh
   key(escape)
-  insert(":split ~/.talon/user/apps/mac/zsh.talon\n")
+  insert(":split ~/.talon/user/apps/zsh.talon\n")
 config talon vim:
   # vim talon
   key(escape)
-  insert(":split ~/.talon/user/apps/mac/vim.talon\n")
+  insert(":split ~/.talon/user/apps/vim.talon\n")
 config talon keys:
   key(escape)
   insert(":split ~/.talon/user/code/keys.py\n")

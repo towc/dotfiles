@@ -1,26 +1,25 @@
-os: mac
-app: Google Chrome
+os: linux
+app: Firefox
+title: /firefox/i
 -
 tag(): browser
-	
+
 #action(browser.address):
 
 action(browser.bookmark):
-	key(cmd-d)
+	key(ctrl-d)
 
 action(browser.bookmark_tabs):
-	key(cmd-shift-d)
-	
-action(browser.bookmarks):
-	key(cmd-alt-b)
-  
-action(browser.bookmarks_bar):
-	key(cmd-shift-b)
+	key(ctrl-shift-d)
 
-action(browser.focus_address): 
-	key(cmd-l)
-	
-#action(browser.focus_page):
+action(browser.bookmarks):
+	key(ctrl-shift-o)
+
+action(browser.bookmarks_bar):
+	key(ctrl-b)
+
+action(browser.focus_address):
+	key(ctrl-l)
 
 action(browser.focus_search):
 	browser.focus_address()
@@ -31,43 +30,44 @@ action(browser.go):
 	key(enter)
 
 action(browser.go_blank):
-	key(cmd-n)
-	
+	key(ctrl-n)
+
 action(browser.go_back):
-	key(cmd-[)
+	key(alt-left)
 
 action(browser.go_forward):
-	key(cmd-])
-	
+	key(alt-right)
+
 action(browser.go_home):
-	key(cmd-shift-h)
+	key(alt-home)
 
 action(browser.open_private_window):
-	key(cmd-shift-n)
+	key(ctrl-shift-p)
 
 action(browser.reload):
-	key(cmd-r)
+	key(ctrl-r)
 
 action(browser.reload_hard):
-	key(cmd-shift-r)
+	key(ctrl-shift-r)
 
 #action(browser.reload_hardest):
-	
-action(browser.show_clear_cache):
-	key(cmd-shift-delete)
-  
-action(browser.show_downloads):
-	key(cmd-shift-j)
 
-#action(browser.show_extensions)
+action(browser.show_clear_cache):
+	key(ctrl-shift-del)
+
+action(browser.show_downloads):
+	key(ctrl-shift-y)
+
+action(browser.show_extensions):
+	key(ctrl-shift-a)
 
 action(browser.show_history):
-	key(cmd-y)
-	
+	key(ctrl-h)
+
 action(browser.submit_form):
 	key(enter)
 
 #action(browser.title)
 
 action(browser.toggle_dev_tools):
-	key(cmd-alt-i)
+	key(ctrl-shift-i)

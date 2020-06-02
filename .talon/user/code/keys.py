@@ -87,14 +87,14 @@ ctx.lists['self.modifier'] = {
 }
 
 ctx.lists['self.letter'] = {
-    'a': 'a',
+    'and': 'a',
     'be': 'b',
     'cut': 'c',
     'delta': 'd',
     'echo': 'e',
     'fox': 'f',
     'gee': 'g',
-    'hotel': 'h',
+    'hub': 'h',
     'i': 'i',
     'jay': 'j',
     'kay': 'k',
