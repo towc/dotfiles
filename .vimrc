@@ -1,4 +1,4 @@
-set t_Co=256
+set t_co=256
 syntax on
 
 set shell=bash
@@ -627,11 +627,14 @@ nnoremap <leader>zq :bdelete<cr>
 "set wildignore+=*/node_modules/*
 "nnoremap <leader>zx :find<space>
 command! -bang -nargs=? -complete=dir HFiles
-  \ call fzf#vim#files(<q-args>, {'source': 'ag --hidden --ignore .git -g ""'}, <bang>0)
+  \ call fzf#vim#files(<q-args>, {'source': 'ag --hidden --ignore .git -g ""', 'options':
+  \   ['--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
 nnoremap <leader>zx :HFiles<cr>
 command! -bang -nargs=? -complete=dir HNGFiles
-  \ call fzf#vim#files(<q-args>, {'source': 'ag --hidden --skip-vcs-ignores --ignore .git -g ""'}, <bang>0)
+  \ call fzf#vim#files(<q-args>, {'source': 'ag --hidden --skip-vcs-ignores --ignore .git -g ""', 'options':
+  \   ['--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
 nnoremap <leader>zX :HNGFiles<cr>
+nnoremap <leader>zf :Locate *<cr>
 
 nnoremap <leader>za :argdo<space>
 nnoremap <leader>zA :args<space>
@@ -649,12 +652,15 @@ nnoremap <leader>zs :Snippets<cr>
 nnoremap <leader>zl :Lines<cr>
 nnoremap <leader>zL :BLines<cr>
 " search all files in directory
-command! -bang -nargs=* CAg call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
+command! -bang -nargs=* CAg call fzf#vim#ag(<q-args>, {'options': 
+      \   ['--delimiter=:', '--nth=4..', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
 nnoremap <leader>zv :CAg<cr>
 vnoremap <leader>zv :<c-u>CAg <c-r>*<cr>
 nnoremap <leader>zV :Ag<cr>
 
 nnoremap <leader>zm :Marks<cr>
+nnoremap <leader>z: :History:<cr>
+nnoremap <leader>z/ :History/<cr>
 
 " }}}
 " leader run stuff (r) {{{
