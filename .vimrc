@@ -278,6 +278,7 @@ let g:ale_fixers = {
 \   'jsx': ['eslint'],
 \   'json': ['eslint'],
 \   'typescript': ['eslint'],
+\   'typescriptreact': ['eslint'],
 \   'vue': ['eslint'],
 \   'c': ['clang-format'],
 \   'cpp': ['clang-format'],
