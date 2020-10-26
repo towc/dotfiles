@@ -45,6 +45,21 @@ colorscheme afterglow
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+let g:fzf_layout = {'down':'40%'}
+" copy of fzf's s:p
+function! s:p(...)
+  let preview_args = get(g:, 'fzf_preview_window', ['right', 'ctrl-/'])
+  if empty(preview_args)
+    return { 'options': ['--preview-window', 'hidden'] }
+  endif
+
+  " For backward-compatiblity
+  if type(preview_args) == type('')
+    let preview_args = [preview_args]
+  endif
+  return call('fzf#vim#with_preview', extend(copy(a:000), preview_args))
+endfunction
+
 Plug 'scy/vim-mkdir-on-write'
 Plug 'vim-jp/vital.vim'
 Plug 'mattn/webapi-vim'
@@ -627,12 +642,12 @@ nnoremap <leader>zq :bdelete<cr>
 "set wildignore+=*/node_modules/*
 "nnoremap <leader>zx :find<space>
 command! -bang -nargs=? -complete=dir HFiles
-  \ call fzf#vim#files(<q-args>, {'source': 'ag --hidden --ignore .git -g ""', 'options':
-  \   ['--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
+  \ call fzf#vim#files(<q-args>, 
+  \   s:p({'source': 'ag --hidden --ignore .git -g ""'}), <bang>0)
 nnoremap <leader>zx :HFiles<cr>
 command! -bang -nargs=? -complete=dir HNGFiles
-  \ call fzf#vim#files(<q-args>, {'source': 'ag --hidden --skip-vcs-ignores --ignore .git -g ""', 'options':
-  \   ['--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
+  \ call fzf#vim#files(<q-args>,
+  \   s:p({'source': 'ag --hidden --skip-vcs-ignores --ignore .git -g ""'}), <bang>0)
 nnoremap <leader>zX :HNGFiles<cr>
 nnoremap <leader>zf :Locate *<cr>
 
@@ -652,10 +667,12 @@ nnoremap <leader>zs :Snippets<cr>
 nnoremap <leader>zl :Lines<cr>
 nnoremap <leader>zL :BLines<cr>
 " search all files in directory
-command! -bang -nargs=* CAg call fzf#vim#ag(<q-args>, {'options': 
-      \   ['--delimiter=:', '--nth=4..', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
+command! -bang -nargs=* CAg call fzf#vim#ag(<q-args>, s:p({'options': 
+      \   ['--delimiter=:', '--nth=4..']}), <bang>0)
 nnoremap <leader>zv :CAg<cr>
 vnoremap <leader>zv :<c-u>CAg <c-r>*<cr>
+" c-_ is really c-/
+nnoremap <c-_> :CAg<cr>
 nnoremap <leader>zV :Ag<cr>
 
 nnoremap <leader>zm :Marks<cr>

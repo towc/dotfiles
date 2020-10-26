@@ -17,6 +17,7 @@ PATHS+=":$HOME/bin"
 PATHS+=":$HOME/.fzf/bin"
 PATHS+=":$HOME/.gem/ruby/2.3.0/bin"
 PATHS+=":/home/nvidia/.local/bin"
+PATHS+=":/opt/wine-stable/bin"
 PATHS+=":$JAVA_HOME/bin"
 
 export PATH=$PATHS:$PATH
@@ -27,6 +28,9 @@ export ANDROID_SDK=$HOME/Android/Sdk
 if type rustc > /dev/null; then
   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 fi
+
+# syntax highlighting with bat
+export BAT_THEME=gruvbox
 
 
 # Path to your oh-my-zsh installation.
