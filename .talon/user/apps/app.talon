@@ -8,13 +8,13 @@ action(app.tab_close):
 #  Move the current tab to a new window
   
 action(app.tab_next):
-	key(ctrl-tab)
+	key(escape ctrl-tab)
 	
 action(app.tab_open):
 	key(ctrl-t)
 	
 action(app.tab_previous):
-	key(ctrl-shift-tab)
+	key(escape ctrl-shift-tab)
 	
 action(app.tab_reopen):
 	key(ctrl-shift-t)

@@ -28,7 +28,7 @@ mv .zshrc-tmp .zshrc
 # install custom plugins
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-curl https://raw.githubusercontent.com/towc/dotfiles/master/.oh-my-zsh/themes/agnoster.zsh-theme > .oh-my-zsh/themes/agno ster.zsh-theme
+curl https://raw.githubusercontent.com/towc/dotfiles/master/.oh-my-zsh/themes/agnoster.zsh-theme > .oh-my-zsh/themes/agnoster.zsh-theme
 # reboot for changes to happen, or `zsh` for now
 ```
 
@@ -46,25 +46,23 @@ curl https://raw.githubusercontent.com/danilo-augusto/vim-afterglow/master/color
 
 # i3
 ```
-sai i3 i3blocks rofi chromium-browser
+sai i3 i3blocks rofi chromium-browser firefox
 ```
 
-# alacritty
+# kitty terminal
 ```
-# install from repo, then
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 sudo update-alternatives --config x-terminal-emulator
 ```
 
-# chatting
+# node
 ```
-sai weechat lua-cjson
-curl https://raw.githubusercontent.com/torhve/weechat-matrix-protocol-script/master/matrix.lua ~/.weechat/lua/matrix.lua
-# and then /script load matrix.lua
-curl https://weechat.org/files/temp/theme/theme.py > ~/.weechat/python/autoload/theme.py
+curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+npm i -g serve fkill-cli eslint tldr yarn
 ```
 
 # other packages
 ```
-sai redshift vlock w3m bvi r2 xbacklight nmap feh xcalib
-npm i -g serve fkill-cli eslint tldr
+sai redshift vlock w3m bvi xbacklight nmap feh xcalib keepassx
 ```

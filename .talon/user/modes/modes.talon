@@ -22,10 +22,12 @@ talon wake:
 dragon mode: speech.disable()
 talon mode: speech.enable()
 ^dictation mode$:
-    mode.disable("sleep")
-    mode.disable("command")
-    mode.enable("dictation")
+  app.notify("dictation mode")
+  mode.disable("sleep")
+  mode.disable("command")
+  mode.enable("dictation")
 ^command mode$:
-    mode.disable("sleep")
-    mode.disable("dictation")
-    mode.enable("command")
+  app.notify("command mode")
+  mode.disable("sleep")
+  mode.disable("dictation")
+  mode.enable("command")

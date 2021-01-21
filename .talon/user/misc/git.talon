@@ -6,6 +6,7 @@ app: Windows Command Processor
 app: Code
 app: Visual Studio Code
 app: Code.exe
+title: /zsh/i
 -
 git add patch: "git add . -p\n"
 git add: "git add "

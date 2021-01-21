@@ -11,7 +11,6 @@ PATHS+=":$HOME/.npm-global/bin"
 PATHS+=":$HOME/.bin"
 PATHS+=":$HOME/.cargo/bin"
 PATHS+=":$HOME/.local/bin"
-PATHS+=":$HOME/Android/Sdk/platform-tools"
 PATHS+=":/snap/bin"
 PATHS+=":$HOME/bin"
 PATHS+=":$HOME/.fzf/bin"
@@ -32,9 +31,8 @@ fi
 # syntax highlighting with bat
 export BAT_THEME=gruvbox
 
-
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/user/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 stty stop undef
 stty start undef
@@ -190,7 +188,8 @@ alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
 alias vsrc='vim ~/.zshrc ~/.tmux.conf ~/.vimrc'
 
 alias copy='xclip -sel clip'
-alias myip='dig myip.opendns.com @resolver1.opendns.com +short'
+alias myip4='dig myip.opendns.com @resolver1.opendns.com +short'
+alias myip='ip -6 addr | grep "3: " -A1 | grep inet | cut -d" " -f6 | cut -d/ -f1'
 alias L='less -R'
 
 alias kdiff='kitty +kitten diff'
@@ -207,12 +206,7 @@ alias cnt='kill -CONT'
 cntn() { cnt $(pids $1)}
 killn() { kill $(pids $1)}
 
-#fpath=(/home/user/.zsh/gradle-completion $fpath)
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source ~/.local/bin/aws_zsh_completer.sh
-
-eval $(thefuck --alias)
 
 # OPAM configuration
 . /home/user/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

@@ -26,7 +26,7 @@ bindsym $mod+Shift+b exec "xrandr && xrandr --auto"
 #bindsym $mod+z move workspace to output DP1
 #bindsym $mod+Shift+z move workspace to output eDP1
 # HDMI
-bindsym $mod+b exec "xrandr --output HDMI1 --mode 1920x1080 --below eDP1"
+bindsym $mod+b exec "xrandr --output HDMI1 --mode 1920x1080 --above eDP1"
 bindsym $mod+z move workspace to output HDMI1
 bindsym $mod+Shift+z move workspace to output eDP1
 

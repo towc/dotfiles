@@ -13,11 +13,9 @@ clear line:
 clear word:
   key(ctrl-w)
 
-vim:
-  insert("vim ")
-
-we:
-  insert("wd ")
+git: insert("git ")
+vim: insert("vim ")
+we: insert("wd ")
 
 slap:
   key(enter)

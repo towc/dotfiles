@@ -125,7 +125,7 @@ function! ToggleAutoFix()
   endif
 endfunction
 
-" Use K to show documentation in preview window
+" Use K to show documentation in preview window, from coc
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -610,6 +610,15 @@ function! ToggleSaveEveryEdit()
 endfunction
 nnoremap <leader>ss :call ToggleSaveEveryEdit()<cr>
 
+function! ToggleColorColumn()
+  if strlen(&colorcolumn) == 0
+    set colorcolumn=80
+  else
+    set colorcolumn=
+  endif
+endfunction
+nnoremap <leader>sc :call ToggleColorColumn()<cr>
+
 nnoremap <leader>sts :let old_ft=&filetype <bar> set ft=txt<cr>
 nnoremap <leader>str :let &ft=old_ft<cr>
 
@@ -676,7 +685,11 @@ nnoremap <c-_> :CAg<cr>
 nnoremap <leader>zV :Ag<cr>
 
 nnoremap <leader>zm :Marks<cr>
+" file history
+nnoremap <leader>zh :History<cr>
+" command history
 nnoremap <leader>z: :History:<cr>
+" search history
 nnoremap <leader>z/ :History/<cr>
 
 " }}}

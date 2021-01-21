@@ -6,4 +6,4 @@ xautolock -corners "----" \
   -locker '~/.bin/lock-screen' &
 
 dunst &
-redshift -O 2200 &
+redshift -O 1800 &
