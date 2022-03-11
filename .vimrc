@@ -8,6 +8,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 set nomodeline  " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+set visualbell " disable bell
 
 let maplocalleader="\\"
 
@@ -18,15 +19,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Plugins
 call plug#begin('~/.vim/plugged')
-nnoremap <leader>pi <esc>:w<cr>:source ~/.vimrc<cr>:PlugInstall<cr>
-nnoremap <leader>pc <esc>:w<cr>:source ~/.vimrc<cr>:PlugClean<cr>
-nnoremap <leader>pu :PlugUpdate<cr>
-nnoremap <leader>ps :PlugStatus<cr>
-nnoremap <leader>pd :PlugDiff<cr>
-" upgrade vim-plug itself
-nnoremap <leader>pU :PlugUpgrade<cr>
 
 " }}}
 " timetracking {{{
@@ -37,8 +30,12 @@ Plug 'wakatime/vim-wakatime'
 
 " }}}
 " colorschemes {{{
-Plug 'NLKNguyen/papercolor-theme' " PaperColor
-colorscheme afterglow
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" Plug 'NLKNguyen/papercolor-theme' " PaperColor
+" Plug 'morhetz/gruvbox'
+Plug 'tomasiser/vim-code-dark'
+let g:airline_theme = 'codedark'
 
 " }}}
 " unsorted plugins {{{
@@ -73,6 +70,7 @@ let g:localvimrc_sandbox = 0
 Plug 'tikhomirov/vim-glsl', { 'for': 'glsl' }
 Plug 'ap/vim-css-color'
 Plug 'Raimondi/delimitMate'
+let g:delimitMate_expand_cr = 1
 Plug 'terryma/vim-expand-region' " + -
 Plug 'mattn/emmet-vim', { 'for': ['html', 'xml', 'vue', 'javascript', 'typescript']} " c-y,
 Plug 'AndrewRadev/splitjoin.vim' " gS gJ
@@ -96,9 +94,10 @@ nnoremap <leader>cl :<c-u>CocList<cr>
 nnoremap <leader>cx :<c-u>CocAction<cr>
 
 nnoremap <leader>ct :<c-u>call ToggleAutoTrigger()<cr>
-nnoremap <leader>cf :<c-u>call ToggleAutoFix()<cr>
+nnoremap <leader>cF :<c-u>call ToggleAutoFix()<cr>
 nmap <leader>cr <Plug>(coc-rename)
 nmap <silent> <leader>cs <Plug>(coc-fix-current)
+nmap <silent> <leader>cf :CocFix<cr>
 nmap <silent> <leader>cS <Plug>(coc-codeaction)
 nmap <silent> <leader>ca <Plug>(coc-diagnostic-next)
 nmap <silent> <leader>cA <Plug>(coc-diagnostic-next-error)
@@ -222,12 +221,28 @@ nnoremap <leader>nb :call UseBookMode()<cr>
 " text-object related {{{
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-surround'
-"Plugin 'bkad/CamelCaseMotion'
-"
-"map <silent> w <Plug>CamelCaseMotion_w
-"map <silent> b <Plug>CamelCaseMotion_b
-"map <silent> e <Plug>CamelCaseMotion_e
 
+" 'someOb<cursor>ject' -> d,w -> 'some<cursor>'
+Plug 'bkad/CamelCaseMotion'
+omap <silent> ,w <Plug>CamelCaseMotion_iw
+xmap <silent> ,w <Plug>CamelCaseMotion_iw
+omap <silent> ,b <Plug>CamelCaseMotion_ib
+xmap <silent> ,b <Plug>CamelCaseMotion_ib
+omap <silent> ,e <Plug>CamelCaseMotion_ie
+xmap <silent> ,e <Plug>CamelCaseMotion_ie
+
+" cii / cai
+Plug 'michaeljsmith/vim-indent-object'
+
+" https://github.com/tpope/vim-abolish
+" crs = to snake_case
+" crc = to camelCase
+" crm = to MixedCase
+" cru = to UPPER_CASE
+" cr- = to dash-case
+" cr. = to space case
+" crt = to Title Case
+Plug 'tpope/vim-abolish'
 
 " }}}
 " git (g) {{{
@@ -325,6 +340,7 @@ highlight ALEWarning ctermbg=none cterm=underline
 
 map <Leader>af <Esc>:ALEFix<Enter>
 map <Leader>an <Esc>:ALENext<Enter>
+map <Leader>ad <Esc>:ALEDetail<Enter>
 
 augroup ecma-mappings
   au FileType javascript,jsx nnoremap <buffer> <Leader>td :TernDef<cr>
@@ -531,6 +547,8 @@ Plug 'tpope/vim-scriptease'
 call plug#end()
 filetype plugin indent on
 
+autocmd vimenter * ++nested colorscheme codedark
+
 " }}}
 " tabs {{{
 set tabstop=2
@@ -555,6 +573,7 @@ set matchtime=1
 if empty($MYVIMRC)
   let $MYVIMRC = "~/.vimrc"
 endif
+let $MYVIMRC = "~/.vimrc"
 nnoremap <leader>ve :split $MYVIMRC<cr>
 nnoremap <leader>vE :e $MYVIMRC<cr>
 nnoremap <leader>vv :source $MYVIMRC<cr>
@@ -567,13 +586,23 @@ nnoremap <leader>vs :syntax sync fromstart<cr>
 nnoremap <leader>vS :redraw!<cr>
 
 " }}}
+" leader plugin (p) {{{
+nnoremap <leader>pi <esc>:w<cr>:source ~/.vimrc<cr>:PlugInstall<cr>
+nnoremap <leader>pc <esc>:w<cr>:source ~/.vimrc<cr>:PlugClean<cr>
+nnoremap <leader>pu :PlugUpdate<cr>
+nnoremap <leader>ps :PlugStatus<cr>
+nnoremap <leader>pd :PlugDiff<cr>
+" upgrade vim-plug itself
+nnoremap <leader>pU :PlugUpgrade<cr>
+" }}}
 " leader insert (i) {{{
 nnoremap <leader>id :let @d=strftime("%c")<cr>"dP
 nnoremap <leader>iD :pu=strftime('%c')<cr>
 " }}}
 " leader opening (o) {{{
 " open current file in a new tab
-nnoremap <leader>oo :tabe %<cr>
+nnoremap <leader>oo :tabe %<cr><c-o>zz
+nnoremap <c-t> :tabe %<cr><c-o>zz
 " open terminal
 nnoremap <leader>ot :term zsh<cr>
 " toggle nerdtree
@@ -691,6 +720,8 @@ nnoremap <leader>zh :History<cr>
 nnoremap <leader>z: :History:<cr>
 " search history
 nnoremap <leader>z/ :History/<cr>
+" go to 'TODO CONTINUE FROM HERE'
+nnoremap <leader>zk :CAg TODO CONTINUE FROM HERE<cr>
 
 " }}}
 " leader run stuff (r) {{{
@@ -727,6 +758,7 @@ autocmd FileType javascript,vim call matchadd('colorcolumn', '\%80v', 100)
 " local vimrc {{{
 set exrc
 " }}}
+
 " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
 let s:opam_share_dir = system("opam config var share")
 let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')

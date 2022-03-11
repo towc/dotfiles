@@ -6,3 +6,10 @@
 	editor = vim
 [merge]
 	tool = vimdiff
+
+
+stash-untracked = "!f() {    \
+    git stash;               \
+    git stash -u;            \
+    git stash pop stash@{1}; \
+}; f"

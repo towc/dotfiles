@@ -5,7 +5,8 @@ export WORK=/home/user/work/toptal/deepchannel
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 PATHS=""
-PATHS+="$WORK/bin"
+PATHS+="./bin"
+PATHS+=":$WORK/bin"
 PATHS+=":./node_modules/.bin"
 PATHS+=":$HOME/.npm-global/bin"
 PATHS+=":$HOME/.bin"
@@ -15,9 +16,12 @@ PATHS+=":/snap/bin"
 PATHS+=":$HOME/bin"
 PATHS+=":$HOME/.fzf/bin"
 PATHS+=":$HOME/.gem/ruby/2.3.0/bin"
+PATHS+=":$HOME/.gem/bin"
+PATHS+=":$HOME/go/bin"
 PATHS+=":/home/nvidia/.local/bin"
 PATHS+=":/opt/wine-stable/bin"
 PATHS+=":$JAVA_HOME/bin"
+PATHS+=":$HOME/.local/kitty.app/bin"
 
 export PATH=$PATHS:$PATH
 
@@ -29,7 +33,7 @@ if type rustc > /dev/null; then
 fi
 
 # syntax highlighting with bat
-export BAT_THEME=gruvbox
+export BAT_THEME='Visual Studio Dark+'
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -156,7 +160,7 @@ bindkey ^q exec-exit
 
 alias galias="alias | grep "
 
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles-git/ --work-tree=$HOME'
 alias q='exit'
 alias greps='ps aux | grep'
 pids() { greps $1 | grep -v grep | sed -re 's/^[^0-9]+//' | sed -re 's/ .+//' }
@@ -184,8 +188,11 @@ alias pi='pip install --user'
 alias ei='elm install'
 
 alias py='python3'
+alias v='nvim'
+alias vz='v ~/.zshrc'
+alias sz='source ~/.zshrc'
 alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
-alias vsrc='vim ~/.zshrc ~/.tmux.conf ~/.vimrc'
+alias vsrc='v ~/.zshrc ~/.tmux.conf ~/.vimrc'
 
 alias copy='xclip -sel clip'
 alias myip4='dig myip.opendns.com @resolver1.opendns.com +short'
@@ -216,3 +223,10 @@ autoload -Uz compinit
 compinit
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
+
+# remove bell
+set bell-style none
+
+# fnm
+export PATH=/home/user/.fnm:$PATH
+eval "`fnm env`"
