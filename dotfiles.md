@@ -19,7 +19,7 @@ curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator `which kitty` 50
 ```
 
-# oh-my-zsh
+# oh-my-zsh / tmux
 
 ```
 sudo apt-get install zsh tmux fonts-powerline
@@ -34,6 +34,7 @@ mv .zshrc-tmp .zshrc
 # install custom plugins
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone git@github.com:marzocchi/zsh-notify.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/notify
 curl https://raw.githubusercontent.com/towc/dotfiles/master/.oh-my-zsh/themes/agnoster.zsh-theme > .oh-my-zsh/themes/agnoster.zsh-theme
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
