@@ -49,7 +49,7 @@ npm i -g serve fkill-cli eslint tldr yarn
 # vim
 
 ```
-sai neovim
+sai neovim silversearcher-ag
 v --version # make sure it's above 0.6
 mkdir .vim/colors
 curl https://raw.githubusercontent.com/danilo-augusto/vim-afterglow/master/colors/afterglow.vim > .vim/colors/afterglow.vim
