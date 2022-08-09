@@ -60,7 +60,8 @@ endfunction
 Plug 'scy/vim-mkdir-on-write'
 Plug 'vim-jp/vital.vim'
 Plug 'mattn/webapi-vim'
-Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-speeddating' " custom format specified towards end of file. Can't do here because the command is not loaded yet
+
 Plug 'embear/vim-localvimrc'
 let g:localvimrc_ask = 0
 let g:localvimrc_sandbox = 0
@@ -69,8 +70,8 @@ let g:localvimrc_sandbox = 0
 
 Plug 'tikhomirov/vim-glsl', { 'for': 'glsl' }
 Plug 'ap/vim-css-color'
-Plug 'Raimondi/delimitMate'
-let g:delimitMate_expand_cr = 1
+"Plug 'Raimondi/delimitMate' " is causing delays after pressing `(`
+"let g:delimitMate_expand_cr = 1
 Plug 'terryma/vim-expand-region' " + -
 Plug 'mattn/emmet-vim', { 'for': ['html', 'xml', 'vue', 'javascript', 'typescript']} " c-y,
 Plug 'AndrewRadev/splitjoin.vim' " gS gJ
@@ -83,6 +84,8 @@ let g:indentLine_char = '|'
 set concealcursor=
 autocmd FileType json :IndentLinesDisable
 nnoremap <leader>ni :IndentLinesToggle<cr>
+
+Plug 'github/copilot.vim'
 " }}}
 " language server (c) {{{
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -90,21 +93,40 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 nnoremap <leader>C :<c-u>CocDisable<cr>
 nnoremap <leader>Cc :<c-u>CocEnable<cr>
 nnoremap <leader>ci :<c-u>CocInstall 
+nnoremap <space>i   :<c-u>CocInstall 
 nnoremap <leader>cl :<c-u>CocList<cr>
+nnoremap <space>l   :<c-u>CocList<cr>
 nnoremap <leader>cx :<c-u>CocAction<cr>
+nnoremap <space>x   :<c-u>CocAction<cr>
+nnoremap <leader>cn :<c-u>call CocAction('diagnosticNext')<cr>
+nnoremap <space>n   :<c-u>call CocAction('diagnosticNext')<cr>
+nnoremap <leader>cp :<c-u>call CocAction('diagnosticPrevious')<cr>
+nnoremap <space>p   :<c-u>call CocAction('diagnosticPrevious')<cr>
 
 nnoremap <leader>ct :<c-u>call ToggleAutoTrigger()<cr>
+nnoremap <space>t :<c-u>call ToggleAutoTrigger()<cr>
 nnoremap <leader>cF :<c-u>call ToggleAutoFix()<cr>
+nnoremap <space>F :<c-u>call ToggleAutoFix()<cr>
 nmap <leader>cr <Plug>(coc-rename)
+nmap <space>r   <Plug>(coc-rename)
 nmap <silent> <leader>cs <Plug>(coc-fix-current)
+nmap <silent> <space>s   <Plug>(coc-fix-current)
 nmap <silent> <leader>cf :CocFix<cr>
+nmap <silent> <space>f   :CocFix<cr>
 nmap <silent> <leader>cS <Plug>(coc-codeaction)
+nmap <silent> <space>S   <Plug>(coc-codeaction)
 nmap <silent> <leader>ca <Plug>(coc-diagnostic-next)
+nmap <silent> <space>a   <Plug>(coc-diagnostic-next)
 nmap <silent> <leader>cA <Plug>(coc-diagnostic-next-error)
+nmap <silent> <space>A   <Plug>(coc-diagnostic-next-error)
 nmap <silent> <leader>cd <Plug>(coc-definition)
+nmap <silent> <space>d   <Plug>(coc-definition)
 nmap <silent> <leader>cg :call CocAction('doHover')<CR>
+nmap <silent> <space>g   :call CocAction('doHover')<CR>
 nmap <silent> <leader>cu <Plug>(coc-references)
+nmap <silent> <space>u   <Plug>(coc-references)
 nmap <silent> <leader>cp :call CocActionAsync('format')<CR>
+nmap <silent> <space>p   :call CocActionAsync('format')<CR>
 
 function! ToggleAutoTrigger()
   if get(g:coc_user_config, 'suggest.autoTrigger') == 'always'
@@ -174,7 +196,10 @@ nnoremap <leader>ng :Goyo<cr>:set linebreak!<cr>:IndentLinesToggle<cr>
 "Plugin 'xolox/vim-notes'
 Plug 'junegunn/limelight.vim'
 Plug 'itchyny/calendar.vim'
+
 Plug 'RRethy/vim-illuminate'
+highlight CursorLine ctermbg=236  "color of highlight for word under cursor
+
 Plug 'vimwiki/vimwiki', { 'for': ['vimwiki', 'markdown']}
 let g:Illuminate_delay = 1
 
@@ -245,20 +270,14 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'tpope/vim-abolish'
 
 " }}}
-" git (g) {{{
+" git (a) {{{
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-nnoremap <Leader>gs :Gstatus<cr><c-w>J
-nnoremap <Leader>gd :Gdiff<cr>
-nnoremap <Leader>gc :Gcommit<cr><c-w>J
-nnoremap <Leader>gb :Gblame<cr>
-nnoremap <Leader>gm :Gmove<cr>
-nnoremap <Leader>gl :Glog<cr>
-nnoremap <Leader>gb :Gbrowse<cr>
-nnoremap <Leader>gw :Gwrite<cr>
-nnoremap <Leader>gp :Gpull<cr>
-nnoremap <Leader>gP :Gpush<cr>
-
+nnoremap <leader>aa :Git<cr>
+nnoremap <leader>ab :Git blame<cr>
+nnoremap <leader>as :GBrowse<cr>
+nnoremap <leader>am :Git mergetool<cr>
+nnoremap <leader>ap :Git push<cr>
 " }}}
 " gist (h) {{{
 Plug 'mattn/gist-vim'
@@ -547,8 +566,11 @@ Plug 'tpope/vim-scriptease'
 call plug#end()
 filetype plugin indent on
 
-autocmd vimenter * ++nested colorscheme codedark
 
+" }}}
+" post plugin management config {{{
+autocmd vimenter * ++nested colorscheme codedark
+autocmd vimenter * SpeedDatingFormat %i %d %h %Y " vim-speeddating Thu 05 May 2022
 " }}}
 " tabs {{{
 set tabstop=2
@@ -707,11 +729,12 @@ nnoremap <leader>zL :BLines<cr>
 " search all files in directory
 command! -bang -nargs=* CAg call fzf#vim#ag(<q-args>, s:p({'options': 
       \   ['--delimiter=:', '--nth=4..']}), <bang>0)
-nnoremap <leader>zv :CAg<cr>
-vnoremap <leader>zv :<c-u>CAg <c-r>*<cr>
+nnoremap <leader>zV :CAg<cr>
+vnoremap <leader>zV :<c-u>CAg <c-r>*<cr>
 " c-_ is really c-/
-nnoremap <c-_> :CAg<cr>
-nnoremap <leader>zV :Ag<cr>
+nnoremap <c-_> :Ag<cr>
+nnoremap <leader>zv :Ag<cr>
+vnoremap <leader>zv :<c-u>Ag <c-r>*<cr>
 
 nnoremap <leader>zm :Marks<cr>
 " file history
