@@ -22,7 +22,7 @@ sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emula
 # oh-my-zsh / tmux
 
 ```
-sudo apt-get install zsh tmux fonts-powerline
+sudo apt-get install zsh tmux fonts-powerline wmctrl
 # hide previous installation from installer
 mv -f .oh-my-zsh .oh-my-zsh-tmp
 mv .zshrc .zshrc-tmp
