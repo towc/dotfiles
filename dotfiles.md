@@ -55,6 +55,9 @@ mkdir .vim/colors
 curl https://raw.githubusercontent.com/danilo-augusto/vim-afterglow/master/colors/afterglow.vim > .vim/colors/afterglow.vim
 # run \pi from vim
 # for wt api key: https://wakatime.com/settings/account
+
+## in vim
+:CocInstall coc-tsserver
 ```
 
 
