@@ -77,3 +77,9 @@ dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-8 "['<Super>8'
 dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-9 "['<Super>9']"
 ```
 
+# extra settings
+```
+tile windows & hide window titles
+displays > night light (top bar) > custom > 00:00-23:59
+keyboard > shortcuts > search terminal > mod+enter
+```
