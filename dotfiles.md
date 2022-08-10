@@ -63,7 +63,7 @@ curl https://raw.githubusercontent.com/danilo-augusto/vim-afterglow/master/color
 
 # other packages
 ```
-sai keepassx
+sai keepassxc
 flatpak install slack
 ```
 
