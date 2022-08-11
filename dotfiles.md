@@ -70,8 +70,9 @@ curl https://raw.githubusercontent.com/danilo-augusto/vim-afterglow/master/color
 
 # other packages
 ```
-sai keepassxc
+sai keepassxc python3-pip
 flatpak install slack
+pi docker-compose
 ```
 
 # keybindings
