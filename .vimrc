@@ -85,10 +85,16 @@ set concealcursor=
 autocmd FileType json :IndentLinesDisable
 nnoremap <leader>ni :IndentLinesToggle<cr>
 
+let g:copilot_filetypes = {
+  \ 'markdown': v:true,
+  \ 'yaml': v:true,
+  \ }
 Plug 'github/copilot.vim'
 " }}}
 " language server (c) {{{
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 
 nnoremap <leader>C :<c-u>CocDisable<cr>
 nnoremap <leader>Cc :<c-u>CocEnable<cr>
@@ -98,6 +104,7 @@ nnoremap <leader>cl :<c-u>CocList<cr>
 nnoremap <space>l   :<c-u>CocList<cr>
 nnoremap <leader>cx :<c-u>CocAction<cr>
 nnoremap <space>x   :<c-u>CocAction<cr>
+nnoremap <leader>f  :<c-u>Prettier<cr>
 nnoremap <leader>cn :<c-u>call CocAction('diagnosticNext')<cr>
 nnoremap <space>n   :<c-u>call CocAction('diagnosticNext')<cr>
 nnoremap <leader>cp :<c-u>call CocAction('diagnosticPrevious')<cr>
@@ -112,7 +119,6 @@ nmap <space>r   <Plug>(coc-rename)
 nmap <silent> <leader>cs <Plug>(coc-fix-current)
 nmap <silent> <space>s   <Plug>(coc-fix-current)
 nmap <silent> <leader>cf :CocFix<cr>
-nmap <silent> <space>f   :CocFix<cr>
 nmap <silent> <leader>cS <Plug>(coc-codeaction)
 nmap <silent> <space>S   <Plug>(coc-codeaction)
 nmap <silent> <leader>ca <Plug>(coc-diagnostic-next)
@@ -159,23 +165,23 @@ endfunction
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 function! s:check_back_space() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+  return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
+
+" Insert <tab> when previous text is space, refresh completion if not.
+inoremap <silent><expr> <TAB>
+\ coc#pum#visible() ? coc#pum#next(1):
+\ <SID>check_back_space() ? "\<Tab>" :
+\ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " Use <c-c> to trigger completion.
 inoremap <silent><expr> <c-c> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Use <CR> to confirm completion, use:
+inoremap <expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
 " Or use `complete_info` if your vim support it, like:
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
@@ -184,6 +190,10 @@ xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
+
+" unused code is too hard to see. Previously dark on dark background
+highlight CocUnusedHighlight ctermfg=gray
+
 " }}}
 " note taking (n) {{{
 Plug 'metakirby5/codi.vim'
@@ -320,57 +330,56 @@ set tags+=~/.vim/tags/cpp
 
 " }}}
 " eslint {{{
-Plug 'w0rp/ale'
-let g:ale_sign_column_always = 1
-let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\   'jsx': ['eslint'],
-\   'json': ['eslint'],
-\   'typescript': ['eslint'],
-\   'typescriptreact': ['eslint'],
-\   'vue': ['eslint'],
-\   'c': ['clang-format'],
-\   'cpp': ['clang-format'],
-\   'h': ['clang-format'],
-\   'hpp': ['clang-format'],
-\   'rust': ['rustfmt'],
-\   'python': ['autopep8'],
-\   'reason': ['refmt'],
-\   'ruby': ['rubocop']
-\}
-map <leader>f :ALEFix<CR>
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'jsx': ['eslint'],
-\   'json': ['eslint'],
-\   'typescript': ['eslint'],
-\   'rust': ['rustc'],
-\   'sql': ['sqlint'],
-\   'reason': ['refmt'],
-\}
-
-" let g:ale_sign_error = '█'
-" let g:ale_sign_warning = '█' " '𝄚'
-
-" highlight ALEErrorSign ctermbg=none ctermfg=darkyellow
-" highlight ALEWarningSign ctermbg=none ctermfg=darkyellow
-highlight ALEError ctermbg=none cterm=underline
-highlight ALEWarning ctermbg=none cterm=underline
-
-map <Leader>af <Esc>:ALEFix<Enter>
-map <Leader>an <Esc>:ALENext<Enter>
-map <Leader>ad <Esc>:ALEDetail<Enter>
-
-augroup ecma-mappings
-  au FileType javascript,jsx nnoremap <buffer> <Leader>td :TernDef<cr>
-  au FileType javascript,jsx nnoremap <buffer> <Leader>tx :TernDoc<cr>
-  au FileType javascript,jsx nnoremap <buffer> <Leader>tt :TernType<cr>
-  au FileType javascript,jsx nnoremap <buffer> <Leader>tr :TernRefs<cr>
-  au FileType javascript,jsx nnoremap <buffer> <Leader>tn :TernRename<cr>
-  au FileType javascript,jsx nnoremap <buffer> <Leader>tb :call EsBeautifier()<cr>
-  au FileType javascript,jsx vnoremap <buffer> <Leader>tb :call RangeEsBeautifier()<cr>
-augroup END
-
+"Plug 'w0rp/ale'
+"let g:ale_sign_column_always = 1
+"let g:ale_fixers = {
+"\   'javascript': ['eslint'],
+"\   'jsx': ['eslint'],
+"\   'json': ['eslint'],
+"\   'typescript': ['eslint'],
+"\   'typescriptreact': ['eslint'],
+"\   'vue': ['eslint'],
+"\   'c': ['clang-format'],
+"\   'cpp': ['clang-format'],
+"\   'h': ['clang-format'],
+"\   'hpp': ['clang-format'],
+"\   'rust': ['rustfmt'],
+"\   'python': ['autopep8'],
+"\   'reason': ['refmt'],
+"\   'ruby': ['rubocop']
+"\}
+"let g:ale_linters = {
+"\   'javascript': ['eslint'],
+"\   'jsx': ['eslint'],
+"\   'json': ['eslint'],
+"\   'typescript': ['eslint'],
+"\   'rust': ['rustc'],
+"\   'sql': ['sqlint'],
+"\   'reason': ['refmt'],
+"\}
+"
+"" let g:ale_sign_error = '█'
+"" let g:ale_sign_warning = '█' " '𝄚'
+"
+"" highlight ALEErrorSign ctermbg=none ctermfg=darkyellow
+"" highlight ALEWarningSign ctermbg=none ctermfg=darkyellow
+"highlight ALEError ctermbg=none cterm=underline
+"highlight ALEWarning ctermbg=none cterm=underline
+"
+"map <Leader>af <Esc>:ALEFix<Enter>
+"map <Leader>an <Esc>:ALENext<Enter>
+"map <Leader>ad <Esc>:ALEDetail<Enter>
+"
+"augroup ecma-mappings
+"  au FileType javascript,jsx nnoremap <buffer> <Leader>td :TernDef<cr>
+"  au FileType javascript,jsx nnoremap <buffer> <Leader>tx :TernDoc<cr>
+"  au FileType javascript,jsx nnoremap <buffer> <Leader>tt :TernType<cr>
+"  au FileType javascript,jsx nnoremap <buffer> <Leader>tr :TernRefs<cr>
+"  au FileType javascript,jsx nnoremap <buffer> <Leader>tn :TernRename<cr>
+"  au FileType javascript,jsx nnoremap <buffer> <Leader>tb :call EsBeautifier()<cr>
+"  au FileType javascript,jsx vnoremap <buffer> <Leader>tb :call RangeEsBeautifier()<cr>
+"augroup END
+"
 " }}}
 " react {{{
 Plug 'mxw/vim-jsx', {'for':['javascript', 'jsx']}
@@ -698,9 +707,8 @@ nnoremap <leader>zz :Buffers<cr>
 nnoremap <leader>zq :bdelete<cr>
 
 " fuzzy find
-"set path=.,**
-"set wildignore+=*/node_modules/*
-"nnoremap <leader>zx :find<space>
+let $FZF_DEFAULT_COMMAND='find . \( -name node_modules -o -name .git \) -prune -o -print'
+
 command! -bang -nargs=? -complete=dir HFiles
   \ call fzf#vim#files(<q-args>, 
   \   s:p({'source': 'ag --hidden --ignore .git -g ""'}), <bang>0)
@@ -754,6 +762,8 @@ nnoremap <leader>rr :w !bash<cr>
 " when you press :, it also adds '<,'>
 vnoremap <leader>rr :w !bash<cr>
 
+" execute current file
+nnoremap <leader>re :!%:p<cr>
 " }}}
 " leader refactoring (t) {{{
 nnoremap <leader>tn :%s/\<<c-r><c-w>\>//g<left><left>

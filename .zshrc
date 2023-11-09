@@ -10,6 +10,7 @@ PATHS+=":$WORK/bin"
 PATHS+=":./node_modules/.bin"
 PATHS+=":$HOME/.npm-global/bin"
 PATHS+=":$HOME/.bin"
+PATHS+=":$HOME/.deno/bin"
 PATHS+=":$HOME/.cargo/bin"
 PATHS+=":$HOME/.local/bin"
 PATHS+=":/snap/bin"
@@ -110,6 +111,7 @@ plugins=(
   git
   docker
   node
+  deno
   npm
   tmux
   zsh-autosuggestions
@@ -178,6 +180,7 @@ alias dl='dpkg -l'
 alias sdl='dl'
 
 alias dc='docker-compose'
+alias sdc='sudo docker-compose'
 alias dcu='docker-compose up'
 
 alias ni='npm install --save'
@@ -200,6 +203,8 @@ alias myip='ip -6 addr | grep "3: " -A1 | grep inet | cut -d" " -f6 | cut -d/ -f
 alias L='less -R'
 
 alias kdiff='kitty +kitten diff'
+alias dict='cat /usr/share/dict/words'
+alias words=dict
 
 #alias -g H='| head'
 #alias -g T='| tail'
@@ -215,18 +220,50 @@ killn() { kill $(pids $1)}
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# OPAM configuration
-. /home/user/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
-# kitty autocompletion
-autoload -Uz compinit
-compinit
-# Completion for kitty
-kitty + complete setup zsh | source /dev/stdin
-
 # remove bell
 set bell-style none
 
 # fnm
 export PATH=/home/user/.fnm:$PATH
 eval "`fnm env`"
+
+# OPAM configuration
+. /home/user/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+# stripe completion
+fpath=(~/.stripe $fpath)
+
+# kitty completions
+kitty + complete setup zsh | source /dev/stdin
+
+# trigger completions
+autoload -Uz compinit
+compinit -i
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/user/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/user/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/user/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/user/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export METAVOICECODE_ROOT=/home/user/work/metavoice/git/github/MetaVoiceCode
+export PYTHONPATH=/home/user/work/metavoice/git/github/MetaVoiceCode:$PYTHONPATH
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/user/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/user/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/user/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/user/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+export METAVOICECODE_ROOT=/home/user/work/metavoice/git/github/MetaVoiceCode
+export PYTHONPATH=/home/user/work/metavoice/git/github/MetaVoiceCode:$PYTHONPATH
+export METAVOICECODE_ROOT=/home/user/work/metavoice/git/github/MetaVoiceCode
+export PYTHONPATH=/home/user/work/metavoice/git/github/MetaVoiceCode:$PYTHONPATH

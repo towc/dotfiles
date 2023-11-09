@@ -1,6 +1,0 @@
-{
-  "diagnostic.displayByAle": true,
-  "suggest.autoTrigger": "none",
-  "coc.preferences.formatOnSaveFiletypes": ["elm", "reason", "javascript"],
-  "codeLens.enable": true
-}
