@@ -244,8 +244,8 @@ export PATH="/home/user/.local/share/fnm:$PATH"
 eval "`fnm env`"
 
 # lazyshell
-export OPENAI_API_KEY=sk-proj-HxR3Nig5TOkD8egdm8rtT3BlbkFJGKjrQkc3SFsyu5tje1IT
-[ -f ~/.lazyshell.zsh ] && source ~/.lazyshell.zsh
+#export OPENAI_API_KEY=example
+#[ -f ~/.lazyshell.zsh ] && source ~/.lazyshell.zsh
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/home/user/.lmstudio/bin"
