@@ -15,3 +15,5 @@ stash-untracked = "!f() {    \
 }; f"
 [push]
 	default = current
+[init]
+	defaultBranch = main

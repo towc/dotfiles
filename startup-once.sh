@@ -7,3 +7,4 @@ xautolock -corners "----" \
 
 dunst &
 redshift -O 1800 &
+xset -dpms &

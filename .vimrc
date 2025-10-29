@@ -1,3 +1,6 @@
+scriptencoding utf-8
+set encoding=utf-8
+
 set t_co=256
 syntax on
 
@@ -82,10 +85,21 @@ Plug 'Yggdroot/indentLine'
 let g:indentLine_color_term = 236
 let g:indentLine_char = '|'
 set concealcursor=
+set conceallevel=0
 autocmd FileType json :IndentLinesDisable
 nnoremap <leader>ni :IndentLinesToggle<cr>
 
-Plug 'github/copilot.vim'
+" copilot is paid now
+"Plug 'github/copilot.vim'
+"let g:copilot_filetypes = {
+"   \ 'markdown': v:true,
+"   \ }
+
+Plug 'Exafunction/codeium.vim'
+let g:codeium_filetypes = {
+    \ 'markdown': v:false,
+    \ }
+
 " }}}
 " language server (c) {{{
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -179,6 +193,11 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Or use `complete_info` if your vim support it, like:
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
+" make word under cursor background-lit rather than underlined
+autocmd ColorScheme * highlight IlluminatedWordText gui=NONE guibg=#333333
+" make unused variables background-lit rather than concealed
+autocmd ColorScheme * highlight CocUnusedHighlight guifg=NONE guibg=#440000
+
 " Create mappings for function text object, requires document symbols feature of languageserver.
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
@@ -189,6 +208,11 @@ omap af <Plug>(coc-funcobj-a)
 Plug 'metakirby5/codi.vim'
 " toggle scratchpad
 nnoremap <leader>ns :Codi!!<cr>
+"let g:codi#virtual_text_prefix = '\t\t\t\t// '
+"let g:codi#virtual_text_pos="eol"
+"highlight CodiVirtualText ctermfg=8
+let g:codi#virtual_text = 0 " use split
+let g:codi#rightsplit = 0 " go to left side
 
 Plug 'xolox/vim-misc'
 Plug 'junegunn/goyo.vim'
@@ -295,6 +319,33 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
 
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
 " }}}
 " autocomplete ? {{{
 "Plug 'othree/jspc.vim', { 'for': ['javascript', 'typescript', 'html', 'vue']}
@@ -349,8 +400,8 @@ let g:ale_linters = {
 \   'reason': ['refmt'],
 \}
 
-" let g:ale_sign_error = '█'
-" let g:ale_sign_warning = '█' " '𝄚'
+" let g:ale_sign_error = 'âî°'
+" let g:ale_sign_warning = 'â' " 'ðî±'
 
 " highlight ALEErrorSign ctermbg=none ctermfg=darkyellow
 " highlight ALEWarningSign ctermbg=none ctermfg=darkyellow
@@ -419,7 +470,7 @@ au FileType reason nnoremap <leader>rb :!bsb -make-world && node <c-r>=expand("%
 Plug 'posva/vim-vue', {'for':['javascript', 'jsx', 'vue', 'html']}
 
 " format element. F<ea<cr><esc>f>i<cr><80><esc>. 80 is backspace
-au FileType vue let @i = "F<eaf>i�kb"
+au FileType vue let @i = "F<eaf>ikb"
 " }}}
 " typescript {{{
 Plug 'leafgarland/typescript-vim', {'for': 'typescript'}
@@ -436,6 +487,9 @@ Plug 'leafgarland/typescript-vim', {'for': 'typescript'}
 "  au FileType typescript map <buffer> <Leader>tI <Esc>:TsuImport<Enter>
 "augroup END
 
+augroup ts-init
+  au FileType typescript nnoremap <buffer> <leader>rr :!deno run --allow-all <c-r>=expand("%:p")<cr><cr>
+augroup END
 " }}}
 " java {{{
 "source ~/.vim/bundle/eclim/plugin/eclim.vim
@@ -502,13 +556,13 @@ au FileType qml nnoremap <buffer> <leader>rr :!qmlscene <c-r>=expand("%:p")<cr><
 au FileType qml nnoremap <buffer> <leader>rm :!QT_QUICK_CONTROLS_STYLE=material qmlscene <c-r>=expand("%:p")<cr><cr>
 " }}}
 " Ultisnips {{{
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-let g:UltiSnipsSnippetDirectories=["/home/user/UltiSnips"]
-
-let g:UltiSnipsExpandTrigger="<C-l>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+"Plug 'SirVer/ultisnips'
+"Plug 'honza/vim-snippets'
+"let g:UltiSnipsSnippetDirectories=["/home/user/UltiSnips"]
+"
+"let g:UltiSnipsExpandTrigger="<C-l>"
+"let g:UltiSnipsJumpForwardTrigger="<tab>"
+"let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " }}}
 " regex {{{
@@ -596,7 +650,7 @@ if empty($MYVIMRC)
   let $MYVIMRC = "~/.vimrc"
 endif
 let $MYVIMRC = "~/.vimrc"
-nnoremap <leader>ve :split $MYVIMRC<cr>
+nnoremap <leader>ve :vsplit $MYVIMRC<cr>
 nnoremap <leader>vE :e $MYVIMRC<cr>
 nnoremap <leader>vv :source $MYVIMRC<cr>
 nnoremap <leader>vu :UltiSnipsEdit<cr>
@@ -753,14 +807,14 @@ nnoremap <leader>rr :w !bash<cr>
 " run current visual selection in shell
 " when you press :, it also adds '<,'>
 vnoremap <leader>rr :w !bash<cr>
-
 " }}}
 " leader refactoring (t) {{{
 nnoremap <leader>tn :%s/\<<c-r><c-w>\>//g<left><left>
 nnoremap <leader>tN :%s/\<<c-r><c-w>\>//g<left><left>
 " }}}
 " leader copy to clipboard (y) {{{
-nnoremap <leader>yg gg"+yG<c-o><c-o>
+" copy whole file
+nnoremap <leader>yg gg"+yG<c-o>
 nnoremap <leader>yb "+yi{<c-o>
 nnoremap <leader>yf [[j"+yi{<c-o><c-o>
 " }}}
@@ -774,14 +828,15 @@ nnoremap <c-Q> <esc>:q<cr><c-w>k
 
 " }}}
 " char size limit indicator {{{
-hi colorcolumn ctermbg=brown
+highlight colorcolumn ctermbg=brown
 autocmd FileType javascript,vim call matchadd('colorcolumn', '\%80v', 100)
-
 " }}}
 " local vimrc {{{
 set exrc
 " }}}
-
+" leader presets (j) {{{
+nnoremap <leader>jv :Codi!! \| :set nornu<cr>
+" }}}
 " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
 let s:opam_share_dir = system("opam config var share")
 let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')

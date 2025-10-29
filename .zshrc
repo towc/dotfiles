@@ -22,11 +22,14 @@ PATHS+=":/home/nvidia/.local/bin"
 PATHS+=":/opt/wine-stable/bin"
 PATHS+=":$JAVA_HOME/bin"
 PATHS+=":$HOME/.local/kitty.app/bin"
+PATHS+=":$DENO_INSTALL/bin"
+PATHS+=":$HOME/.luarocks/bin"
 
 export PATH=$PATHS:$PATH
 
 export N_PREFIX=$HOME
 export ANDROID_SDK=$HOME/Android/Sdk
+export DENO_INSTALL="$HOME/.deno"
 
 if type rustc > /dev/null; then
   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
@@ -188,7 +191,7 @@ alias pi='pip install --user'
 alias ei='elm install'
 
 alias py='python3'
-alias v='nvim'
+alias v='neovim'
 alias vz='v ~/.zshrc'
 alias sz='source ~/.zshrc'
 alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
@@ -201,6 +204,13 @@ alias L='less -R'
 
 alias kdiff='kitty +kitten diff'
 
+function cd() { builtin cd "$@" && pwd > /tmp/.tmux-last-cd }
+# cd to last cd
+function cdl() { builtin cd `cat /tmp/.tmux-last-cd` }
+# mkdir && cd
+function cdm() { mkdir "$@" && builtin cd "$@" }
+
+
 #alias -g H='| head'
 #alias -g T='| tail'
 #alias -g G='| grep'
@@ -212,6 +222,8 @@ sspn() { ssp $(pids $1)}
 alias cnt='kill -CONT'
 cntn() { cnt $(pids $1)}
 killn() { kill $(pids $1)}
+
+alias winp="prop _NET_WM_PID | sed 's/_NET_WM_PID(CARDINAL) = //'"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -228,5 +240,14 @@ kitty + complete setup zsh | source /dev/stdin
 set bell-style none
 
 # fnm
-export PATH=/home/user/.fnm:$PATH
+export PATH="/home/user/.local/share/fnm:$PATH"
 eval "`fnm env`"
+
+# lazyshell
+export OPENAI_API_KEY=sk-proj-HxR3Nig5TOkD8egdm8rtT3BlbkFJGKjrQkc3SFsyu5tje1IT
+[ -f ~/.lazyshell.zsh ] && source ~/.lazyshell.zsh
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/user/.lmstudio/bin"
+# End of LM Studio CLI section
+

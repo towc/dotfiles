@@ -22,6 +22,8 @@ end
 local function keymap(modes, ...)
   vim.keymap.set(str_to_list(modes), ...)
 end
+
+vim.filetype.add { extension = { mdx = 'markdown' } }
 --- }}}
 
 -- vim options {{{
@@ -64,7 +66,7 @@ keymap('niv', '<C-k>', '<esc><C-w><C-k>', { desc = 'Move focus to the upper wind
 keymap('niv', '<C-q>', '<cmd>q<enter>', { desc = 'quit window' })
 keymap('niv', '<C-S-q>', '<cmd>qa<enter>', { desc = 'quit all windows' })
 keymap('niv', '<C-s>', '<cmd>w<enter><esc>', { desc = 'save buffer and enter normal mode' })
-keymap('niv', '<C-t>', '<cmd>tabe %<enter>', { desc = 'open buffer in new tab' }) -- open buffer in new tab
+keymap('niv', '<C-t>', '<cmd>tabe %<enter>', { desc = 'open buffer in new tab' }) 
 -- sessions (c-p) {{{
 keymap('n', '<C-p>', function()
   require('persistence').load()
@@ -72,14 +74,34 @@ end, { desc = 'load last session in directory' })
 keymap('n', '<C-p><C-p>', function()
   require('persistence').select()
 end, { desc = 'select session to load' })
+-- }}}
+-- config (\c) {{{
 keymap('n', '<leader>cc', '<cmd>tabe $MYVIMRC<enter>', { desc = 'open (change) config' })
-keymap('n', '<leader>cs', '<cmd>source $MYVIMRC<enter>', { desc = 'source config' })
+-- keymap('n', '<leader>cs', '<cmd>source $MYVIMRC<enter>', { desc = 'source config' })
 -- }}}
 -- runners {{{
 on_filetype('javascript', function()
   keymap('niv', '<leader>rr', '<cmd>!node %<cr>')
 end)
 
+-- }}}
+-- git {{{
+keymap('n', '<leader>gg', '<cmd>G<enter>')
+keymap('n', '<leader>gp', '<cmd>G push<enter>')
+-- }}}
+-- writing {{{
+keymap('niv', '<leader>wm', '<cmd>ZenMode<cr>', { desc = 'write mode (zen toggle)' })
+-- }}}
+-- insert (\i) {{{
+keymap('ni', '<leader>id', "<cmd>pu=strftime('%c')<enter>", { desc = 'insert date' })
+
+-- }}}
+-- obsidian (\o) {{{
+-- will be overridden once in obsidian project
+keymap('niv', '<leader>oo', ':cd /home/user/Documents/obsidian/main<cr>:e main.md<cr>', { desc = "open obsidian" })
+-- }}}
+-- run (\r) {{{
+keymap('n', '<leader>rr', '<cmd>!perl %<enter>', { desc = 'run current file' });
 -- }}}
 
 -- }}} key mappings
@@ -132,6 +154,7 @@ require('lazy').setup({
   },
 
   { 'tpope/vim-surround', event = 'VeryLazy' },
+  { 'tpope/vim-fugitive' },
 
   {
     'lewis6991/gitsigns.nvim',
@@ -212,13 +235,30 @@ require('lazy').setup({
       },
     },
   },
+  { 
+    'junegunn/fzf.vim',
+    dependencies = {
+      'junegunn/fzf' 
+    },
+    config = function()
+      vim.keymap.set('n', '<leader>zv', '<cmd>Ag<cr>', { desc = 'search contents' })
+    end
+  },
+  -- not fuzzy by default, and c-g gets fans going
+  -- {
+  --   "ibhagwan/fzf-lua",
+  --   -- optional for icon support
+  --   dependencies = { "nvim-tree/nvim-web-devicons" },
+  --   -- or if using mini.icons/mini.nvim
+  --   -- dependencies = { "echasnovski/mini.icons" },
+  --   opts = {},
 
-  -- NOTE: Plugins can specify dependencies.
-  --
-  -- The dependencies are proper plugin specifications as well - anything
-  -- you do for a plugin at the top level, you can do for a dependency.
-  --
-  -- Use the `dependencies` key to specify the dependencies of a particular plugin
+  --   config = function()
+  --     require'fzf-lua'.setup({
+  --       'fzf-native',
+  --     })
+  --   end
+  -- },
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
@@ -279,6 +319,9 @@ require('lazy').setup({
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
+          fzf = {
+            fuzzy = true
+          }
         },
 
         defaults = {
@@ -290,7 +333,9 @@ require('lazy').setup({
 
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
+      pcall(require('telescope').load_extension, 'fzf_writer')
       pcall(require('telescope').load_extension, 'ui-select')
+
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -300,7 +345,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>zs', builtin.builtin, { desc = '[Z]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>zw', builtin.grep_string, { desc = '[Z]earch current [W]ord' })
       vim.keymap.set('n', '<leader>zg', builtin.live_grep, { desc = '[Z]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>zv', builtin.live_grep, { desc = '[Z]earch by [V]ines' })
       vim.keymap.set('n', '<leader>zd', builtin.diagnostics, { desc = '[Z]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>zr', builtin.resume, { desc = '[Z]earch [R]esume' })
       vim.keymap.set('n', '<leader>z.', builtin.oldfiles, { desc = '[Z]earch Recent Files ("." for repeat)' })
@@ -355,30 +399,30 @@ require('lazy').setup({
       'hrsh7th/cmp-cmdline',
 
       -- Snippets
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
+      -- 'L3MON4D3/LuaSnip',
+      -- 'saadparwaiz1/cmp_luasnip',
 
-      -- Snippet collection (optional)
-      'rafamadriz/friendly-snippets',
+      -- -- Snippet collection (optional)
+      -- 'rafamadriz/friendly-snippets',
     },
     config = function()
       local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
+      -- local luasnip = require 'luasnip'
 
-      require('luasnip.loaders.from_vscode').lazy_load()
+      -- require('luasnip.loaders.from_vscode').lazy_load()
 
       cmp.setup {
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
+        --snippet = {
+        --  expand = function(args)
+        --    luasnip.lsp_expand(args.body)
+        --  end,
+        --},
         mapping = cmp.mapping.preset.insert {
-          ['<Tab>'] = cmp.mapping.confirm { select = true },
+          --['<Tab>'] = cmp.mapping.confirm { select = true },
         },
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
-          { name = 'luasnip' },
+          -- { name = 'luasnip' },
         }, {
           { name = 'buffer' },
           { name = 'path' },
@@ -408,9 +452,6 @@ require('lazy').setup({
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
-      -- Automatically install LSPs and related tools to stdpath for Neovim
-      -- Mason must be loaded before its dependents so we need to set it up here.
-      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -422,43 +463,24 @@ require('lazy').setup({
       'hrsh7th/nvim-cmp',
     },
     config = function()
-      -- Brief aside: **What is LSP?**
-      --
-      -- LSP is an initialism you've probably heard, but might not understand what it is.
-      --
-      -- LSP stands for Language Server Protocol. It's a protocol that helps editors
-      -- and language tooling communicate in a standardized fashion.
-      --
-      -- In general, you have a "server" which is some tool built to understand a particular
-      -- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc.). These Language Servers
-      -- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-      -- processes that communicate with some "client" - in this case, Neovim!
-      --
-      -- LSP provides Neovim with features like:
-      --  - Go to definition
-      --  - Find references
-      --  - Autocompletion
-      --  - Symbol Search
-      --  - and more!
-      --
-      -- Thus, Language Servers are external tools that must be installed separately from
-      -- Neovim. This is where `mason` and related plugins come into play.
-      --
-      -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
-      -- and elegantly composed help section, `:help lsp-vs-treesitter`
-
-      --  This function gets run when an LSP attaches to a particular buffer.
-      --    That is to say, every time a new file is opened that is associated with
-      --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
-      --    function will be executed to configure the current buffer
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
-          -- NOTE: Remember that Lua is a real programming language, and as such it is possible
-          -- to define small helper and utility functions so you don't have to repeat yourself.
-          --
-          -- In this case, we create a function that lets us more easily define mappings specific
-          -- for LSP related items. It sets the mode, buffer and description for us each time.
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          local root_dir = vim.fn.getcwd()
+
+          local is_deno = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc')(root_dir) ~= nil
+
+          -- In Deno project: stop tsserver
+          if is_deno and client.name == 'ts_ls' then
+            client.stop()
+          end
+
+          -- Not a Deno project: stop denols
+          if not is_deno and client.name == 'denols' then
+            client.stop()
+          end
+
           local map = function(keys, func, desc, mode)
             mode = mode or 'n'
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
@@ -587,7 +609,7 @@ require('lazy').setup({
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
       --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
+      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.plugins
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
       -- Enable the following language servers
@@ -600,32 +622,24 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
-
         lua_ls = {
-          -- cmd = { ... },
-          -- filetypes = { ... },
-          -- capabilities = {},
           settings = {
             Lua = {
               completion = {
-                callSnippet = 'Replace',
+                -- callSnippet = 'Replace',
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
+        },
+        ts_ls = {
+          root_dir = require('lspconfig').util.root_pattern { 'package.json', 'tsconfig.json' },
+          single_file_support = false,
+          settings = {},
+        },
+        denols = {
+          root_dir = require('lspconfig').util.root_pattern { 'deno.json', 'deno.jsonc' },
+          single_file_support = false,
+          settings = {},
         },
       }
 
@@ -667,7 +681,7 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
+    -- event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
       {
@@ -717,31 +731,31 @@ require('lazy').setup({
     version = '1.*',
     dependencies = {
       -- Snippet Engine
-      {
-        'L3MON4D3/LuaSnip',
-        version = '2.*',
-        build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
-          return 'make install_jsregexp'
-        end)(),
-        dependencies = {
-          -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
-        },
-        opts = {},
-      },
+      -- {
+      --   'L3MON4D3/LuaSnip',
+      --   version = '2.*',
+      --   build = (function()
+      --     -- Build Step is needed for regex support in snippets.
+      --     -- This step is not supported in many windows environments.
+      --     -- Remove the below condition to re-enable on windows.
+      --     if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+      --       return
+      --     end
+      --     return 'make install_jsregexp'
+      --   end)(),
+      --   dependencies = {
+      --     -- `friendly-snippets` contains a variety of premade snippets.
+      --     --    See the README about individual language/framework/plugin snippets:
+      --     --    https://github.com/rafamadriz/friendly-snippets
+      --     -- {
+      --     --   'rafamadriz/friendly-snippets',
+      --     --   config = function()
+      --     --     require('luasnip.loaders.from_vscode').lazy_load()
+      --     --   end,
+      --     -- },
+      --   },
+      --   opts = {},
+      -- },
       'folke/lazydev.nvim',
     },
     --- @module 'blink.cmp'
@@ -788,13 +802,13 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
       },
 
-      snippets = { preset = 'luasnip' },
+      -- snippets = { preset = 'luasnip' },
 
       -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
       -- which automatically downloads a prebuilt binary when enabled.
@@ -860,31 +874,31 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-  },
+  -- { -- Highlight, edit, and navigate code
+  --   'nvim-treesitter/nvim-treesitter',
+  --   build = ':TSUpdate',
+  --   main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+  --   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+  --   opts = {
+  --     ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+  --     -- Autoinstall languages that are not installed
+  --     auto_install = true,
+  --     highlight = {
+  --       enable = true,
+  --       -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+  --       --  If you are experiencing weird indenting issues, add the language to
+  --       --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+  --       additional_vim_regex_highlighting = { 'ruby' },
+  --     },
+  --     indent = { enable = true, disable = { 'ruby' } },
+  --   },
+  --   -- There are additional nvim-treesitter modules that you can use to interact
+  --   -- with nvim-treesitter. You should go explore a few and see what interests you:
+  --   --
+  --   --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+  --   --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+  --   --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  -- },
 
   {
     'aserowy/tmux.nvim',
@@ -942,18 +956,194 @@ require('lazy').setup({
     },
     lazy = false,
     keys = {
-      { '\\o', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+      { '\\t', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
     },
     opts = {
       filesystem = {
         window = {
           mappings = {
-            ['\\o'] = 'close_window',
+            ['\\t'] = 'close_window',
           },
         },
       },
     },
   },
+  {
+    'folke/zen-mode.nvim',
+    opts = {
+      window = {
+        backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
+        -- height and width can be:
+        -- * an absolute number of cells when > 1
+        -- * a percentage of the width / height of the editor when <= 1
+        -- * a function that returns the width or the height
+        width = 120, -- width of the Zen window
+        height = 1, -- height of the Zen window
+        -- by default, no options are changed for the Zen window
+        -- uncomment any of the options below, or add other vim.wo options you want to apply
+        options = {
+          -- signcolumn = "no", -- disable signcolumn
+          -- number = false, -- disable number column
+          -- relativenumber = false, -- disable relative numbers
+          -- cursorline = false, -- disable cursorline
+          -- cursorcolumn = false, -- disable cursor column
+          -- foldcolumn = "0", -- disable fold column
+          -- list = false, -- disable whitespace characters
+          linebreak = true,
+        },
+      },
+      plugins = {
+        -- disable some global vim options (vim.o...)
+        -- comment the lines to not apply the options
+        options = {
+          enabled = true,
+          ruler = false, -- disables the ruler text in the cmd line area
+          showcmd = false, -- disables the command in the last line of the screen
+          -- you may turn on/off statusline in zen mode by setting 'laststatus' 
+          -- statusline will be shown only if 'laststatus' == 3
+          laststatus = 0, -- turn off the statusline in zen mode
+        },
+        twilight = { enabled = true }, -- enable to start Twilight when zen mode opens
+        gitsigns = { enabled = false }, -- disables git signs
+        -- this will change the font size on kitty when in zen mode
+        -- to make this work, you need to set the following kitty options:
+        -- - allow_remote_control socket-only
+        -- - listen_on unix:/tmp/kitty
+        kitty = {
+          enabled = false,
+          font = "+10", -- font size increment
+        },
+      },
+    }
+  },
+  {
+    'Ron89/thesaurus_query.vim',
+    config = function()
+      keymap('niv', '<leader>ws', '<cmd>ThesaurusQueryReplaceCurrentWord<cr>', { desc = 'write synonym (thesaurus)' })
+      keymap('niv', '<leader>wS', '<c-u>:Thesaurus ', { desc = 'write synonym from scratch (thesaurus)' })
+    end
+  },
+  {
+    "obsidian-nvim/obsidian.nvim",
+    version = "*", -- recommended, use latest release instead of latest commit
+    --ft = "markdown",
+    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+    event = {
+      -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+      -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
+      -- refer to `:h file-pattern` for more examples
+      "BufReadPre /home/user/Documents/obsidian/**/*",
+      "BufNewFile /home/user/Documents/obsidian/**/*",
+    },
+    config = function()
+      vim.opt_local.conceallevel = 2
+      require 'obsidian'.setup {
+        --disable_frontmatter = true,
+        workspaces = {
+          {
+            name = "main",
+            path = "~/Documents/obsidian/main",
+          },
+        },
+        templates = {
+          folder = "templates"
+        },
+
+        -- Optional, customize how note IDs are generated given an optional title.
+        ---@param title string|?
+        ---@return string
+        note_id_func = function(title)
+          local suffix = ""
+          if title ~= nil then
+            -- If title is given, transform it into valid file name.
+            --suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+            suffix = title:gsub("[^A-Za-z0-9 -]", ""):lower()
+          else
+            -- If title is nil, just add 4 random uppercase letters to the suffix.
+            for _ = 1, 4 do
+              suffix = suffix .. string.char(math.random(65, 90))
+            end
+          end
+          return os.date("%Y.%m.%d %H.%M.%S") .. " " .. suffix
+        end,
+        -- Optional, customize how note file names are generated given the ID, target directory, and title.
+        ---@param spec { id: string, dir: obsidian.Path, title: string|? }
+        ---@return string|obsidian.Path The full path to the new note.
+        note_path_func = function(spec)
+          local path = spec.dir / tostring(spec.id)
+          --return path:with_suffix ".md"
+          return tostring(path) .. '.md'
+        end,
+        -- Optional, alternatively you can customize the frontmatter data.
+        ---@return table
+        note_frontmatter_func = function(note)
+          -- Add the title of the note as an alias.
+          if note.title then
+            note:add_alias(note.title)
+          end
+
+          local out = { id = note.id, aliases = note.aliases }
+
+          -- `note.metadata` contains any manually added fields in the frontmatter.
+          -- So here we just make sure those fields are kept in the frontmatter.
+          if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+            for k, v in pairs(note.metadata) do
+              out[k] = v
+            end
+          end
+
+          return out
+        end,
+        mappings = {
+          -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
+          ["gf"] = {
+            action = function()
+              return require("obsidian").util.gf_passthrough()
+            end,
+            opts = { noremap = false, expr = true, buffer = true },
+          },
+          -- Smart action depending on context, either follow link or toggle checkbox.
+          ["<cr>"] = {
+            action = function()
+              return require("obsidian").util.smart_action()
+            end,
+            opts = { buffer = true, expr = true },
+          }
+        },
+        ui = {
+          checkboxes = {
+            -- NOTE: the 'char' value has to be a single character, and the highlight groups are defined below.
+            [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
+            [">"] = { char = "", hl_group = "ObsidianRightArrow" },
+            ["x"] = { char = "", hl_group = "ObsidianDone" },
+            --["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
+            --["!"] = { char = "", hl_group = "ObsidianImportant" },
+            -- Replace the above with this if you don't have a patched font:
+            -- [" "] = { char = "☐", hl_group = "ObsidianTodo" },
+            -- ["x"] = { char = "✔", hl_group = "ObsidianDone" },
+
+            -- You can also add more custom ones...
+          },
+        }
+      }
+      keymap('niv', '<leader>ob', '<cmd>ObsidianBacklinks<cr>')
+      keymap('niv', '<leader>on', '<cmd>ObsidianNew<cr>')
+      keymap('niv', '<leader>o#', '<cmd>ObsidianTags<cr>')
+      keymap('niv', '<leader>oo', '<cmd>ObsidianOpen<cr>')
+      keymap('niv', '<leader>oc', '<cmd>ObsidianTOC<cr>')
+
+      keymap('niv', '<leader>od', '<cmd>ObsidianDailies<cr>')
+      keymap('niv', '<leader>oy', '<cmd>ObsidianYesterday<cr>')
+      keymap('niv', '<leader>ot', '<cmd>ObsidianToday<cr>')
+      keymap('niv', '<leader>oT', '<cmd>ObsidianTomorrow<cr>')
+
+      keymap('niv', '<leader>os', '<cmd>ObsidianSearch<cr>')
+      keymap('niv', '<leader>zo', '<cmd>ObsidianSearch<cr>')
+
+      keymap('nv', '~', '<cmd>ObsidianToggleCheckbox<cr>')
+    end
+  },
+  { 'wakatime/vim-wakatime', lazy = false }
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
