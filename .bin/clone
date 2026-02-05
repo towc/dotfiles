@@ -4,6 +4,16 @@ protocol=$1
 user=$2
 repo=$3
 
+if [[ "$user" == *"/"* ]]
+then
+  echo "detected '/', splitting..."
+  repo_path=$user
+  user=$(echo $repo_path | grep -oE "^[^/]+")
+  repo=$(echo $repo_path | grep -oE  "[^/]+$")
+  echo "user: " $user
+  echo "repo: " $repo
+fi
+
 base=$HOME/git
 site=''
 strat=$protocol
@@ -52,4 +62,5 @@ case $strat in
     ;;
 esac
 
-echo "repo located in $base/$site/$user/$repo"
+
+echo "repo is in $base/$site/$user/$repo"

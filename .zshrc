@@ -1,5 +1,4 @@
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
-
 export WORK=/home/user/work/toptal/deepchannel
 
 # If you come from bash you might have to change your $PATH.
@@ -40,7 +39,7 @@ export BAT_THEME='Visual Studio Dark+'
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
+ 
 stty stop undef
 stty start undef
 # Set name of the theme to load. Optionally, if you set this to "random"
@@ -105,6 +104,7 @@ if [[ ! -o login ]]; then
   ZSH_TMUX_AUTOQUIT=true
 fi
 ZSH_TMUX_AUTOCONNECT=false
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -225,6 +225,17 @@ killn() { kill $(pids $1)}
 
 alias winp="prop _NET_WM_PID | sed 's/_NET_WM_PID(CARDINAL) = //'"
 
+# Claude Code aliases
+alias cn='claude'
+alias cr='claude --resume'
+alias cc='claude --continue'
+
+alias on='opencode'
+alias oc='opencode --continue'
+alias op='opencode --prompt'
+alias oh='cd ~ && on'
+alias ohc='cd ~ && oc'
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # OPAM configuration
@@ -250,4 +261,39 @@ eval "`fnm env`"
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/home/user/.lmstudio/bin"
 # End of LM Studio CLI section
+
+#compdef opencode
+###-begin-opencode-completions-###
+#
+# yargs command completion script
+#
+# Installation: opencode completion >> ~/.zshrc
+#    or opencode completion >> ~/.zprofile on OSX.
+#
+_opencode_yargs_completions()
+{
+  local reply
+  local si=$IFS
+  IFS=$'
+' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" opencode --get-yargs-completions "${words[@]}"))
+  IFS=$si
+  if [[ ${#reply} -gt 0 ]]; then
+    _describe 'values' reply
+  else
+    _default
+  fi
+}
+if [[ "'${zsh_eval_context[-1]}" == "loadautofunc" ]]; then
+  _opencode_yargs_completions "$@"
+else
+  compdef _opencode_yargs_completions opencode
+fi
+###-end-opencode-completions-###
+
+
+
+
+
+export PATH="/home/user/.local/bin:$PATH"
+
 

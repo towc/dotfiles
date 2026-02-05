@@ -3,7 +3,7 @@
 	name = Matei Copot
 [core]
 	excludesfile = /home/user/.gitignore_global
-	editor = vim
+	editor = neovim
 [merge]
 	tool = vimdiff
 

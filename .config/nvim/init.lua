@@ -23,12 +23,17 @@ local function keymap(modes, ...)
   vim.keymap.set(str_to_list(modes), ...)
 end
 
-vim.filetype.add { extension = { mdx = 'markdown' } }
+vim.filetype.add {
+  extension = {
+    mdx = 'markdown',
+    mc = 'monkeyc',
+  },
+}
 --- }}}
 
 -- vim options {{{
 vim.o.number = true
-vim.o.mouse = '' -- 'a' to enable
+vim.o.mouse = 'a' -- enable mouse support
 vim.o.showmode = false -- already in statusline
 vim.o.breakindent = true
 vim.o.undofile = true
@@ -67,6 +72,8 @@ keymap('niv', '<C-q>', '<cmd>q<enter>', { desc = 'quit window' })
 keymap('niv', '<C-S-q>', '<cmd>qa<enter>', { desc = 'quit all windows' })
 keymap('niv', '<C-s>', '<cmd>w<enter><esc>', { desc = 'save buffer and enter normal mode' })
 keymap('niv', '<C-t>', '<cmd>tabe %<enter>', { desc = 'open buffer in new tab' }) 
+keymap('nv', '<Down>', '<C-e>')
+keymap('nv', '<Up>', '<C-y>')
 -- sessions (c-p) {{{
 keymap('n', '<C-p>', function()
   require('persistence').load()
@@ -157,6 +164,11 @@ require('lazy').setup({
   { 'tpope/vim-fugitive' },
 
   {
+    'nheiich/monkeyc-for-vim',
+    ft = 'monkeyc', -- lazy load only for MonkeyC files
+  },
+
+  {
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
@@ -230,7 +242,6 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>z', group = '[Z]earch' },
-        { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
@@ -325,9 +336,6 @@ require('lazy').setup({
         },
 
         defaults = {
-          file_ignore_patterns = {
-            'node_modules',
-          },
         },
       }
 
@@ -336,19 +344,32 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf_writer')
       pcall(require('telescope').load_extension, 'ui-select')
 
+      local defaulted = function(f)
+        return function()
+          f({
+            hidden = true,
+            no_ignore = true,
+            file_ignore_patterns = {
+              'node_modules',
+              '.next',
+              '.git',
+            },
+          })
+        end
+      end
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>zh', builtin.help_tags, { desc = '[Z]earch [H]elp' })
-      vim.keymap.set('n', '<leader>zk', builtin.keymaps, { desc = '[Z]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>zx', builtin.find_files, { desc = '[Z]earch [X]iles' })
-      vim.keymap.set('n', '<leader>zs', builtin.builtin, { desc = '[Z]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>zw', builtin.grep_string, { desc = '[Z]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>zg', builtin.live_grep, { desc = '[Z]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>zd', builtin.diagnostics, { desc = '[Z]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>zr', builtin.resume, { desc = '[Z]earch [R]esume' })
-      vim.keymap.set('n', '<leader>z.', builtin.oldfiles, { desc = '[Z]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>zh', defaulted(builtin.help_tags), { desc = '[Z]earch [H]elp' })
+      vim.keymap.set('n', '<leader>zk', defaulted(builtin.keymaps), { desc = '[Z]earch [K]eymaps' })
+      vim.keymap.set('n', '<leader>zx', defaulted(builtin.find_files), { desc = '[Z]earch [X]iles' })
+      vim.keymap.set('n', '<leader>zs', defaulted(builtin.builtin), { desc = '[Z]earch [S]elect Telescope' })
+      vim.keymap.set('n', '<leader>zw', defaulted(builtin.grep_string), { desc = '[Z]earch current [W]ord' })
+      vim.keymap.set('n', '<leader>zg', defaulted(builtin.live_grep), { desc = '[Z]earch by [G]rep' })
+      vim.keymap.set('n', '<leader>zd', defaulted(builtin.diagnostics), { desc = '[Z]earch [D]iagnostics' })
+      vim.keymap.set('n', '<leader>zr', defaulted(builtin.resume), { desc = '[Z]earch [R]esume' })
+      vim.keymap.set('n', '<leader>z.', defaulted(builtin.oldfiles), { desc = '[Z]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<leader><leader>', defaulted(builtin.buffers), { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -455,6 +476,7 @@ require('lazy').setup({
       { 'mason-org/mason.nvim', opts = {} },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'yioneko/nvim-vtsls',
 
       -- Useful status updates for LSP.
       { 'j-hui/fidget.nvim', opts = {} },
@@ -469,17 +491,17 @@ require('lazy').setup({
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           local root_dir = vim.fn.getcwd()
 
-          local is_deno = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc')(root_dir) ~= nil
+          -- local is_deno = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc')(root_dir) ~= nil
+          --
+          -- -- In Deno project: stop tsserver
+          -- if is_deno and client.name == 'ts_ls' then
+          --   client.stop()
+          -- end
 
-          -- In Deno project: stop tsserver
-          if is_deno and client.name == 'ts_ls' then
-            client.stop()
-          end
-
-          -- Not a Deno project: stop denols
-          if not is_deno and client.name == 'denols' then
-            client.stop()
-          end
+          -- -- Not a Deno project: stop denols
+          -- if not is_deno and client.name == 'denols' then
+          --   client.stop()
+          -- end
 
           local map = function(keys, func, desc, mode)
             mode = mode or 'n'
@@ -564,16 +586,6 @@ require('lazy').setup({
               end,
             })
           end
-
-          -- The following code creates a keymap to toggle inlay hints in your
-          -- code, if the language server you are using supports them
-          --
-          -- This may be unwanted, since they displace some of your code
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
-          end
         end,
       })
 
@@ -631,16 +643,37 @@ require('lazy').setup({
             },
           },
         },
-        ts_ls = {
-          root_dir = require('lspconfig').util.root_pattern { 'package.json', 'tsconfig.json' },
-          single_file_support = false,
-          settings = {},
+        vtsls = {
+          -- Use the default root pattern logic from lspconfig
+          root_dir = require('lspconfig').util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
+          settings = {
+            typescript = {
+              updateImportsOnFileMove = { enabled = "always" },
+              inlayHints = {
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
+              },
+            },
+            vtsls = {
+              enableMoveToFileCodeAction = true,
+              autoUseWorkspaceTsdk = true,
+              experimental = {
+                completion = {
+                  enableServerSideFuzzyMatch = true,
+                },
+              },
+            },
+          },
         },
-        denols = {
-          root_dir = require('lspconfig').util.root_pattern { 'deno.json', 'deno.jsonc' },
-          single_file_support = false,
-          settings = {},
-        },
+        --denols = {
+        --  root_dir = require('lspconfig').util.root_pattern { 'deno.json', 'deno.jsonc' },
+        --  single_file_support = false,
+        --  settings = {},
+        --},
       }
 
       -- Ensure the servers and tools above are installed
@@ -901,37 +934,30 @@ require('lazy').setup({
   -- },
 
   {
-    'aserowy/tmux.nvim',
-    config = function()
-      return require('tmux').setup()
-    end,
-  },
-
-  {
     'folke/persistence.nvim',
     event = 'BufReadPre', -- this will only start session saving when an actual file was opened
     opts = {},
   },
 
-  {
-    'robitx/gp.nvim',
-    config = function()
-      require('gp').setup {
-        openai_api_key = require('secrets').OPENAI_API_KEY,
-        agents = {
-          {
-            name = 'default',
-            provider = 'openai',
-            model = 'o3-2025-04-16',
-            system_prompt = 'You are an expert programmer and code transformer. Your job is to modify code exactly as instructed, without adding unrelated explanations.',
-          },
-        },
-        default_agent = 'default',
-      }
+  -- {
+  --   'robitx/gp.nvim',
+  --   config = function()
+  --     require('gp').setup {
+  --       openai_api_key = require('secrets').OPENAI_API_KEY,
+  --       agents = {
+  --         {
+  --           name = 'default',
+  --           provider = 'openai',
+  --           model = 'o3-2025-04-16',
+  --           system_prompt = 'You are an expert programmer and code transformer. Your job is to modify code exactly as instructed, without adding unrelated explanations.',
+  --         },
+  --       },
+  --       default_agent = 'default',
+  --     }
 
-      vim.keymap.set('v', '<leader>a', ':GpRewrite<cr>')
-    end,
-  },
+  --     vim.keymap.set('v', '<leader>a', ':GpRewrite<cr>')
+  --   end,
+  -- },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -960,6 +986,9 @@ require('lazy').setup({
     },
     opts = {
       filesystem = {
+        filtered_items = {
+          visible = true, -- or would have to press H
+        },
         window = {
           mappings = {
             ['\\t'] = 'close_window',
@@ -1059,10 +1088,8 @@ require('lazy').setup({
             --suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
             suffix = title:gsub("[^A-Za-z0-9 -]", ""):lower()
           else
-            -- If title is nil, just add 4 random uppercase letters to the suffix.
-            for _ = 1, 4 do
-              suffix = suffix .. string.char(math.random(65, 90))
-            end
+            -- If no title given
+            suffix = suffix .. "tmp"
           end
           return os.date("%Y.%m.%d %H.%M.%S") .. " " .. suffix
         end,
@@ -1074,76 +1101,181 @@ require('lazy').setup({
           --return path:with_suffix ".md"
           return tostring(path) .. '.md'
         end,
-        -- Optional, alternatively you can customize the frontmatter data.
-        ---@return table
-        note_frontmatter_func = function(note)
-          -- Add the title of the note as an alias.
-          if note.title then
-            note:add_alias(note.title)
-          end
 
-          local out = { id = note.id, aliases = note.aliases }
-
-          -- `note.metadata` contains any manually added fields in the frontmatter.
-          -- So here we just make sure those fields are kept in the frontmatter.
-          if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-            for k, v in pairs(note.metadata) do
-              out[k] = v
+        frontmatter = {
+          func = function(note)
+            -- Add the title of the note as an alias.
+            if note.title then
+              note:add_alias(note.title)
             end
-          end
 
-          return out
-        end,
-        mappings = {
-          -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
-          ["gf"] = {
-            action = function()
-              return require("obsidian").util.gf_passthrough()
-            end,
-            opts = { noremap = false, expr = true, buffer = true },
-          },
-          -- Smart action depending on context, either follow link or toggle checkbox.
-          ["<cr>"] = {
-            action = function()
-              return require("obsidian").util.smart_action()
-            end,
-            opts = { buffer = true, expr = true },
-          }
+            local out = { id = note.id, aliases = note.aliases }
+
+            -- `note.metadata` contains any manually added fields in the frontmatter.
+            -- So here we just make sure those fields are kept in the frontmatter.
+            if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+              for k, v in pairs(note.metadata) do
+                out[k] = v
+              end
+            end
+
+            return out
+          end,
         },
-        ui = {
-          checkboxes = {
-            -- NOTE: the 'char' value has to be a single character, and the highlight groups are defined below.
-            [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
-            [">"] = { char = "", hl_group = "ObsidianRightArrow" },
-            ["x"] = { char = "", hl_group = "ObsidianDone" },
-            --["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
-            --["!"] = { char = "", hl_group = "ObsidianImportant" },
-            -- Replace the above with this if you don't have a patched font:
-            -- [" "] = { char = "☐", hl_group = "ObsidianTodo" },
-            -- ["x"] = { char = "✔", hl_group = "ObsidianDone" },
-
-            -- You can also add more custom ones...
-          },
-        }
+        checkbox = {
+          order = { " ", ">", "x" },
+        },
+        footer = { enabled = false },
+        legacy_commands = false,
       }
-      keymap('niv', '<leader>ob', '<cmd>ObsidianBacklinks<cr>')
-      keymap('niv', '<leader>on', '<cmd>ObsidianNew<cr>')
-      keymap('niv', '<leader>o#', '<cmd>ObsidianTags<cr>')
-      keymap('niv', '<leader>oo', '<cmd>ObsidianOpen<cr>')
-      keymap('niv', '<leader>oc', '<cmd>ObsidianTOC<cr>')
 
-      keymap('niv', '<leader>od', '<cmd>ObsidianDailies<cr>')
-      keymap('niv', '<leader>oy', '<cmd>ObsidianYesterday<cr>')
-      keymap('niv', '<leader>ot', '<cmd>ObsidianToday<cr>')
-      keymap('niv', '<leader>oT', '<cmd>ObsidianTomorrow<cr>')
+      keymap('n', 'gf', function() return require("obsidian").util.gf_passthrough() end, { buffer = true });
+      keymap('n', '<cr>', function() return require("obsidian").util.smart_action() end, { buffer = true });
 
-      keymap('niv', '<leader>os', '<cmd>ObsidianSearch<cr>')
-      keymap('niv', '<leader>zo', '<cmd>ObsidianSearch<cr>')
+      keymap('nv', '<leader>ob', '<cmd>Obsidian backlinks<cr>')
+      keymap('nv', '<leader>on', '<cmd>Obsidian new<cr>')
+      keymap('nv', '<leader>o#', '<cmd>Obsidian tags<cr>')
+      keymap('nv', '<leader>oo', '<cmd>Obsidian open<cr>')
+      keymap('nv', '<leader>oc', '<cmd>Obsidian toc<cr>')
 
-      keymap('nv', '~', '<cmd>ObsidianToggleCheckbox<cr>')
+      keymap('nv', '<leader>od', '<cmd>Obsidian dailies<cr>')
+      keymap('nv', '<leader>oy', '<cmd>Obsidian yesterday<cr>')
+      keymap('nv', '<leader>ot', '<cmd>Obsidian today<cr>')
+      keymap('nv', '<leader>oT', '<cmd>Obsidian tomorrow<cr>')
+
+      keymap('nv', '<leader>os', '<cmd>Obsidian search<cr>')
+      keymap('nv', '<leader>zo', '<cmd>Obsidian search<cr>')
+
+      keymap('n', '<leader>or', function ()
+        local str_find_literal = function(str, x)
+          -- last param is a plain text flag
+          return string.find(str, x, 1, true)
+        end
+        local str_replace_range = function(str, i, j, s)
+          return str:sub(1, i-1) .. s .. str:sub(j+1)
+        end
+        local str_replace_literal = function(str, a, b)
+          local i, j = str_find_literal(str, a)
+          if i then
+            return str_replace_range(str, i, j, b)
+          else
+            return str
+          end
+        end
+
+        local path = vim.fn.expand('%:h') -- path without filename
+        local extension = vim.fn.expand('%:e')
+
+        local cur_id = vim.fn.expand('%:t:r') -- file name w/o ext, friendlier for input
+        local cur_full_path = vim.fn.expand('%:p')
+
+        local new_id = vim.fn.input('Rename to: ', cur_id)
+        local new_full_path = path .. '/' .. new_id .. '.' .. extension
+
+        -- could use require 'obsidian.frontmatter',
+        -- but the trivial search/replace solution in current file is good enough for me.
+        -- If you don't use an alias, you can skip this step:
+        local text = vim.fn.readblob(cur_full_path)
+
+        -- - assume filename was id, so update id
+        text = str_replace_literal(text, cur_id, new_id)
+
+        -- - assume alias was id with name only, so:
+        --   - cur_id - cur_alias = base_id ('ID old' - 'old' = 'ID ')
+        --   - new_id - base_id = new_alias ('ID new' - 'ID ' = 'new')
+        --   - set new_alias in frontmatter
+
+        local has_alias, alias_start = string.find(text, 'aliases:%s+-%s?')
+        if has_alias > 0 then
+          local cur_alias = string.match(text, '[^\n]+', alias_start + 1)
+          local base_id = str_replace_literal(cur_id, cur_alias, '')
+          local new_alias = str_replace_literal(new_id, base_id, '')
+
+          text = str_replace_range(text, alias_start+1, alias_start + #cur_alias, new_alias)
+        end
+
+        -- TODO: look for link references to new_name, and rename them?
+        -- not my most common usecase, often I just want to not have to worry about changing frontmatter myself
+
+        os.rename(cur_full_path, new_full_path)
+
+        vim.api.nvim_command('edit ' .. vim.fn.fnameescape(new_full_path))
+        vim.api.nvim_command('bwipeout #')
+
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(text, "\n"))
+        vim.api.nvim_buf_set_name(0, new_full_path)
+        vim.api.nvim_command('write!')
+      end, { desc = 'Obsidian Rename' })
     end
   },
-  { 'wakatime/vim-wakatime', lazy = false }
+  { 'wakatime/vim-wakatime', lazy = false },
+  {
+    "pwntester/octo.nvim",
+    cmd = "Octo",
+    opts = {
+      -- or "fzf-lua" or "snacks" or "default"
+      picker = "telescope",
+      -- bare Octo command opens picker of commands
+      enable_builtin = true,
+    },
+    keys = {
+      {
+        "<leader>oi",
+        "<CMD>Octo issue list<CR>",
+        desc = "List GitHub Issues",
+      },
+      {
+        "<leader>op",
+        "<CMD>Octo pr list<CR>",
+        desc = "List GitHub PullRequests",
+      },
+      {
+        "<leader>od",
+        "<CMD>Octo discussion list<CR>",
+        desc = "List GitHub Discussions",
+      },
+      {
+        "<leader>on",
+        "<CMD>Octo notification list<CR>",
+        desc = "List GitHub Notifications",
+      },
+      {
+        "<leader>os",
+        function()
+          require("octo.utils").create_base_search_command { include_current_repo = true }
+        end,
+        desc = "Search GitHub",
+      },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      -- OR "ibhagwan/fzf-lua",
+      -- OR "folke/snacks.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+  },
+  -- development
+  { 
+    dir = '~/git/github/towc/nvim-ws-tmux-navigation',
+    --'alexghergh/nvim-tmux-navigation',
+    config = function()
+
+        local nvim_tmux_nav = require('nvim-tmux-navigation')
+
+        nvim_tmux_nav.setup {
+            disable_when_zoomed = true -- defaults to false
+        }
+
+        vim.keymap.set('n', "<C-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
+        vim.keymap.set('n', "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
+        vim.keymap.set('n', "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
+        vim.keymap.set('n', "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
+        vim.keymap.set('n', "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
+        vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
+
+    end
+  }
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the

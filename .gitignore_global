@@ -21,3 +21,17 @@ tags
 __pycache__/
 *.py[cod]
 *$py.class
+
+# AI
+.claude/*
+.claude.*
+.agents
+.github/skills/*
+.cursor/skills/*
+.agent/*
+
+# misc
+matei-*
+.env.e2e
+.env.prod
+.env.staging
