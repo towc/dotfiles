@@ -236,6 +236,9 @@ alias op='opencode --prompt'
 alias oh='cd ~ && on'
 alias ohc='cd ~ && oc'
 
+# Resume or create OpenCode sessions by title using opencode-resume
+alias o='npx ~/git/github/towc/opencode-plugin-resume'
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # OPAM configuration
