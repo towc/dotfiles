@@ -233,11 +233,12 @@ alias cc='claude --continue'
 alias on='opencode'
 alias oc='opencode --continue'
 alias op='opencode --prompt'
-alias oh='cd ~ && on'
+alias oh='cd ~ && on --model opencode/big-pickle'
 alias ohc='cd ~ && oc'
 
 # Resume or create OpenCode sessions by title using opencode-resume
 alias o='npx ~/git/github/towc/opencode-plugin-resume'
+alias oo='wd o && o'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
