@@ -252,6 +252,17 @@ git check-ignore -v <filename>
 - `oh` → **Start OpenCode for dotfiles management (manages ALL configs: Neovim, OpenCode, Zsh, Tmux, etc.)**
 - `ohc` → **Continue OpenCode session for dotfiles management**
 
+### OpenCode Plugins
+Plugins are defined in `~/.config/opencode/opencode.json` under the `plugin` array. When removing a plugin:
+1. Remove it from the `plugin` array in `opencode.json`
+2. Delete the plugin directory from `~/.config/opencode/plugins/`
+3. Delete any agent definition files from `~/.config/opencode/agents/`
+4. Restart OpenCode
+
+Common locations:
+- Plugins: `~/.config/opencode/plugins/<plugin-name>/`
+- Agent definitions: `~/.config/opencode/agents/<name>.md`
+
 ### Custom Functions
 - `cdl` - CD to last directory (tracked in `/tmp/.tmux-last-cd`)
 - `cdm <dir>` - Create directory and cd into it
@@ -342,6 +353,10 @@ git check-ignore -v <filename>
 ### Development Workflow
 - **Never run `npm run build`** - breaks dev server (only if explicitly requested)
 - Use `npx tsc --noEmit` for TypeScript verification instead
+- Use `gh issue view <number> --repo anomalyco/opencode` to fetch GitHub issues
+
+### Supabase MCP Auth Workaround
+If you get "Unrecognized client_id" error with Supabase MCP, it may be caused by having MCP servers with the same name but different configs (e.g., different project_refs) across multiple projects. Fix: rename one of the MCP servers to a unique name in its project, then re-authenticate.
 
 ## Common Tasks
 
