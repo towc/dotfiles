@@ -11,6 +11,14 @@ This document provides guidance for AI coding agents working with this personal 
 **Scope**: All tracked dotfiles including `~/.zshrc`, `~/.tmux.conf`, `~/.config/nvim/`, `~/.config/opencode/`, etc.  
 **Dotfiles Repo**: Bare git repository at `~/.dotfiles-git/` (GitHub: `towc/dotfiles`)
 
+## Global OpenCode AGENTS.md
+
+**Location**: `~/.config/opencode/AGENTS.md`
+
+This is the global AGENTS.md for all OpenCode projects. If you want to prevent OpenCode from acting a certain way in the future:
+1. First look for deterministic solutions (code changes, config, etc.)
+2. If none exist, suggest what you'd write to the global AGENTS.md
+
 ## OpenCode Source Code
 
 **Location**: `~/git/github/anomalyco/opencode`  
@@ -258,6 +266,10 @@ Plugins are defined in `~/.config/opencode/opencode.json` under the `plugin` arr
 2. Delete the plugin directory from `~/.config/opencode/plugins/`
 3. Delete any agent definition files from `~/.config/opencode/agents/`
 4. Restart OpenCode
+
+**When asked to "add a plugin to do something"**: Always prefer deterministic solutions (code changes, config) first. Only add a skill or command if explicitly requested.
+
+**When making a new plugin**: Search online first to see if someone else already solved this. If not, create a well-versioned git repo at `~/git/github/towc/opencode-plugin-<plugin>`, then add it to the plugin array in opencode.json. Never add plugins directly to `~/.config/opencode/plugins/`.
 
 Common locations:
 - Plugins: `~/.config/opencode/plugins/<plugin-name>/`

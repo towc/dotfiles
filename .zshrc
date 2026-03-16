@@ -225,6 +225,38 @@ killn() { kill $(pids $1)}
 
 alias winp="prop _NET_WM_PID | sed 's/_NET_WM_PID(CARDINAL) = //'"
 
+# Git worktree helper — places worktrees in ~/.worktrees/<owner>/<repo>[-branch]
+gw() {
+  local remote_url repo_path owner repo branch dir
+  remote_url=$(git remote get-url origin 2>/dev/null)
+  if [[ -z "$remote_url" ]]; then
+    echo "Not in a git repo with an origin remote" >&2
+    return 1
+  fi
+
+  # Extract owner/repo from SSH or HTTPS remote URL
+  repo_path=$(echo "$remote_url" | sed -E 's#(git@[^:]+:|https?://[^/]+/)##' | sed 's/\.git$//')
+  owner=$(dirname "$repo_path")
+  repo=$(basename "$repo_path")
+
+  branch="${1:-}"
+  if [[ -n "$branch" ]]; then
+    dir="$HOME/.worktrees/$owner/${repo}-${branch}"
+    git worktree add "$dir" "$branch" || git worktree add -b "$branch" "$dir"
+  else
+    # No branch specified — use a numbered suffix
+    local i=2
+    dir="$HOME/.worktrees/$owner/${repo}-wt2"
+    while [[ -d "$dir" ]]; do
+      ((i++))
+      dir="$HOME/.worktrees/$owner/${repo}-wt${i}"
+    done
+    git worktree add "$dir"
+  fi
+
+  echo "$dir"
+}
+
 # Claude Code aliases
 alias cn='claude'
 alias cr='claude --resume'
@@ -237,8 +269,9 @@ alias oh='cd ~ && on --model opencode/big-pickle'
 alias ohc='cd ~ && oc'
 
 # Resume or create OpenCode sessions by title using opencode-resume
-alias o='npx ~/git/github/towc/opencode-plugin-resume'
+alias o='node ~/git/github/towc/opencode-resume/dist/index.js'
 alias oo='wd o && o'
+alias vo='wd o && v main.md'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -301,3 +334,6 @@ fi
 export PATH="/home/user/.local/bin:$PATH"
 
 
+
+# opencode
+export PATH=/home/user/.opencode/bin:$PATH
