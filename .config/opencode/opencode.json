@@ -1,0 +1,29 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["/home/user/git/github/towc/opencode-plugin-boops"],
+  "permission": {
+    "*": "ask",
+    "external_directory": {
+      "/tmp/**": "allow"
+    },
+    "bash": {
+      "*": "ask",
+      "cat *": "allow",
+      "ls *": "allow",
+      "grep *": "allow",
+      "git status *": "allow",
+      "git log *": "allow",
+      "git diff *": "allow",
+      "npx tsc *": "allow",
+    },
+    "edit": "ask",
+    "glob": "allow",
+    "read": "allow",
+    "grep": "allow",
+    "skill": "allow",
+    "question": "allow",
+    "webfetch": "allow",
+    "todoread": "allow",
+    "todowrite": "allow"
+  }
+}
