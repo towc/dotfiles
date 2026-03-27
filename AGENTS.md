@@ -4,9 +4,11 @@ This document provides guidance for AI coding agents working with this personal 
 
 ## Overview
 
-**Purpose**: Personal Linux configuration management for Pop!_OS/Ubuntu development environment  
-**OS**: Pop!_OS 22.04 LTS (based on Ubuntu Jammy)  
-**Window Manager**: GNOME with Pop Shell (tiling window manager extension)  
+**Purpose**: Personal Linux configuration management for Ubuntu development environment  
+**OS**: Ubuntu 24.04 LTS (Noble Numbat)  
+**Laptop**: ThinkPad T14 Gen 6 (AMD Ryzen)  
+**Window Manager**: Sway (Wayland)  
+**Display Server**: Wayland (Xwayland for X11 apps)  
 **Primary Configs**: Shell (Zsh), Terminal (Kitty), Git, Tmux, Neovim, OpenCode, and various CLI tools  
 **Scope**: All tracked dotfiles including `~/.zshrc`, `~/.tmux.conf`, `~/.config/nvim/`, `~/.config/opencode/`, etc.  
 **Dotfiles Repo**: Bare git repository at `~/.dotfiles-git/` (GitHub: `towc/dotfiles`)
@@ -144,6 +146,21 @@ When you want to track a new config file:
 - **URL Handling**: Firefox with Ctrl modifier
 - **Keybindings**: Ctrl+equal/minus for font size adjustment
 
+### Sway Window Manager (`~/.config/sway/config`)
+- **Type**: Wayland compositor (i3-compatible)
+- **Status Bar**: waybar
+- **Key Features**:
+  - Vim-style navigation (`$mod + h/j/k/l`)
+  - Rofi/fzf for app launcher (`$mod+d`)
+  - Kitty terminal
+  - swayidle for auto-lock/suspend
+  - swaylock for screen lock
+
+### Waybar (`~/.config/waybar/config`)
+- **Modules**: workspaces, window, pulseaudio, network, battery, clock
+- **Tray**: Used for nm-applet (network), blueman-applet (bluetooth)
+- **Icons**: FontAwesome
+
 ### Git Configuration (`~/.gitconfig`)
 - **User**: Matei Copot (matei@copot.eu)
 - **Editor**: neovim
@@ -180,6 +197,8 @@ When you want to track a new config file:
     ├── htop/                     # System monitor config
     ├── gcloud/                   # Google Cloud CLI
     ├── stripe/                   # Stripe CLI
+    ├── sway/                     # Sway window manager config
+    ├── waybar/                   # Waybar status bar config
     └── [other app configs]
 ```
 
@@ -217,6 +236,36 @@ source ~/.zshrc
 
 # Test zsh syntax
 zsh -n ~/.zshrc
+```
+
+### Sway Configuration
+```bash
+# Edit sway config
+vi ~/.config/sway/config
+
+# Reload sway config (without restarting)
+swaymsg reload
+
+# Restart sway completely
+swaymsg exit && sway
+
+# View sway outputs
+swaymsg -t get_outputs
+
+# View sway inputs
+swaymsg -t get_inputs
+```
+
+### Waybar Configuration
+```bash
+# Edit waybar config
+vi ~/.config/waybar/config
+
+# Restart waybar
+pkill waybar && waybar &
+
+# Test waybar config
+waybar -c ~/.config/waybar/config -s ~/.config/waybar/style.css
 ```
 
 ### Tmux Operations
@@ -342,6 +391,30 @@ Common locations:
 - **stripe**: Stripe CLI for testing
 - **kitty**: Terminal with advanced features
 - **bat**: Syntax highlighting (theme: Visual Studio Dark+)
+- **brightnessctl**: Screen brightness control (needs video group membership)
+- **waybar**: Status bar for Sway/Wayland
+- **swayidle**: Idle management and auto-lock
+- **swaylock**: Screen lock
+
+### Sway/Wayland Specific Notes
+
+#### Brightness Control
+- Use `brightnessctl` for screen backlight control
+- User must be in the `video` group for permission: `sudo usermod -aG video $USER`
+- Requires logging out and back in for group membership to take effect
+
+#### Polkit Authentication
+- Sway doesn't include a polkit agent by default (unlike GNOME/KDE)
+- Install `mate-polkit` or `polkit-kde-agent-1` and add to sway config:
+  ```
+  exec_always mate-polkit
+  ```
+- This enables password prompts for privileged operations (snap-store, etc.)
+
+#### Media Keys (XF86)
+- Brightness: `XF86MonBrightnessUp/Down` → `brightnessctl set +/-5%`
+- Volume: `XF86AudioRaise/LowerVolume` → `pactl set-sink-volume @DEFAULT_SINK@ +/-5%`
+- Mute: `XF86AudioMute` → `pactl set-sink-mute @DEFAULT_SINK@ toggle`
 
 ### Environment Variables
 - `$JAVA_HOME`: Java 11 OpenJDK

@@ -15,6 +15,11 @@
       "git log *": "allow",
       "git diff *": "allow",
       "npx tsc *": "allow",
+      "swaymsg *": "allow",
+      "jq *": "allow",
+      "echo *": "allow",
+      "head *": "allow",
+      "tail *": "allow"
     },
     "edit": "ask",
     "glob": "allow",
@@ -24,6 +29,7 @@
     "question": "allow",
     "webfetch": "allow",
     "todoread": "allow",
-    "todowrite": "allow"
+    "todowrite": "allow",
+    "codesearch": "allow"
   }
 }

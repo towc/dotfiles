@@ -23,6 +23,8 @@ PATHS+=":$JAVA_HOME/bin"
 PATHS+=":$HOME/.local/kitty.app/bin"
 PATHS+=":$DENO_INSTALL/bin"
 PATHS+=":$HOME/.luarocks/bin"
+PATHS+=":/opt/nvim-linux-x86_64/bin"
+
 
 export PATH=$PATHS:$PATH
 
@@ -109,6 +111,7 @@ ZSH_TMUX_AUTOCONNECT=false
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
 plugins=(
   git
   docker
@@ -120,7 +123,6 @@ plugins=(
   dirhistory
   wd
   ssh-agent
-  notify
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -191,7 +193,7 @@ alias pi='pip install --user'
 alias ei='elm install'
 
 alias py='python3'
-alias v='neovim'
+alias v='nvim'
 alias vz='v ~/.zshrc'
 alias sz='source ~/.zshrc'
 alias src='source ~/.zshrc && tmux source ~/.tmux.conf'
@@ -273,14 +275,22 @@ alias o='node ~/git/github/towc/opencode-resume/dist/index.js'
 alias oo='wd o && o'
 alias vo='wd o && v main.md'
 
+alias vc='cd ~/.config && v'
+alias vv='vc nvim/init.lua'
+alias vs='vc sway/config'
+alias vsl='vc swaylock/config'
+alias vw='vc waybar/config'
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # OPAM configuration
-. /home/user/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+#. /home/user/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 # kitty autocompletion
 autoload -Uz compinit
-compinit
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.zsh/cache"
+compinit -C
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
 
@@ -290,14 +300,6 @@ set bell-style none
 # fnm
 export PATH="/home/user/.local/share/fnm:$PATH"
 eval "`fnm env`"
-
-# lazyshell
-#export OPENAI_API_KEY=example
-#[ -f ~/.lazyshell.zsh ] && source ~/.lazyshell.zsh
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/user/.lmstudio/bin"
-# End of LM Studio CLI section
 
 #compdef opencode
 ###-begin-opencode-completions-###
@@ -337,3 +339,7 @@ export PATH="/home/user/.local/bin:$PATH"
 
 # opencode
 export PATH=/home/user/.opencode/bin:$PATH
+
+
+# keep at bottom
+autoload -U compinit && compinit

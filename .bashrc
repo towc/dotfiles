@@ -126,3 +126,4 @@ export PATH="$PATH:/home/user/.lmstudio/bin"
 # End of LM Studio CLI section
 
 export EDITOR=neovim
+. "$HOME/.cargo/env"
