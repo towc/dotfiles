@@ -1,8 +1,8 @@
 -- init.lua
 
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = '\\'
-vim.g.maplocalleader = '\\'
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 vim.g.have_nerd_font = true
 
@@ -105,7 +105,7 @@ keymap('ni', '<leader>id', "<cmd>pu=strftime('%c')<enter>", { desc = 'insert dat
 -- }}}
 -- obsidian (\o) {{{
 -- will be overridden once in obsidian project
-keymap('niv', '<leader>oo', ':cd /home/user/Documents/obsidian/main<cr>:e main.md<cr>', { desc = "open obsidian" })
+keymap('niv', '<leader>oo', ':cd /home/user/Documents/obsidian-private/main<cr>:e main.md<cr>', { desc = "open obsidian" })
 -- }}}
 -- run (\r) {{{
 keymap('n', '<leader>rr', '<cmd>!perl %<enter>', { desc = 'run current file' });
@@ -252,7 +252,7 @@ require('lazy').setup({
       'junegunn/fzf' 
     },
     config = function()
-      vim.keymap.set('n', '<leader>zv', '<cmd>Ag<cr>', { desc = 'search contents' })
+      vim.keymap.set('n', '<leader>/', '<cmd>Ag<cr>', { desc = 'search contents' })
     end
   },
   -- not fuzzy by default, and c-g gets fans going
@@ -360,39 +360,16 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>zh', defaulted(builtin.help_tags), { desc = '[Z]earch [H]elp' })
-      vim.keymap.set('n', '<leader>zk', defaulted(builtin.keymaps), { desc = '[Z]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>zx', defaulted(builtin.find_files), { desc = '[Z]earch [X]iles' })
-      vim.keymap.set('n', '<leader>zs', defaulted(builtin.builtin), { desc = '[Z]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>zw', defaulted(builtin.grep_string), { desc = '[Z]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>zg', defaulted(builtin.live_grep), { desc = '[Z]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>zd', defaulted(builtin.diagnostics), { desc = '[Z]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>zr', defaulted(builtin.resume), { desc = '[Z]earch [R]esume' })
-      vim.keymap.set('n', '<leader>z.', defaulted(builtin.oldfiles), { desc = '[Z]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<leader>/h', defaulted(builtin.help_tags), { desc = '[/]earch [H]elp' })
+      vim.keymap.set('n', '<leader>/k', defaulted(builtin.keymaps), { desc = '[/]earch [K]eymaps' })
+      vim.keymap.set('n', '<leader>.', defaulted(builtin.find_files), { desc = '[/]earch [X]iles' })
+      vim.keymap.set('n', '<leader>/s', defaulted(builtin.builtin), { desc = '[/]earch [S]elect Telescope' })
+      vim.keymap.set('n', '<leader>/w', defaulted(builtin.grep_string), { desc = '[/]earch current [W]ord' })
+      vim.keymap.set('n', '<leader>/g', defaulted(builtin.live_grep), { desc = '[/]earch by [G]rep' })
+      vim.keymap.set('n', '<leader>/d', defaulted(builtin.diagnostics), { desc = '[/]earch [D]iagnostics' })
+      vim.keymap.set('n', '<leader>/r', defaulted(builtin.resume), { desc = '[/]earch [R]esume' })
+      vim.keymap.set('n', '<leader>/.', defaulted(builtin.oldfiles), { desc = '[/]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', defaulted(builtin.buffers), { desc = '[ ] Find existing buffers' })
-
-      -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set('n', '<leader>/', function()
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          previewer = false,
-        })
-      end, { desc = '[/] Fuzzily search in current buffer' })
-
-      -- It's also possible to pass additional configuration options.
-      --  See `:help telescope.builtin.live_grep()` for information about particular keys
-      vim.keymap.set('n', '<leader>z/', function()
-        builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
-        }
-      end, { desc = '[z]earch [/] in Open Files' })
-
-      -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>zc', function()
-        builtin.live_grep { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[Z]earch [C]onfig' })
     end,
   },
 
@@ -884,7 +861,7 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- require('mini.surround').setup()
 
       --require('mini.starter').setup()
 
@@ -982,7 +959,7 @@ require('lazy').setup({
     },
     lazy = false,
     keys = {
-      { '\\t', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+      { '<leader>t', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
     },
     opts = {
       filesystem = {
@@ -991,7 +968,7 @@ require('lazy').setup({
         },
         window = {
           mappings = {
-            ['\\t'] = 'close_window',
+            ['<leader>t'] = 'close_window',
           },
         },
       },
@@ -1061,8 +1038,8 @@ require('lazy').setup({
       -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
       -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
       -- refer to `:h file-pattern` for more examples
-      "BufReadPre /home/user/Documents/obsidian/**/*",
-      "BufNewFile /home/user/Documents/obsidian/**/*",
+      "BufReadPre /home/user/Documents/obsidian-private/**/*",
+      "BufNewFile /home/user/Documents/obsidian-private/**/*",
     },
     config = function()
       vim.opt_local.conceallevel = 2
@@ -1071,7 +1048,7 @@ require('lazy').setup({
         workspaces = {
           {
             name = "main",
-            path = "~/Documents/obsidian/main",
+            path = "~/Documents/obsidian-private/main",
           },
         },
         templates = {
@@ -1208,7 +1185,7 @@ require('lazy').setup({
       end, { desc = 'Obsidian Rename' })
     end
   },
-  { 'wakatime/vim-wakatime', lazy = false },
+  -- { 'wakatime/vim-wakatime', lazy = false },
   {
     "pwntester/octo.nvim",
     cmd = "Octo",
@@ -1256,8 +1233,8 @@ require('lazy').setup({
     },
   },
   -- development
-  { 
-    dir = '~/git/github/towc/nvim-ws-tmux-navigation',
+  {
+    'towc/nvim-ws-tmux-navigation',
     --'alexghergh/nvim-tmux-navigation',
     config = function()
 

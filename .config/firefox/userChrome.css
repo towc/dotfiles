@@ -1,0 +1,8 @@
+/* top toolbar */
+#TabsToolbar { display: none }
+
+/* sidebar */
+#sidebar-main { display: none }
+sidebar-panel-header { display: none }
+#sidebar { border-radius: 0 !important }
+#sidebar-box { padding: 0 !important }

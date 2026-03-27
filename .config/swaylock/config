@@ -1,0 +1,9 @@
+#image=/home/user/Pictures/wallpaper.png
+scaling=center
+show-failed-attempts
+show-keyboard-layout
+indicator-caps-lock
+indicator-idle-visible
+indicator-radius=128
+indicator-thickness=64
+ignore-empty-password
