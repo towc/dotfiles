@@ -166,6 +166,11 @@ bindkey ^q exec-exit
 alias galias="alias | grep "
 
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles-git/ --work-tree=$HOME'
+dotfile() {
+  dotfiles add $@ -f;
+  dotfiles commit -m "backup: $(date) $@";
+  dotfiles push;
+}
 alias q='exit'
 alias greps='ps aux | grep'
 pids() { greps $1 | grep -v grep | sed -re 's/^[^0-9]+//' | sed -re 's/ .+//' }
