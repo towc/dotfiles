@@ -57,63 +57,17 @@ The `dotfiles` alias is defined as:
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles-git/ --work-tree=$HOME'
 ```
 
-**Common dotfiles commands:**
-```bash
-# View status (shows modified tracked files)
-dotfiles status
+You can use it for git operations as if it was the `git` command, but prefer just the `dotfile` command, which takes a list of filepaths and automatically adds, commits, and pushes, e.g.:
 
-# Add a file to track
-dotfiles add ~/.zshrc
-dotfiles add ~/.tmux.conf
-dotfiles add ~/.config/kitty/kitty.conf
-
-# Commit changes
-dotfiles commit -m "Update zsh configuration"
-
-# Push to GitHub
-dotfiles push origin main
-
-# View tracked files
-dotfiles ls-files
-
-# View diff of changes
-dotfiles diff
-
-# View commit history
-dotfiles log --oneline
-
-# Pull latest changes
-dotfiles pull
 ```
-
-### Quick Access Alias
-
-Use **`oh`** to start an OpenCode session focused on dotfiles management:
-```bash
-oh   # Opens OpenCode with dotfiles management context
-ohc  # Continue last OpenCode session for dotfiles
+dotfile .zshrc .tmux.conf
 ```
-
-This alias automatically provides context about the bare git repository setup and the `dotfiles` command. **This is the primary way to manage ALL configurations**, including Neovim, OpenCode, shell configs, and any other dotfiles.
-
-**Note**: The `oh` and `ohc` aliases are defined in `~/.zshrc` (lines 236-237). When modifying these aliases, edit that file directly.
-
-### Adding New Configuration Files
-
-When you want to track a new config file:
-1. Edit the file normally (e.g., `vi ~/.zshrc`)
-2. Add it to dotfiles: `dotfiles add ~/.zshrc`
-3. Commit: `dotfiles commit -m "Add zsh configuration"`
-4. Push: `dotfiles push`
 
 ### Important Notes
 
 - **Don't use regular `git` commands** in `~/` - always use `dotfiles`
-- The repository ignores untracked files by default (`.git` config: `status.showUntrackedFiles no`)
 - **All configurations** should be managed through the dotfiles repo, including Neovim and OpenCode
-- While Neovim has its own `AGENTS.md` at `~/.config/nvim/AGENTS.md`, that file should also be tracked in dotfiles
 - Never commit sensitive data (API keys, tokens, etc.)
-- See `~/dotfiles.md` for full setup instructions
 
 ## Key Configuration Files
 
