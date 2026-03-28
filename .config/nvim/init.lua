@@ -88,7 +88,7 @@ keymap('n', '<leader>cc', '<cmd>tabe $MYVIMRC<enter>', { desc = 'open (change) c
 -- }}}
 -- runners {{{
 on_filetype('javascript', function()
-  keymap('niv', '<leader>rr', '<cmd>!node %<cr>')
+  keymap('nv', '<leader>rr', '<cmd>!node %<cr>')
 end)
 
 -- }}}
@@ -97,15 +97,15 @@ keymap('n', '<leader>gg', '<cmd>G<enter>')
 keymap('n', '<leader>gp', '<cmd>G push<enter>')
 -- }}}
 -- writing {{{
-keymap('niv', '<leader>wm', '<cmd>ZenMode<cr>', { desc = 'write mode (zen toggle)' })
+keymap('nv', '<leader>wm', '<cmd>ZenMode<cr>', { desc = 'write mode (zen toggle)' })
 -- }}}
 -- insert (\i) {{{
-keymap('ni', '<leader>id', "<cmd>pu=strftime('%c')<enter>", { desc = 'insert date' })
+keymap('n', '<leader>id', "<cmd>pu=strftime('%c')<enter>", { desc = 'insert date' })
 
 -- }}}
 -- obsidian (\o) {{{
 -- will be overridden once in obsidian project
-keymap('niv', '<leader>oo', ':cd /home/user/Documents/obsidian-private/main<cr>:e main.md<cr>', { desc = "open obsidian" })
+keymap('nv', '<leader>oo', ':cd /home/user/Documents/obsidian-private/main<cr>:e main.md<cr>', { desc = "open obsidian" })
 -- }}}
 -- run (\r) {{{
 keymap('n', '<leader>rr', '<cmd>!perl %<enter>', { desc = 'run current file' });
@@ -240,10 +240,7 @@ require('lazy').setup({
       },
 
       -- Document existing key chains
-      spec = {
-        { '<leader>z', group = '[Z]earch' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      },
+      spec = {},
     },
   },
   { 
@@ -252,7 +249,7 @@ require('lazy').setup({
       'junegunn/fzf' 
     },
     config = function()
-      vim.keymap.set('n', '<leader>/', '<cmd>Ag<cr>', { desc = 'search contents' })
+      vim.keymap.set('n', '<leader><leader>', '<cmd>Ag<cr>', { desc = 'search contents' })
     end
   },
   -- not fuzzy by default, and c-g gets fans going
@@ -360,16 +357,15 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>/h', defaulted(builtin.help_tags), { desc = '[/]earch [H]elp' })
-      vim.keymap.set('n', '<leader>/k', defaulted(builtin.keymaps), { desc = '[/]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>.', defaulted(builtin.find_files), { desc = '[/]earch [X]iles' })
-      vim.keymap.set('n', '<leader>/s', defaulted(builtin.builtin), { desc = '[/]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>/w', defaulted(builtin.grep_string), { desc = '[/]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>/g', defaulted(builtin.live_grep), { desc = '[/]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>/d', defaulted(builtin.diagnostics), { desc = '[/]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>/r', defaulted(builtin.resume), { desc = '[/]earch [R]esume' })
-      vim.keymap.set('n', '<leader>/.', defaulted(builtin.oldfiles), { desc = '[/]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', defaulted(builtin.buffers), { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader><leader>h', defaulted(builtin.help_tags), { desc = '[/]earch [H]elp' })
+      vim.keymap.set('n', '<leader><leader>k', defaulted(builtin.keymaps), { desc = '[/]earch [K]eymaps' })
+      vim.keymap.set('n', '<leader><leader>f', defaulted(builtin.find_files), { desc = '[/]earch [F]iles' })
+      vim.keymap.set('n', '<leader><leader>s', defaulted(builtin.builtin), { desc = '[/]earch [S]elect Telescope' })
+      vim.keymap.set('n', '<leader><leader>w', defaulted(builtin.grep_string), { desc = '[/]earch current [W]ord' })
+      vim.keymap.set('n', '<leader><leader>g', defaulted(builtin.live_grep), { desc = '[/]earch by [G]rep' })
+      vim.keymap.set('n', '<leader><leader>d', defaulted(builtin.diagnostics), { desc = '[/]earch [D]iagnostics' })
+      vim.keymap.set('n', '<leader><leader>r', defaulted(builtin.resume), { desc = '[/]earch [R]esume' })
+      vim.keymap.set('n', '<leader><leader>.', defaulted(builtin.oldfiles), { desc = '[/]earch Recent Files ("." for repeat)' })
     end,
   },
 
@@ -916,26 +912,6 @@ require('lazy').setup({
     opts = {},
   },
 
-  -- {
-  --   'robitx/gp.nvim',
-  --   config = function()
-  --     require('gp').setup {
-  --       openai_api_key = require('secrets').OPENAI_API_KEY,
-  --       agents = {
-  --         {
-  --           name = 'default',
-  --           provider = 'openai',
-  --           model = 'o3-2025-04-16',
-  --           system_prompt = 'You are an expert programmer and code transformer. Your job is to modify code exactly as instructed, without adding unrelated explanations.',
-  --         },
-  --       },
-  --       default_agent = 'default',
-  --     }
-
-  --     vim.keymap.set('v', '<leader>a', ':GpRewrite<cr>')
-  --   end,
-  -- },
-
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1025,8 +1001,8 @@ require('lazy').setup({
   {
     'Ron89/thesaurus_query.vim',
     config = function()
-      keymap('niv', '<leader>ws', '<cmd>ThesaurusQueryReplaceCurrentWord<cr>', { desc = 'write synonym (thesaurus)' })
-      keymap('niv', '<leader>wS', '<c-u>:Thesaurus ', { desc = 'write synonym from scratch (thesaurus)' })
+      keymap('nv', '<leader>ws', '<cmd>ThesaurusQueryReplaceCurrentWord<cr>', { desc = 'write synonym (thesaurus)' })
+      keymap('nv', '<leader>wS', '<c-u>:Thesaurus ', { desc = 'write synonym from scratch (thesaurus)' })
     end
   },
   {
@@ -1121,7 +1097,6 @@ require('lazy').setup({
       keymap('nv', '<leader>oT', '<cmd>Obsidian tomorrow<cr>')
 
       keymap('nv', '<leader>os', '<cmd>Obsidian search<cr>')
-      keymap('nv', '<leader>zo', '<cmd>Obsidian search<cr>')
 
       keymap('n', '<leader>or', function ()
         local str_find_literal = function(str, x)
@@ -1197,27 +1172,27 @@ require('lazy').setup({
     },
     keys = {
       {
-        "<leader>oi",
+        "<leader>gi",
         "<CMD>Octo issue list<CR>",
         desc = "List GitHub Issues",
       },
       {
-        "<leader>op",
+        "<leader>gp",
         "<CMD>Octo pr list<CR>",
         desc = "List GitHub PullRequests",
       },
       {
-        "<leader>od",
+        "<leader>gd",
         "<CMD>Octo discussion list<CR>",
         desc = "List GitHub Discussions",
       },
       {
-        "<leader>on",
+        "<leader>gn",
         "<CMD>Octo notification list<CR>",
         desc = "List GitHub Notifications",
       },
       {
-        "<leader>os",
+        "<leader>gs",
         function()
           require("octo.utils").create_base_search_command { include_current_repo = true }
         end,
@@ -1252,7 +1227,151 @@ require('lazy').setup({
         vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
 
     end
-  }
+  },
+  {
+    "nickjvandyke/opencode.nvim",
+    version = "*", -- Latest stable release
+    dependencies = {
+      {
+        -- `snacks.nvim` integration is recommended, but optional
+        ---@module "snacks" <- Loads `snacks.nvim` types for configuration intellisense
+        "folke/snacks.nvim",
+        optional = true,
+        opts = {
+          input = {}, -- Enhances `ask()`
+          picker = { -- Enhances `select()`
+            actions = {
+              opencode_send = function(...) return require("opencode").snacks_picker_send(...) end,
+            },
+            win = {
+              input = {
+                keys = {
+                  ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    config = function()
+      ---@type opencode.Opts
+      vim.g.opencode_opts = {
+        -- Your configuration, if any; goto definition on the type or field for details
+      }
+
+      vim.o.autoread = true -- Required for `opts.events.reload`
+
+      vim.keymap.set({ "n", "x" }, "<leader>aa", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode…" })
+      vim.keymap.set({ "n", "x" }, "<leader>as", function() require("opencode").select() end,                          { desc = "Execute opencode action…" })
+      vim.keymap.set({ "n", "t" }, "<leader>ac", function() require("opencode").toggle() end,                          { desc = "Toggle opencode" })
+
+      -- vim.keymap.set({ "n", "x" }, "go",  function() return require("opencode").operator("@this ") end,        { desc = "Add range to opencode", expr = true })
+      -- vim.keymap.set("n",          "goo", function() return require("opencode").operator("@this ") .. "_" end, { desc = "Add line to opencode", expr = true })
+
+      vim.keymap.set("n", "<S-C-u>", function() require("opencode").command("session.half.page.up") end,   { desc = "Scroll opencode up" })
+      vim.keymap.set("n", "<S-C-d>", function() require("opencode").command("session.half.page.down") end, { desc = "Scroll opencode down" })
+    end,
+  },
+  	{
+		"ThePrimeagen/99",
+		config = function()
+			local _99 = require("99")
+
+            -- For logging that is to a file if you wish to trace through requests
+            -- for reporting bugs, i would not rely on this, but instead the provided
+            -- logging mechanisms within 99.  This is for more debugging purposes
+            local cwd = vim.uv.cwd()
+            local basename = vim.fs.basename(cwd)
+			_99.setup({
+                -- provider = _99.Providers.ClaudeCodeProvider,  -- default: OpenCodeProvider
+				logger = {
+					level = _99.DEBUG,
+					path = "/tmp/" .. basename .. ".99.debug",
+					print_on_error = true,
+				},
+                -- When setting this to something that is not inside the CWD tools
+                -- such as claude code or opencode will have permission issues
+                -- and generation will fail refer to tool documentation to resolve
+                -- https://opencode.ai/docs/permissions/#external-directories
+                -- https://code.claude.com/docs/en/permissions#read-and-edit
+                tmp_dir = "./tmp",
+
+                --- Completions: #rules and @files in the prompt buffer
+                completion = {
+                    -- I am going to disable these until i understand the
+                    -- problem better.  Inside of cursor rules there is also
+                    -- application rules, which means i need to apply these
+                    -- differently
+                    -- cursor_rules = "<custom path to cursor rules>"
+
+                    --- A list of folders where you have your own SKILL.md
+                    --- Expected format:
+                    --- /path/to/dir/<skill_name>/SKILL.md
+                    ---
+                    --- Example:
+                    --- Input Path:
+                    --- "scratch/custom_rules/"
+                    ---
+                    --- Output Rules:
+                    --- {path = "scratch/custom_rules/vim/SKILL.md", name = "vim"},
+                    --- ... the other rules in that dir ...
+                    ---
+                    custom_rules = {
+                      "scratch/custom_rules/",
+                    },
+
+                    --- Configure @file completion (all fields optional, sensible defaults)
+                    files = {
+                        -- enabled = true,
+                        -- max_file_size = 102400,     -- bytes, skip files larger than this
+                        -- max_files = 5000,            -- cap on total discovered files
+                        -- exclude = { ".env", ".env.*", "node_modules", ".git", ... },
+                    },
+                    --- File Discovery:
+                    --- - In git repos: Uses `git ls-files` which automatically respects .gitignore
+                    --- - Non-git repos: Falls back to filesystem scanning with manual excludes
+                    --- - Both methods apply the configured `exclude` list on top of gitignore
+
+                    --- What autocomplete engine to use. Defaults to native (built-in) if not specified.
+                    source = "native", -- "native" (default), "cmp", or "blink"
+                },
+
+                --- WARNING: if you change cwd then this is likely broken
+                --- ill likely fix this in a later change
+                ---
+                --- md_files is a list of files to look for and auto add based on the location
+                --- of the originating request.  That means if you are at /foo/bar/baz.lua
+                --- the system will automagically look for:
+                --- /foo/bar/AGENT.md
+                --- /foo/AGENT.md
+                --- assuming that /foo is project root (based on cwd)
+				md_files = {
+					"AGENT.md",
+				},
+			})
+
+            -- take extra note that i have visual selection only in v mode
+            -- technically whatever your last visual selection is, will be used
+            -- so i have this set to visual mode so i dont screw up and use an
+            -- old visual selection
+            --
+            -- likely ill add a mode check and assert on required visual mode
+            -- so just prepare for it now
+			vim.keymap.set("v", "<leader>9v", function()
+				_99.visual()
+			end)
+
+            --- if you have a request you dont want to make any changes, just cancel it
+			vim.keymap.set("n", "<leader>9x", function()
+				_99.stop_all_requests()
+			end)
+
+			vim.keymap.set("n", "<leader>9s", function()
+				_99.search()
+			end)
+		end,
+	},
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
