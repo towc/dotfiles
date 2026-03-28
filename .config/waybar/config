@@ -9,16 +9,10 @@
         "all-outputs": true,
         "format": "{name} {icon}",
         "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "4": "",
-            "5": "",
-            "6": "",
-            "7": "",
-            "8": "",
-            "9": "",
-            "10": "",
+            "1": "",
+            "2": "",
+            "3": "",
+            "9": "",
             "urgent": "",
             "default": ""
         }
@@ -87,7 +81,9 @@
     "backlight": {
         // "device": "acpi_video1",
         "format": "{percent}% {icon}",
-        "format-icons": ["", ""]
+        "format-icons": ["", ""],
+        "on-click":       "brightnessctl s $(node -e \"console.log(Math.max($(brightnessctl g) /2, 1))\")",
+        "on-click-right": "brightnessctl s $(node -e \"console.log(($(brightnessctl g) +  $(brightnessctl m))/2)\")"
     },
     "battery": {
         "states": {
