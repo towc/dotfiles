@@ -22,15 +22,36 @@ set $menu exec $term --class=launcher -e bash -c 'compgen -c | grep -v fzf | sor
 # Windows config
 for_window [app_id="^launcher$"] floating enable, border none, opacity 0.8
 for_window [title="^Network Connections$"] floating enable
+for_window [title="^CIQ Simulator.*$"] resize set width 300 ppt
+# zoom
+for_window [title="^annotate_toolbar$"] floating enable
 
 include /etc/sway/config-vars.d/*
 
 bindsym $mod+b exec firefox
 
 ### Output configuration
-output HDMI-A-1 resolution 1360x768 position 0,0 bg ~/Pictures/timezone.jpeg fill
-output eDP-1 resolution 1920x1200 position 0,768 bg ~/Pictures/wallpaper.png fill
-#
+set $d_ext HDMI-A-1
+set $d_own eDP-1
+
+output * bg ~/Pictures/timezone.jpeg fill
+output $d_own resolution 1920x1200 bg ~/Pictures/wallpaper.png fill
+
+exec_always ~/.config/sway/display-layout.sh
+
+set $d_up $d_ext $d_own
+set $d_dn $d_own
+
+workspace 1 output $d_dn
+workspace 2 output $d_up
+workspace 3 output $d_up
+workspace 4 output $d_up
+workspace 5 output $d_up
+workspace 6 output $d_up
+workspace 7 output $d_up
+workspace 8 output $d_up
+workspace 9 output $d_up
+
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
 ### Idle configuration
@@ -38,7 +59,13 @@ output eDP-1 resolution 1920x1200 position 0,768 bg ~/Pictures/wallpaper.png fil
           timeout 300 'swaylock -f -c 000000' \
           timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
           before-sleep 'swaylock -f -c 000000'
+ exec_always sway-audio-idle-inhibit
 bindsym $mod+Escape exec 'swaylock -f -c 000000'
+
+# don't swayidle when these are used:
+# google meet
+for_window [title="Meet - .*-.*-.*"] inhibit_idle visible
+
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -57,6 +84,7 @@ bindsym $mod+Escape exec 'swaylock -f -c 000000'
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
+
 input type:touchpad {
     tap enabled
     pointer_accel 1
@@ -210,17 +238,6 @@ bar {
     swaybar_command waybar
 }
 
-# Disable built-in swaybar
-# bar {
-#     position top
-#     status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-#     colors {
-#         statusline #ffffff
-#         background #323232
-#         inactive_workspace #32323200 #32323200 #5c5c5c
-#     }
-# }
-
 include /etc/sway/config.d/*
 
 
@@ -243,10 +260,11 @@ seat seat0 hide_cursor 5000
 
 # Gaps
 smart_gaps on
-gaps inner 2
+gaps inner 0
 gaps outer 0
 
 # Borders
+# Set a thick border to act as a grab area
 default_border none
 
 # Windows config
@@ -266,3 +284,4 @@ exec_always blueman-applet
 exec_always syncthing
 
 exec_always lxpolkit
+#seat seat0 xcursor_theme Breeze 24
