@@ -169,6 +169,8 @@ require('lazy').setup({
     ft = 'monkeyc', -- lazy load only for MonkeyC files
   },
 
+  require('plugins.monkeyc'),
+
   {
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -250,7 +252,7 @@ require('lazy').setup({
       'junegunn/fzf' 
     },
     config = function()
-      vim.keymap.set('n', '<leader><leader>', '<cmd>Ag<cr>', { desc = 'search contents' })
+      vim.keymap.set('n', '<leader>s', '<cmd>Ag<cr>', { desc = 'search contents' })
     end
   },
   -- not fuzzy by default, and c-g gets fans going
@@ -283,9 +285,7 @@ require('lazy').setup({
 
         -- `cond` is a condition used to determine whether this plugin should be
         -- installed and loaded.
-        cond = function()
-          return vim.fn.executable 'make' == 1
-        end,
+        cond = function() return vim.fn.executable 'make' == 1 end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
@@ -361,6 +361,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader><leader>h', defaulted(builtin.help_tags), { desc = '[/]earch [H]elp' })
       vim.keymap.set('n', '<leader><leader>k', defaulted(builtin.keymaps), { desc = '[/]earch [K]eymaps' })
       vim.keymap.set('n', '<leader><leader>f', defaulted(builtin.find_files), { desc = '[/]earch [F]iles' })
+      vim.keymap.set('n', '<leader>f', defaulted(builtin.find_files), { desc = '[/]earch [F]iles' })
       vim.keymap.set('n', '<leader><leader>s', defaulted(builtin.builtin), { desc = '[/]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader><leader>w', defaulted(builtin.grep_string), { desc = '[/]earch current [W]ord' })
       vim.keymap.set('n', '<leader><leader>g', defaulted(builtin.live_grep), { desc = '[/]earch by [G]rep' })
@@ -1245,6 +1246,8 @@ require('lazy').setup({
       
       _99.setup({
         -- provider = _99.Providers.ClaudeCodeProvider,  -- default: OpenCodeProvider
+        model = 'opencode/big-pickle',
+
         logger = {
           level = _99.DEBUG,
           path = "/tmp/" .. basename .. ".99.debug",
@@ -1272,33 +1275,45 @@ require('lazy').setup({
         },
       })
 
-      vim.keymap.set("v", "<leader>aa", function()
-        _99.visual()
-        vim.cmd('startinsert');
-      end, { desc = 'ai add' })
-
-      local function ai_implement()
-        _99.visual()
-        vim.defer_fn(function()
-          vim.cmd.normal('aimplement')
-          vim.cmd.write()
-        end, 200)
-      end
-      vim.keymap.set("n", "<leader>ai", function()
-        vim.cmd.normal('V') -- otherwise uses previous selection
-        ai_implement()
-      end, { desc = 'ai implement' })
-      vim.keymap.set("v", "<leader>ai", ai_implement, { desc = 'ai implement' })
+      vim.keymap.set("v", "<leader>aa", '<esc>:Ai ask ', { desc = 'ai add' })
+      vim.keymap.set("n", "<leader>ai", 'V<esc>:Ai ask implement<cr>', { desc = 'ai implement' })
+      vim.keymap.set("v", "<leader>ai", '<esc>:Ai ask implement<cr>', { desc = 'ai implement' })
+      vim.keymap.set("n", "<leader>as", ':Ai search ', { desc = 'ai search' })
 
       vim.keymap.set("n", "<leader>ax", function()
         _99.stop_all_requests()
       end, { desc = 'ai stop' })
-      vim.keymap.set("n", "<leader>as", function()
-        _99.search()
-      end, { desc = 'ai search' })
       vim.keymap.set("n", "<leader>av", function()
         _99.view_logs()
       end, { desc = 'ai view_logs()' })
+
+      vim.api.nvim_create_user_command(
+        'Ai',
+        function (data)
+          local cmd = data.fargs[1]
+          table.remove(data.fargs, 1)
+          local args = table.concat(data.fargs, " ")
+
+          if cmd == "ask" then
+            _99.visual()
+            vim.defer_fn(function()
+              vim.cmd.normal('a' .. args)
+              vim.cmd.write()
+            end, 200)
+          elseif cmd == "search" then
+            _99.search()
+            vim.defer_fn(function()
+              vim.cmd.normal('a' .. args)
+              vim.cmd.write()
+            end, 200)
+          else
+            -- no command found
+            print(':Ai ask|search')
+          end
+        end,
+        {
+          nargs = "*",
+        })
     end,
   }
 }, {
