@@ -35,3 +35,6 @@ matei-*
 .env.e2e
 .env.prod
 .env.staging
+
+# vscode
+.vscode

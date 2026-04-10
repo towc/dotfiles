@@ -276,15 +276,18 @@ alias oh='cd ~ && on --model opencode/big-pickle'
 alias ohc='cd ~ && oc'
 
 # Resume or create OpenCode sessions by title using opencode-resume
-alias o='node ~/git/github/towc/opencode-resume/dist/index.js'
+alias o='npx opencode-resume' # 'node ~/git/github/towc/opencode-resume/dist/index.js'
 alias oo='wd o && o'
-alias vo='wd o && v main.md'
 
 alias vc='cd ~/.config && v'
 alias vv='vc nvim/init.lua'
 alias vs='vc sway/config'
 alias vsl='vc swaylock/config'
 alias vw='vc waybar/config'
+alias vgi='v ~/.gitignore_global'
+alias vk='vc kitty/kitty.conf'
+
+alias vo='wd o && v main.md'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
