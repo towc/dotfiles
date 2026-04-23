@@ -90,6 +90,43 @@ return {
                   { pattern = "**/*.{mc,mcgen}" },
                 },
               }
+              client.server_capabilities.signatureHelpProvider = {
+                triggerCharacters = { "(", "," },
+              }
+              
+              -- Add keybinding for signature help (since C-K is taken)
+              vim.keymap.set("n", "<S-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "signature help" })
+              
+              -- Override request handler to fix server issues
+              local methods = vim.lsp.protocol.Methods
+              local req = client.request
+              client.request = function(method, params, handler, bufnr_req)
+                -- Fix goto definition URIs: server returns file:/ instead of file:///
+                if method == methods.textDocument_definition then
+                  return req(method, params, function(err, result, context, config)
+                    local function fix_uri(uri)
+                      if uri:match("^file:/[^/]") then
+                        uri = uri:gsub("^file:/", "file:///")
+                      end
+                      return uri
+                    end
+                    if vim.islist(result) then
+                      for _, res in ipairs(result) do
+                        if res.uri then res.uri = fix_uri(res.uri) end
+                      end
+                    elseif result.uri then
+                      result.uri = fix_uri(result.uri)
+                    end
+                    return handler(err, result, context, config)
+                  end, bufnr_req)
+                -- Add required context for signature help
+                elseif method == methods.textDocument_signatureHelp then
+                  params.context = { triggerKind = 1 }
+                  return req(method, params, handler, bufnr_req)
+                else
+                  return req(method, params, handler, bufnr_req)
+                end
+              end
             end,
           },
         }

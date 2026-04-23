@@ -246,10 +246,10 @@ require('lazy').setup({
       spec = {},
     },
   },
-  { 
+  {
     'junegunn/fzf.vim',
     dependencies = {
-      'junegunn/fzf' 
+      'junegunn/fzf'
     },
     config = function()
       vim.keymap.set('n', '<leader>s', '<cmd>Ag<cr>', { desc = 'search contents' })
@@ -351,7 +351,9 @@ require('lazy').setup({
               'node_modules',
               '.next',
               '.git',
+              '.svelte-kit',
             },
+            layout_strategy = 'current_buffer'
           })
         end
       end
@@ -384,65 +386,66 @@ require('lazy').setup({
       },
     },
   },
-  {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-    dependencies = {
-      -- Sources
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-path',
-      'hrsh7th/cmp-cmdline',
+  --{
+  --  'hrsh7th/nvim-cmp',
+  --  event = 'InsertEnter',
+  --  dependencies = {
+  --    -- Sources
+  --    'hrsh7th/cmp-nvim-lsp',
+  --    'hrsh7th/cmp-buffer',
+  --    'hrsh7th/cmp-path',
+  --    'hrsh7th/cmp-cmdline',
 
-      -- Snippets
-      -- 'L3MON4D3/LuaSnip',
-      -- 'saadparwaiz1/cmp_luasnip',
+  --    -- Snippets
+  --    -- 'L3MON4D3/LuaSnip',
+  --    -- 'saadparwaiz1/cmp_luasnip',
 
-      -- -- Snippet collection (optional)
-      -- 'rafamadriz/friendly-snippets',
-    },
-    config = function()
-      local cmp = require 'cmp'
-      -- local luasnip = require 'luasnip'
+  --    -- -- Snippet collection (optional)
+  --    -- 'rafamadriz/friendly-snippets',
+  --  },
+  --  config = function()
+  --    local cmp = require 'cmp'
+  --    -- local luasnip = require 'luasnip'
 
-      -- require('luasnip.loaders.from_vscode').lazy_load()
+  --    -- require('luasnip.loaders.from_vscode').lazy_load()
 
-      cmp.setup {
-        --snippet = {
-        --  expand = function(args)
-        --    luasnip.lsp_expand(args.body)
-        --  end,
-        --},
-        mapping = cmp.mapping.preset.insert {
-          --['<Tab>'] = cmp.mapping.confirm { select = true },
-        },
-        sources = cmp.config.sources({
-          { name = 'nvim_lsp' },
-          -- { name = 'luasnip' },
-        }, {
-          { name = 'buffer' },
-          { name = 'path' },
-        }),
-      }
+  --    cmp.setup {
+  --      --snippet = {
+  --      --  expand = function(args)
+  --      --    luasnip.lsp_expand(args.body)
+  --      --  end,
+  --      --},
+  --      mapping = cmp.mapping.preset.insert {
+  --        --['<Tab>'] = cmp.mapping.confirm { select = true },
+  --      },
+  --      sources = cmp.config.sources({
+  --        { name = 'nvim_lsp' },
+  --        { name = 'nvim_lsp_signature_help' },
+  --        -- { name = 'luasnip' },
+  --      }, {
+  --        { name = 'buffer' },
+  --        { name = 'path' },
+  --      }),
+  --    }
 
-      -- Optional: cmdline completion
-      cmp.setup.cmdline('/', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = 'buffer' },
-        },
-      })
+  --    -- Optional: cmdline completion
+  --    cmp.setup.cmdline('/', {
+  --      mapping = cmp.mapping.preset.cmdline(),
+  --      sources = {
+  --        { name = 'buffer' },
+  --      },
+  --    })
 
-      cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = 'path' },
-        }, {
-          { name = 'cmdline' },
-        }),
-      })
-    end,
-  },
+  --    cmp.setup.cmdline(':', {
+  --      mapping = cmp.mapping.preset.cmdline(),
+  --      sources = cmp.config.sources({
+  --        { name = 'path' },
+  --      }, {
+  --        { name = 'cmdline' },
+  --      }),
+  --    })
+  --  end,
+  --},
 
   {
     -- Main LSP Configuration
@@ -457,7 +460,8 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
-      'hrsh7th/nvim-cmp',
+      --'hrsh7th/nvim-cmp',
+      'saghen/blink.cmp',
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -593,12 +597,6 @@ require('lazy').setup({
         },
       }
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.plugins
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -644,11 +642,11 @@ require('lazy').setup({
             },
           },
         },
-        --denols = {
-        --  root_dir = require('lspconfig').util.root_pattern { 'deno.json', 'deno.jsonc' },
-        --  single_file_support = false,
-        --  settings = {},
-        --},
+        denols = {
+          root_dir = require('lspconfig').util.root_pattern { 'deno.json', 'deno.jsonc' },
+          single_file_support = false,
+          settings = {},
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -679,7 +677,6 @@ require('lazy').setup({
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
         },
@@ -882,31 +879,62 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  -- { -- Highlight, edit, and navigate code
-  --   'nvim-treesitter/nvim-treesitter',
-  --   build = ':TSUpdate',
-  --   main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-  --   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  --   opts = {
-  --     ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-  --     -- Autoinstall languages that are not installed
-  --     auto_install = true,
-  --     highlight = {
-  --       enable = true,
-  --       -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-  --       --  If you are experiencing weird indenting issues, add the language to
-  --       --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-  --       additional_vim_regex_highlighting = { 'ruby' },
-  --     },
-  --     indent = { enable = true, disable = { 'ruby' } },
-  --   },
-  --   -- There are additional nvim-treesitter modules that you can use to interact
-  --   -- with nvim-treesitter. You should go explore a few and see what interests you:
-  --   --
-  --   --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-  --   --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-  --   --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-  -- },
+  { -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    lazy = false,
+    build = ':TSUpdate',
+    branch = 'main',
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
+    config = function()
+      -- ensure basic parser are installed
+      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      require('nvim-treesitter').install(parsers)
+
+      ---@param buf integer
+      ---@param language string
+      local function treesitter_try_attach(buf, language)
+        -- check if parser exists and load it
+        if not vim.treesitter.language.add(language) then return end
+        -- enables syntax highlighting and other treesitter features
+        vim.treesitter.start(buf, language)
+
+        -- enables treesitter based folds
+        -- for more info on folds see `:help folds`
+        -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+        -- vim.wo.foldmethod = 'expr'
+
+        -- check if treesitter indentation is available for this language, and if so enable it
+        -- in case there is no indent query, the indentexpr will fallback to the vim's built in one
+        local has_indent_query = vim.treesitter.query.get(language, 'indents') ~= nil
+
+        -- enables treesitter based indentation
+        if has_indent_query then vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
+      end
+
+      local available_parsers = require('nvim-treesitter').get_available()
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          local buf, filetype = args.buf, args.match
+
+          local language = vim.treesitter.language.get_lang(filetype)
+          if not language then return end
+
+          local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
+
+          if vim.tbl_contains(installed_parsers, language) then
+            -- enable the parser if it is installed
+            treesitter_try_attach(buf, language)
+          elseif vim.tbl_contains(available_parsers, language) then
+            -- if a parser is available in `nvim-treesitter` auto install it, and enable it after the installation is done
+            require('nvim-treesitter').install(language):await(function() treesitter_try_attach(buf, language) end)
+          else
+            -- try to enable treesitter features in case the parser exists but is not available from `nvim-treesitter`
+            treesitter_try_attach(buf, language)
+          end
+        end,
+      })
+    end,
+  },
 
   {
     'folke/persistence.nvim',
@@ -927,6 +955,14 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
+
+  {
+      'windwp/nvim-autopairs',
+      event = "InsertEnter",
+      config = true
+      -- use opts = {} for passing setup options
+      -- this is equivalent to setup({}) function
+  },
   {
     'nvim-neo-tree/neo-tree.nvim',
     version = '*',
@@ -1179,7 +1215,7 @@ require('lazy').setup({
         desc = "List GitHub Issues",
       },
       {
-        "<leader>gp",
+        "<leader>gl",
         "<CMD>Octo pr list<CR>",
         desc = "List GitHub PullRequests",
       },

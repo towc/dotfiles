@@ -351,3 +351,11 @@ export PATH=/home/user/.opencode/bin:$PATH
 
 # keep at bottom
 autoload -U compinit && compinit
+. "/home/user/.deno/env"
+
+# bun completions
+[ -s "/home/user/.bun/_bun" ] && source "/home/user/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
