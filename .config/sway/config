@@ -89,6 +89,8 @@ input type:touchpad {
     tap enabled
     pointer_accel 1
     accel_profile flat
+    dwt disabled
+    dwtp disabled
 }
 
 ### Key bindings
