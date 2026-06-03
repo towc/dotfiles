@@ -127,3 +127,4 @@ export PATH="$PATH:/home/user/.lmstudio/bin"
 
 export EDITOR=neovim
 . "$HOME/.cargo/env"
+. "/home/user/.deno/env"
