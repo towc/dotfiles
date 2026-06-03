@@ -29,6 +29,7 @@ for_window [title="^annotate_toolbar$"] floating enable
 include /etc/sway/config-vars.d/*
 
 bindsym $mod+b exec firefox
+bindsym $mod+equal exec pgrep shmooz && killall shmooz || /home/user/.cargo/bin/shmooz --invert-scroll --zoom-in 20%
 
 ### Output configuration
 set $d_ext HDMI-A-1
@@ -287,3 +288,4 @@ exec_always syncthing
 
 exec_always lxpolkit
 #seat seat0 xcursor_theme Breeze 24
+exec_always /usr/libexec/xdg-desktop-portal -r
