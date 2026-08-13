@@ -29,13 +29,15 @@ for_window [title="^annotate_toolbar$"] floating enable
 include /etc/sway/config-vars.d/*
 
 bindsym $mod+b exec firefox
-bindsym $mod+equal exec pgrep shmooz && killall shmooz || /home/user/.cargo/bin/shmooz --invert-scroll --zoom-in 20%
+bindsym $mod+equal exec pgrep shmooz && killall shmooz || /home/user/.cargo/bin/shmooz --invert-scroll
 
 ### Output configuration
 set $d_ext HDMI-A-1
 set $d_own eDP-1
 
 output * bg ~/Pictures/timezone.jpeg fill
+#output $d_ext resolution 2560x1440
+output $d_ext resolution 3840x2160
 output $d_own resolution 1920x1200 bg ~/Pictures/wallpaper.png fill
 
 exec_always ~/.config/sway/display-layout.sh

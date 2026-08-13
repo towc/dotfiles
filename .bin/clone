@@ -23,6 +23,16 @@ case $protocol in
     strat=github
     site=github
     ;;
+  exp)
+    strat=github
+    site=github
+    repo=exp-$2
+    user=towc
+    ;;
+  freedesktop | fd)
+    start=freedesktop
+    site=freedesktop
+    ;;
   vps)
     strat=vps
     base=$HOME/work/vps/git
@@ -57,10 +67,18 @@ case $strat in
   github)
     git clone git@github.com:$user/$repo
     ;;
+  freedesktop)
+    git clone https://gitlab.freedesktop.org/$user/$repo.git
+    # git clone git@ssh.gitlab.freedesktop.org:$user/$repo.git
+    ;;
   vps)
     git clone ssh://git@dev.viewpointsystem.io:7999/$user/$repo.git
     ;;
 esac
 
+dir=$base/$site/$user/$repo
 
-echo "repo is in $base/$site/$user/$repo"
+echo "repo is in $dir"
+
+# for easy cdl
+echo $dir > /tmp/.tmux-last-cd

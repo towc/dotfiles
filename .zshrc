@@ -31,6 +31,7 @@ export PATH=$PATHS:$PATH
 export N_PREFIX=$HOME
 export ANDROID_SDK=$HOME/Android/Sdk
 export DENO_INSTALL="$HOME/.deno"
+export LESS='--mouse -R' # scrolling less within tmux
 
 if type rustc > /dev/null; then
   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
@@ -194,7 +195,7 @@ alias ni='npm install --save'
 alias nd='npm uninstall --save'
 alias nig='npm install --save -g'
 alias ndg='npm uninstall --save -g'
-alias pi='pip install --user'
+# alias pi='pip install --user' # now pi.dev
 alias ei='elm install'
 
 alias py='python3'
@@ -274,6 +275,21 @@ alias oc='opencode --continue'
 alias op='opencode --prompt'
 alias oh='cd ~ && on --model opencode/big-pickle'
 alias ohc='cd ~ && oc'
+
+alias p='pi'
+alias pn='pi --name'
+alias pc='pi --continue'
+alias pr='pi --resume'
+alias pp='pi -p'
+alias pt='pi -xt write,edit'
+
+# Dotfiles sessions — inject ~/.dotfiles-agents.md only when cwd is ~
+function ph() {
+  cd ~ && pi --append-system-prompt "$(< ~/.dotfiles-agents.md)"
+}
+function phc() {
+  cd ~ && pi -c --append-system-prompt "$(< ~/.dotfiles-agents.md)"
+}
 
 # Resume or create OpenCode sessions by title using opencode-resume
 alias o='npx opencode-resume' # 'node ~/git/github/towc/opencode-resume/dist/index.js'
